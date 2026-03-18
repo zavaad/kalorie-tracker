@@ -1,0 +1,378 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+
+#app { font-family:'Nunito',sans-serif; position:relative; width:100%; max-width:430px; margin:0 auto; min-height:720px; overflow:hidden; border-radius:28px; }
+
+.bg { position:absolute; inset:0; background:#eeecf4; }
+.orb { position:absolute; border-radius:50%; filter:blur(72px); animation:fl 10s ease-in-out infinite; }
+.o1 { width:300px;height:300px;background:radial-gradient(circle,#ff7a5a,#ffaa88);top:-70px;right:-50px;opacity:0.42;animation-delay:0s; }
+.o2 { width:280px;height:280px;background:radial-gradient(circle,#4d8fff,#88bbff);bottom:80px;left:-70px;opacity:0.48;animation-delay:-4s; }
+.o3 { width:240px;height:240px;background:radial-gradient(circle,#a07ee8,#cc99ff);bottom:-30px;right:10px;opacity:0.38;animation-delay:-7s; }
+@keyframes fl{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(14px,-14px) scale(1.04)}66%{transform:translate(-10px,11px) scale(0.97)}}
+.grain { position:absolute;inset:0;opacity:0.22;pointer-events:none;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.glass { background:rgba(255,255,255,0.46); backdrop-filter:blur(22px) saturate(160%); -webkit-backdrop-filter:blur(22px) saturate(160%); border:1px solid rgba(255,255,255,0.78); box-shadow:0 4px 18px rgba(80,60,140,0.07),inset 0 1px 0 rgba(255,255,255,0.85); }
+.glass-md { background:rgba(255,255,255,0.54); backdrop-filter:blur(32px) saturate(170%); -webkit-backdrop-filter:blur(32px) saturate(170%); border:1px solid rgba(255,255,255,0.82); box-shadow:0 6px 24px rgba(80,60,140,0.09),inset 0 1px 0 rgba(255,255,255,0.9); }
+
+.screen { position:relative; z-index:2; padding:0 16px 96px; display:none; }
+.screen.on { display:block; }
+
+.topbar { padding:50px 0 16px; }
+.topbar h1 { font-size:24px; font-weight:800; color:#1a1530; }
+.topbar .sub { font-size:12px; color:rgba(50,40,90,0.42); margin-top:2px; font-weight:500; }
+
+.ring-wrap { display:flex; justify-content:center; margin:0 0 18px; position:relative; }
+.ring-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; pointer-events:none; }
+.ring-num { font-size:30px; font-weight:800; color:#1a1530; line-height:1; }
+.ring-lbl { font-size:12px; color:rgba(50,40,90,0.4); margin-top:3px; font-weight:500; }
+.ring-rem { font-size:11px; color:rgba(50,40,90,0.32); margin-top:2px; }
+
+.macro-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px; }
+.mc { border-radius:16px; padding:12px 11px; overflow:hidden; min-width:0; }
+.mc .lbl { font-size:10px; color:rgba(40,30,80,0.44); font-weight:700; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mc .val { font-size:17px; font-weight:800; color:#1a1530; line-height:1.1; }
+.mc .goal { font-size:10px; color:rgba(40,30,80,0.28); margin-top:1px; }
+.bar-bg { height:4px; background:rgba(100,80,180,0.1); border-radius:4px; margin-top:8px; overflow:hidden; width:100%; }
+.bar-fill { height:4px; border-radius:4px; transition:width 0.5s ease; max-width:100%; }
+
+.sec-title { font-size:10px; color:rgba(40,30,80,0.38); font-weight:800; letter-spacing:0.09em; text-transform:uppercase; margin-bottom:10px; }
+
+.meals { display:flex; flex-direction:column; gap:8px; margin-bottom:12px; }
+.meal { border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:10px; }
+.meal-info { flex:1; min-width:0; }
+.meal-name { font-size:14px; font-weight:700; color:#1a1530; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.meal-time { font-size:11px; color:rgba(40,30,80,0.35); margin-top:1px; }
+.meal-right { text-align:right; flex-shrink:0; }
+.meal-kcal { font-size:15px; font-weight:800; color:#5566cc; }
+.meal-macros { font-size:10px; color:rgba(40,30,80,0.33); margin-top:1px; white-space:nowrap; }
+.meal-del { background:rgba(160,140,200,0.12); border:none; color:rgba(80,60,130,0.38); width:26px; height:26px; border-radius:50%; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.no-meal { text-align:center; padding:26px 16px; color:rgba(80,60,140,0.28); font-size:14px; font-weight:500; }
+
+.input-card { border-radius:20px; margin-bottom:14px; overflow:hidden; }
+.tabs { display:flex; border-bottom:1px solid rgba(160,140,200,0.18); }
+.tab { flex:1; padding:12px; text-align:center; font-size:13px; font-weight:700; color:rgba(60,50,110,0.38); cursor:pointer; background:none; border:none; font-family:'Nunito',sans-serif; transition:all 0.2s; }
+.tab.on { color:#5566cc; background:rgba(90,100,210,0.06); }
+textarea { width:100%; background:transparent; border:none; outline:none; color:#1a1530; font-family:'Nunito',sans-serif; font-size:15px; padding:14px; resize:none; min-height:76px; }
+textarea::placeholder { color:rgba(70,55,120,0.28); }
+.ai-btn { width:calc(100% - 28px); margin:0 14px 14px; background:rgba(90,100,210,0.1); color:#4455bb; border:1px solid rgba(90,100,210,0.22); border-radius:12px; padding:12px; font-size:14px; font-weight:800; font-family:'Nunito',sans-serif; cursor:pointer; transition:all 0.2s; }
+.ai-btn:disabled { opacity:0.35; cursor:default; }
+.ai-btn:active { transform:scale(0.98); }
+
+.dots { display:none; text-align:center; padding:22px; color:rgba(70,55,120,0.38); font-size:14px; font-weight:500; }
+.dots.on { display:block; }
+.dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:rgba(90,100,210,0.45); margin:0 3px; animation:bonce 1.2s infinite; }
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes bonce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
+
+.result-card { border-radius:20px; padding:15px; margin-bottom:14px; display:none; }
+.result-card.on { display:block; }
+.result-name { font-size:16px; font-weight:800; color:#1a1530; margin-bottom:10px; }
+.result-macros { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-bottom:12px; }
+.rm { text-align:center; background:rgba(255,255,255,0.52); border-radius:9px; padding:7px 3px; border:1px solid rgba(255,255,255,0.7); }
+.rm-val { font-size:14px; font-weight:800; }
+.rm-lbl { font-size:10px; color:rgba(50,40,90,0.38); margin-top:1px; }
+.feedback { font-size:13px; color:rgba(40,30,80,0.52); line-height:1.55; border-top:1px solid rgba(160,140,200,0.18); padding-top:10px; }
+.confirm-btn { width:100%; background:linear-gradient(135deg,#55cc88,#33bb77); color:#fff; border:none; border-radius:12px; padding:13px; font-size:14px; font-weight:800; font-family:'Nunito',sans-serif; cursor:pointer; margin-top:11px; box-shadow:0 3px 14px rgba(50,170,90,0.22); }
+
+.hist-list { display:flex; flex-direction:column; gap:11px; }
+.hday { border-radius:18px; overflow:hidden; }
+.hday-header { padding:11px 14px; border-bottom:1px solid rgba(160,140,200,0.14); display:flex; justify-content:space-between; align-items:center; }
+.hday-date { font-size:13px; font-weight:700; color:#1a1530; }
+.hday-kcal { font-size:13px; color:#5566cc; font-weight:700; }
+.hmeal { padding:7px 14px; display:flex; justify-content:space-between; font-size:12px; }
+.hmeal-name { color:rgba(40,30,80,0.52); }
+.hmeal-kcal { color:rgba(40,30,80,0.3); font-weight:600; }
+
+.sform { display:flex; flex-direction:column; gap:12px; margin-top:4px; }
+.sg { border-radius:18px; padding:15px; }
+.sg-lbl { font-size:10px; color:rgba(40,30,80,0.38); margin-bottom:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; }
+.sinput { width:100%; background:rgba(255,255,255,0.58); border:1px solid rgba(160,140,200,0.26); border-radius:9px; padding:10px 12px; color:#1a1530; font-family:'Nunito',sans-serif; font-size:14px; outline:none; font-weight:500; }
+.sinput:focus { border-color:rgba(90,100,210,0.4); }
+.sinput option { background:#f0eef8; color:#1a1530; }
+.api-note { font-size:11px; color:rgba(50,40,90,0.32); margin-top:7px; line-height:1.5; }
+.save-btn { background:linear-gradient(135deg,#8090ee,#a8b0f5); color:#fff; border:none; border-radius:12px; padding:14px; font-size:15px; font-weight:800; font-family:'Nunito',sans-serif; cursor:pointer; }
+
+/* NAV — glass s tmavě modrофialovoу barvou ikon/textu */
+.nav {
+  position:absolute; bottom:0; left:0; right:0; z-index:10;
+  border-radius:0 0 28px 28px;
+  display:flex; align-items:stretch;
+  padding:0 6px 18px;
+  background:rgba(220,215,245,0.70);
+  backdrop-filter:blur(28px) saturate(200%);
+  -webkit-backdrop-filter:blur(28px) saturate(200%);
+  border-top:1px solid rgba(255,255,255,0.75);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.82), 0 -4px 20px rgba(80,60,160,0.08);
+}
+.nb {
+  flex:1; background:none; border:none;
+  color:#5560aa;
+  font-family:'Nunito',sans-serif; font-size:10px; font-weight:700;
+  cursor:pointer; padding:12px 4px 0;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  transition:color 0.18s;
+  -webkit-tap-highlight-color:transparent;
+  border-radius:14px;
+  margin:8px 2px 0;
+}
+.nb svg { width:21px; height:21px; display:block; flex-shrink:0; stroke:#5560aa; }
+
+.nb.on {
+  color:#3340aa;
+  background:rgba(255,255,255,0.55);
+  border:1px solid rgba(255,255,255,0.78);
+  box-shadow:0 2px 10px rgba(70,80,200,0.10), inset 0 1px 0 rgba(255,255,255,0.9);
+}
+.nb.on svg { stroke:#3340aa; }
+
+.toast { position:absolute; top:14px; left:50%; transform:translateX(-50%) translateY(-80px); background:rgba(255,255,255,0.9); backdrop-filter:blur(16px); color:#1a1530; padding:9px 20px; border-radius:18px; font-size:13px; font-weight:700; border:1px solid rgba(160,140,200,0.28); transition:transform 0.28s; z-index:99; white-space:nowrap; box-shadow:0 3px 16px rgba(80,60,140,0.1); }
+.toast.on { transform:translateX(-50%) translateY(0); }
+.empty-h { text-align:center; padding:36px 20px; color:rgba(70,55,120,0.24); font-size:14px; }
+.photo-btn { background:rgba(255,255,255,0.52); border:1px solid rgba(160,140,200,0.28); color:rgba(55,45,110,0.52); padding:12px 26px; border-radius:11px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:600; cursor:pointer; }
+</style>
+
+<div id="app">
+  <div class="bg">
+    <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+    <div class="grain"></div>
+  </div>
+
+  <div id="s-today" class="screen on">
+    <div class="topbar"><h1>Dnes</h1><div class="sub" id="a-date"></div></div>
+    <div class="ring-wrap">
+      <svg width="188" height="188" viewBox="0 0 188 188">
+        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7080ee"/><stop offset="100%" stop-color="#a8b0f8"/></linearGradient></defs>
+        <circle cx="94" cy="94" r="78" fill="none" stroke="rgba(90,80,170,0.1)" stroke-width="13"/>
+        <circle cx="94" cy="94" r="78" fill="none" stroke="url(#rg)" stroke-width="13" stroke-linecap="round" stroke-dasharray="490.1" stroke-dashoffset="490.1" transform="rotate(-90 94 94)" id="a-ring" style="transition:stroke-dashoffset 0.65s ease"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-num" id="a-kcal">0</div>
+        <div class="ring-lbl">kcal</div>
+        <div class="ring-rem" id="a-rem"></div>
+      </div>
+    </div>
+    <div class="macro-row">
+      <div class="mc glass"><div class="lbl">Bílkoviny</div><div class="val" id="a-p">0g</div><div class="goal" id="ag-p"></div><div class="bar-bg"><div class="bar-fill" id="ab-p" style="background:linear-gradient(90deg,#8090ee,#a8b8ff)"></div></div></div>
+      <div class="mc glass"><div class="lbl">Sacharidy</div><div class="val" id="a-c">0g</div><div class="goal" id="ag-c"></div><div class="bar-bg"><div class="bar-fill" id="ab-c" style="background:linear-gradient(90deg,#f0a040,#f8cc80)"></div></div></div>
+      <div class="mc glass"><div class="lbl">Tuky</div><div class="val" id="a-f">0g</div><div class="goal" id="ag-f"></div><div class="bar-bg"><div class="bar-fill" id="ab-f" style="background:linear-gradient(90deg,#f07080,#f8a0aa)"></div></div></div>
+    </div>
+    <div class="sec-title">Jídla dnes</div>
+    <div class="meals" id="a-meals"><div class="no-meal">Zatím nic. Přidej první jídlo ↓</div></div>
+  </div>
+
+  <div id="s-add" class="screen">
+    <div class="topbar"><h1>Přidat jídlo</h1></div>
+    <div class="input-card glass-md">
+      <div class="tabs">
+        <button class="tab on" onclick="setTab('text')">Popis</button>
+        <button class="tab" onclick="setTab('photo')">Foto</button>
+      </div>
+      <div id="t-text"><textarea id="a-input" placeholder="Co jsi jedl/a? Např. kuřecí prso 200g, rýže 150g..." rows="3"></textarea></div>
+      <div id="t-photo" style="display:none;padding:14px;text-align:center">
+        <input type="file" id="a-photo" accept="image/*" capture="environment" style="display:none">
+        <div id="a-preview" style="display:none;margin-bottom:10px"><img id="a-img" style="max-width:100%;border-radius:10px;max-height:170px;object-fit:cover"></div>
+        <button class="photo-btn" onclick="document.getElementById('a-photo').click()">📷 Vybrat nebo vyfotit</button>
+      </div>
+      <button class="ai-btn" id="a-analyze" onclick="analyze()">✦ Analyzovat pomocí AI</button>
+    </div>
+    <div class="dots" id="a-dots"><div style="margin-bottom:10px"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>AI analyzuje jídlo...</div>
+    <div class="result-card glass-md" id="a-result">
+      <div class="result-name" id="r-name"></div>
+      <div class="result-macros">
+        <div class="rm"><div class="rm-val" id="r-kcal" style="color:#5566cc"></div><div class="rm-lbl">kcal</div></div>
+        <div class="rm"><div class="rm-val" id="r-p" style="color:#7080ee"></div><div class="rm-lbl">bílk.</div></div>
+        <div class="rm"><div class="rm-val" id="r-c" style="color:#c08020"></div><div class="rm-lbl">sachar.</div></div>
+        <div class="rm"><div class="rm-val" id="r-f" style="color:#c04858"></div><div class="rm-lbl">tuky</div></div>
+      </div>
+      <div class="feedback" id="r-fb"></div>
+      <button class="confirm-btn" onclick="confirm_meal()">✓ Přidat do deníku</button>
+    </div>
+  </div>
+
+  <div id="s-history" class="screen">
+    <div class="topbar"><h1>Historie</h1></div>
+    <div class="hist-list" id="a-hist"></div>
+  </div>
+
+  <div id="s-settings" class="screen">
+    <div class="topbar"><h1>Nastavení</h1></div>
+    <div class="sform">
+      <div class="sg glass"><div class="sg-lbl">API klíč (Anthropic)</div><input class="sinput" type="password" id="s-key" placeholder="sk-ant-..."><div class="api-note">Ukládá se jen v tvém prohlížeči. Získej na console.anthropic.com</div></div>
+      <div class="sg glass">
+        <div class="sg-lbl">Denní cíle</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+          <div><div style="font-size:11px;color:rgba(55,45,100,0.38);margin-bottom:4px;font-weight:600">Kalorie</div><input class="sinput" type="number" id="s-kcal" placeholder="1800"></div>
+          <div><div style="font-size:11px;color:rgba(55,45,100,0.38);margin-bottom:4px;font-weight:600">Bílkoviny (g)</div><input class="sinput" type="number" id="s-p" placeholder="150"></div>
+          <div><div style="font-size:11px;color:rgba(55,45,100,0.38);margin-bottom:4px;font-weight:600">Sacharidy (g)</div><input class="sinput" type="number" id="s-c" placeholder="200"></div>
+          <div><div style="font-size:11px;color:rgba(55,45,100,0.38);margin-bottom:4px;font-weight:600">Tuky (g)</div><input class="sinput" type="number" id="s-f" placeholder="60"></div>
+        </div>
+      </div>
+      <div class="sg glass">
+        <div class="sg-lbl">Osobní údaje</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+          <div><div style="font-size:11px;color:rgba(55,45,100,0.38);margin-bottom:4px;font-weight:600">Váha (kg)</div><input class="sinput" type="number" id="s-w" placeholder="80"></div>
+          <div><div style="font-size:11px;color:rgba(55,45,100,0.38);margin-bottom:4px;font-weight:600">Cíl</div><select class="sinput" id="s-g"><option value="maintain">Udržet váhu</option><option value="lose">Zhubnout</option><option value="gain">Nabrat svaly</option></select></div>
+        </div>
+      </div>
+      <button class="save-btn" onclick="save()">Uložit nastavení</button>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <button class="nb on" id="n-today" onclick="go('today')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+      Dnes
+    </button>
+    <button class="nb" id="n-add" onclick="go('add')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Přidat
+    </button>
+    <button class="nb" id="n-history" onclick="go('history')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Historie
+    </button>
+    <button class="nb" id="n-settings" onclick="go('settings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Nastavení
+    </button>
+  </nav>
+
+  <div class="toast" id="a-toast"></div>
+</div>
+
+<script>
+const DEF={kcal:1800,protein:150,carbs:200,fat:60,weight:'',goal:'maintain',apikey:''};
+let cfg={...DEF},meals=[],pending=null,tab='text',pb64=null;
+function td(){return new Date().toISOString().split('T')[0];}
+function init(){
+  const s=localStorage.getItem('nai_cfg');if(s)cfg={...DEF,...JSON.parse(s)};
+  const d=localStorage.getItem('nai_'+td());if(d)meals=JSON.parse(d);
+  render();loadS();
+  document.getElementById('a-date').textContent=new Date().toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long'});
+}
+function save(){
+  cfg.apikey=document.getElementById('s-key').value.trim();
+  cfg.kcal=parseInt(document.getElementById('s-kcal').value)||1800;
+  cfg.protein=parseInt(document.getElementById('s-p').value)||150;
+  cfg.carbs=parseInt(document.getElementById('s-c').value)||200;
+  cfg.fat=parseInt(document.getElementById('s-f').value)||60;
+  cfg.weight=document.getElementById('s-w').value;
+  cfg.goal=document.getElementById('s-g').value;
+  localStorage.setItem('nai_cfg',JSON.stringify(cfg));
+  toast('Nastavení uloženo ✓');render();
+}
+function loadS(){
+  document.getElementById('s-key').value=cfg.apikey||'';
+  document.getElementById('s-kcal').value=cfg.kcal;
+  document.getElementById('s-p').value=cfg.protein;
+  document.getElementById('s-c').value=cfg.carbs;
+  document.getElementById('s-f').value=cfg.fat;
+  document.getElementById('s-w').value=cfg.weight||'';
+  document.getElementById('s-g').value=cfg.goal||'maintain';
+}
+function render(){
+  const t=meals.reduce((a,m)=>({kcal:a.kcal+m.kcal,protein:a.protein+m.protein,carbs:a.carbs+m.carbs,fat:a.fat+m.fat}),{kcal:0,protein:0,carbs:0,fat:0});
+  document.getElementById('a-kcal').textContent=Math.round(t.kcal);
+  const rem=cfg.kcal-t.kcal;
+  document.getElementById('a-rem').textContent=rem>0?'zbývá '+Math.round(rem):'přebytek '+Math.round(-rem);
+  const pct=Math.min(t.kcal/cfg.kcal,1);
+  document.getElementById('a-ring').setAttribute('stroke-dashoffset',Math.round(490.1*(1-pct)));
+  document.getElementById('a-ring').style.stroke=pct>=1?'#f07080':'url(#rg)';
+  document.getElementById('a-p').textContent=Math.round(t.protein)+'g';
+  document.getElementById('a-c').textContent=Math.round(t.carbs)+'g';
+  document.getElementById('a-f').textContent=Math.round(t.fat)+'g';
+  document.getElementById('ag-p').textContent='/ '+cfg.protein+'g';
+  document.getElementById('ag-c').textContent='/ '+cfg.carbs+'g';
+  document.getElementById('ag-f').textContent='/ '+cfg.fat+'g';
+  document.getElementById('ab-p').style.width=Math.min(100,t.protein/cfg.protein*100).toFixed(1)+'%';
+  document.getElementById('ab-c').style.width=Math.min(100,t.carbs/cfg.carbs*100).toFixed(1)+'%';
+  document.getElementById('ab-f').style.width=Math.min(100,t.fat/cfg.fat*100).toFixed(1)+'%';
+  const el=document.getElementById('a-meals');
+  if(!meals.length){el.innerHTML='<div class="no-meal">Zatím nic. Přidej první jídlo ↓</div>';return;}
+  el.innerHTML=meals.map((m,i)=>`<div class="meal glass"><div class="meal-info"><div class="meal-name">${m.name}</div><div class="meal-time">${m.time}</div></div><div class="meal-right"><div class="meal-kcal">${Math.round(m.kcal)} kcal</div><div class="meal-macros">${Math.round(m.protein)}b · ${Math.round(m.carbs)}s · ${Math.round(m.fat)}t</div></div><button class="meal-del" onclick="del(${i})">×</button></div>`).join('');
+}
+function del(i){meals.splice(i,1);localStorage.setItem('nai_'+td(),JSON.stringify(meals));render();}
+function setTab(t){
+  tab=t;
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('on',(i===0&&t==='text')||(i===1&&t==='photo')));
+  document.getElementById('t-text').style.display=t==='text'?'block':'none';
+  document.getElementById('t-photo').style.display=t==='photo'?'block':'none';
+}
+document.getElementById('a-photo').addEventListener('change',function(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{pb64=ev.target.result.split(',')[1];document.getElementById('a-img').src=ev.target.result;document.getElementById('a-preview').style.display='block';};
+  r.readAsDataURL(f);
+});
+async function analyze(){
+  if(!cfg.apikey){toast('Nastav API klíč v nastavení');go('settings');return;}
+  const txt=document.getElementById('a-input').value.trim();
+  if(tab==='text'&&!txt){toast('Napiš co jsi jedl/a');return;}
+  if(tab==='photo'&&!pb64){toast('Vyber nebo vyfoť jídlo');return;}
+  document.getElementById('a-dots').classList.add('on');
+  document.getElementById('a-result').classList.remove('on');
+  document.getElementById('a-analyze').disabled=true;
+  const gm={maintain:'udržení váhy',lose:'hubnutí',gain:'nabírání svalů'};
+  const sys=`Jsi nutriční asistent. Analyzuješ jídla a vracíš kalorie + makra.\nUživatel: ${cfg.weight?'váha '+cfg.weight+'kg, ':''}cíl: ${gm[cfg.goal]||'udržení váhy'}.\nDenní cíle: ${cfg.kcal} kcal, ${cfg.protein}g bílkovin, ${cfg.carbs}g sacharidů, ${cfg.fat}g tuků.\nVrať POUZE JSON bez markdown: {"name":"","kcal":0,"protein":0,"carbs":0,"fat":0,"feedback":""}`;
+  try{
+    let content=tab==='photo'&&pb64?[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:pb64}},{type:'text',text:txt?`Foto jídla. Poznámka: ${txt}.`:'Analyzuj jídlo na fotce.'}]:txt;
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:500,system:sys,messages:[{role:'user',content}]})});
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error.message);
+    const parsed=JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
+    pending=parsed;
+    document.getElementById('r-name').textContent=parsed.name;
+    document.getElementById('r-kcal').textContent=Math.round(parsed.kcal);
+    document.getElementById('r-p').textContent=Math.round(parsed.protein)+'g';
+    document.getElementById('r-c').textContent=Math.round(parsed.carbs)+'g';
+    document.getElementById('r-f').textContent=Math.round(parsed.fat)+'g';
+    document.getElementById('r-fb').textContent=parsed.feedback;
+    document.getElementById('a-result').classList.add('on');
+  }catch(e){toast('Chyba: '+e.message);}
+  document.getElementById('a-dots').classList.remove('on');
+  document.getElementById('a-analyze').disabled=false;
+}
+function confirm_meal(){
+  if(!pending)return;
+  const now=new Date();
+  const meal={...pending,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
+  meals.push(meal);
+  localStorage.setItem('nai_'+td(),JSON.stringify(meals));
+  const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
+  const today=td();
+  const idx=hist.findIndex(d=>d.date===today);
+  if(idx>=0)hist[idx].meals=meals;else hist.unshift({date:today,meals:[...meals]});
+  localStorage.setItem('nai_hist',JSON.stringify(hist));
+  pending=null;
+  document.getElementById('a-result').classList.remove('on');
+  document.getElementById('a-input').value='';
+  document.getElementById('a-preview').style.display='none';
+  pb64=null;
+  render();go('today');toast('Jídlo přidáno ✓');
+}
+function loadH(){
+  const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
+  const el=document.getElementById('a-hist');
+  if(!hist.length){el.innerHTML='<div class="empty-h">Zatím žádná historie.</div>';return;}
+  el.innerHTML=hist.slice(0,30).map(day=>{
+    const tot=day.meals.reduce((a,m)=>({kcal:a.kcal+m.kcal}),{kcal:0});
+    const d=new Date(day.date);
+    const lbl=d.toLocaleDateString('cs-CZ',{weekday:'short',day:'numeric',month:'short'});
+    return `<div class="hday glass"><div class="hday-header"><span class="hday-date">${lbl}</span><span class="hday-kcal">${Math.round(tot.kcal)} kcal</span></div>${day.meals.map(m=>`<div class="hmeal"><span class="hmeal-name">${m.name}</span><span class="hmeal-kcal">${Math.round(m.kcal)}</span></div>`).join('')}</div>`;
+  }).join('');
+}
+function go(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('s-'+name).classList.add('on');
+  document.getElementById('n-'+name).classList.add('on');
+  if(name==='history')loadH();
+  if(name==='settings')loadS();
+  document.getElementById('app').scrollTop=0;
+}
+function toast(msg){const t=document.getElementById('a-toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2400);}
+init();
+</script>
