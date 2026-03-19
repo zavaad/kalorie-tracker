@@ -408,7 +408,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
         <div class="ring-rem" id="a-rem"></div>
       </div>
     </div>
-    <div class="macro-row">
+    <div class="macro-row" id="macro-row-el">
       <div class="mc glass"><div class="lbl">Bílkoviny</div><div class="val" id="a-p">0g</div><div class="goal" id="ag-p"></div><div class="bar-bg"><div class="bar-fill" id="ab-p" style="background:var(--bar1)"></div></div></div>
       <div class="mc glass"><div class="lbl">Sacharidy</div><div class="val" id="a-c">0g</div><div class="goal" id="ag-c"></div><div class="bar-bg"><div class="bar-fill" id="ab-c" style="background:var(--bar2)"></div></div></div>
       <div class="mc glass"><div class="lbl">Tuky</div><div class="val" id="a-f">0g</div><div class="goal" id="ag-f"></div><div class="bar-bg"><div class="bar-fill" id="ab-f" style="background:var(--bar3)"></div></div></div>
@@ -482,8 +482,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
       <div class="sg glass"><div class="sg-lbl">API klíč (Anthropic)</div><input class="sinput" type="password" id="s-key" placeholder="sk-ant-..."><div class="api-note">Ukládá se jen v tvém prohlížeči. Získej na console.anthropic.com</div></div>
       <div class="sg glass">
         <div class="sg-lbl">Denní cíle</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
-          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Kalorie</div><input class="sinput" type="number" id="s-kcal" placeholder="1800"></div>
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Kalorie</div>
+          <input class="sinput" type="number" id="s-kcal" placeholder="1800">
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--input-bg);border:1px solid var(--input-bdr);border-radius:9px;">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--text-primary)">Sledovat makra</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:1px">B · S · T</div>
+          </div>
+          <div id="macro-toggle" onclick="toggleMacros()" style="width:44px;height:26px;border-radius:13px;background:var(--input-bdr);cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;">
+            <div id="macro-thumb" style="position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.25);"></div>
+          </div>
+        </div>
+        <div id="macro-inputs" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:10px;">
           <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">B (g)</div><input class="sinput" type="number" id="s-p" placeholder="150"></div>
           <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">S (g)</div><input class="sinput" type="number" id="s-c" placeholder="200"></div>
           <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">T (g)</div><input class="sinput" type="number" id="s-f" placeholder="60"></div>
@@ -519,7 +531,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 
 <script>
 // ── MAIN ──────────────────────────────────────────────
-const DEF={kcal:1800,protein:150,carbs:200,fat:60,weight:'',goal:'maintain',apikey:''};
+const DEF={kcal:1800,protein:150,carbs:200,fat:60,weight:'',goal:'maintain',apikey:'',trackMacros:true};
 let cfg={...DEF},meals=[],mealpreps=[],pending=null,pb64=null,pbMime='image/jpeg';
 function td(){return new Date().toISOString().split('T')[0];}
 function init(){
@@ -528,11 +540,30 @@ function init(){
   const mp=localStorage.getItem('nai_mealpreps');if(mp)mealpreps=JSON.parse(mp);
   render();loadS();
   document.getElementById('a-date').textContent=new Date().toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long'});
+  updateMacroUI();
 }
 document.addEventListener('dblclick',e=>e.preventDefault());
 document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
 let lastT=0;
 document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastT<300)e.preventDefault();lastT=n;},{passive:false});
+function toggleMacros(){
+  cfg.trackMacros=!cfg.trackMacros;
+  localStorage.setItem('nai_cfg',JSON.stringify(cfg));
+  updateMacroUI();
+}
+function updateMacroUI(){
+  const on=cfg.trackMacros;
+  const toggle=document.getElementById('macro-toggle');
+  const thumb=document.getElementById('macro-thumb');
+  const inputs=document.getElementById('macro-inputs');
+  const macroRow=document.getElementById('macro-row-el');
+  const mealMacros=document.querySelectorAll('.meal-macros');
+  if(toggle){toggle.style.background=on?'var(--accent)':'var(--input-bdr)';}
+  if(thumb){thumb.style.left=on?'21px':'3px';}
+  if(inputs){inputs.style.display=on?'grid':'none';}
+  if(macroRow){macroRow.style.display=on?'grid':'none';}
+  mealMacros.forEach(el=>el.style.display=on?'block':'none');
+}
 function save(){
   cfg.apikey=document.getElementById('s-key').value.trim();
   cfg.kcal=parseInt(document.getElementById('s-kcal').value)||1800;
@@ -542,6 +573,7 @@ function save(){
   cfg.weight=document.getElementById('s-w').value;
   cfg.goal=document.getElementById('s-g').value;
   localStorage.setItem('nai_cfg',JSON.stringify(cfg));
+  updateMacroUI();
   toast('Nastavení uloženo ✓');render();
 }
 function loadS(){
@@ -552,6 +584,7 @@ function loadS(){
   document.getElementById('s-f').value=cfg.fat;
   document.getElementById('s-w').value=cfg.weight||'';
   document.getElementById('s-g').value=cfg.goal||'maintain';
+  updateMacroUI();
 }
 function render(){
   const t=meals.reduce((a,m)=>({kcal:a.kcal+m.kcal,protein:a.protein+m.protein,carbs:a.carbs+m.carbs,fat:a.fat+m.fat}),{kcal:0,protein:0,carbs:0,fat:0});
