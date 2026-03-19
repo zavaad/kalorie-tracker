@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
@@ -246,15 +247,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 <div id="app">
 
 <!-- TODAY -->
+
 <div id="s-today" class="screen on">
   <div class="topbar"><h1>Dnes</h1><div class="sub" id="a-date"></div></div>
   <div class="ring-wrap">
     <svg width="188" height="188" viewBox="0 0 188 188">
-      <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="var(--ring1)"/><stop offset="100%" stop-color="var(--ring2)"/></linearGradient></defs>
+      <defs>
+        <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="var(--ring1)"/><stop offset="100%" stop-color="var(--ring2)"/></linearGradient>
+        <linearGradient id="rg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="var(--ring1)" stop-opacity="0.4"/><stop offset="100%" stop-color="var(--ring2)" stop-opacity="0.4"/></linearGradient>
+      </defs>
       <circle cx="94" cy="94" r="78" fill="none" stroke="var(--ring-track)" stroke-width="13"/>
+      <circle cx="94" cy="94" r="78" fill="none" stroke="url(#rg2)" stroke-width="13" stroke-linecap="round" stroke-dasharray="490.1" stroke-dashoffset="490.1" transform="rotate(-90 94 94)" id="a-ring-range" style="transition:stroke-dashoffset 0.65s ease;display:none"/>
       <circle cx="94" cy="94" r="78" fill="none" stroke="url(#rg)" stroke-width="13" stroke-linecap="round" stroke-dasharray="490.1" stroke-dashoffset="490.1" transform="rotate(-90 94 94)" id="a-ring" style="transition:stroke-dashoffset 0.65s ease"/>
     </svg>
-    <div class="ring-center"><div class="ring-num" id="a-kcal">0</div><div class="ring-lbl">kcal</div><div class="ring-rem" id="a-rem"></div></div>
+    <div class="ring-center"><div class="ring-num" id="a-kcal">0</div><div class="ring-lbl" id="ring-lbl-el">kcal</div><div class="ring-rem" id="a-rem"></div></div>
   </div>
   <div class="macro-row" id="macro-row-el">
     <div class="mc glass"><div class="lbl">Bílkoviny</div><div class="val" id="a-p">0g</div><div class="goal" id="ag-p"></div><div class="bar-bg"><div class="bar-fill" id="ab-p" style="background:var(--bar1)"></div></div></div>
@@ -262,12 +268,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
     <div class="mc glass"><div class="lbl">Tuky</div><div class="val" id="a-f">0g</div><div class="goal" id="ag-f"></div><div class="bar-bg"><div class="bar-fill" id="ab-f" style="background:var(--bar3)"></div></div></div>
   </div>
   <button class="summary-btn" onclick="getDailySummary()">✦ Zhodnoť dnešní den pomocí AI</button>
-  <div class="summary-box glass-md" id="summary-box"><div class="dots on" id="summary-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div class="summary-text" id="summary-text"></div></div>
+  <div class="summary-box glass-md" id="summary-box">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+      <div style="font-size:10px;font-weight:800;color:var(--sec-col);text-transform:uppercase;letter-spacing:0.07em">Denní shrnutí AI</div>
+      <button onclick="closeSummary()" style="background:var(--meal-del-bg);border:none;color:var(--meal-del-col);width:24px;height:24px;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">×</button>
+    </div>
+    <div class="dots on" id="summary-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    <div class="summary-text" id="summary-text"></div>
+  </div>
   <div class="sec-title">Jídla dnes</div>
   <div class="meals" id="a-meals"><div class="no-meal">Zatím nic. Přidej první jídlo ↓</div></div>
 </div>
 
 <!-- ADD -->
+
 <div id="s-add" class="screen">
   <div class="topbar"><h1>Přidat jídlo</h1></div>
   <div class="subtabs">
@@ -345,6 +359,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 </div>
 
 <!-- HISTORY + STATS -->
+
 <div id="s-history" class="screen">
   <div class="topbar"><h1>Historie</h1></div>
   <div class="subtabs">
@@ -372,21 +387,52 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 </div>
 
 <!-- SETTINGS -->
+
 <div id="s-settings" class="screen">
   <div class="topbar"><h1>Nastavení</h1></div>
   <div class="sform">
     <div class="sg glass"><div class="sg-lbl">API klíč (Anthropic)</div><input class="sinput" type="password" id="s-key" placeholder="sk-ant-..."><div class="api-note">Ukládá se jen v tvém prohlížeči. Získej na console.anthropic.com</div></div>
     <div class="sg glass">
-      <div class="sg-lbl">Denní cíle</div>
-      <div style="margin-bottom:12px">
-        <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Kalorie</div>
+      <div class="sg-lbl">Kalorický cíl</div>
+      <div class="subtabs" style="margin-bottom:14px">
+        <button class="stab on" id="gm-fixed" onclick="setGoalMode('fixed')">Pevný</button>
+        <button class="stab" id="gm-range" onclick="setGoalMode('range')">Rozmezí</button>
+        <button class="stab" id="gm-deficit" onclick="setGoalMode('deficit')">Deficit</button>
+      </div>
+      <div id="gm-fixed-inputs">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Kalorie / den</div>
         <input class="sinput" type="number" id="s-kcal" placeholder="1800">
       </div>
-      <div class="toggle-row">
+      <div id="gm-range-inputs" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Minimum kcal</div><input class="sinput" type="number" id="s-kcal-min" placeholder="1200"></div>
+          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Maximum kcal</div><input class="sinput" type="number" id="s-kcal-max" placeholder="1500"></div>
+        </div>
+      </div>
+      <div id="gm-deficit-inputs" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px">
+          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">TDEE (výdej klidový)</div><input class="sinput" type="number" id="s-tdee" placeholder="2200"></div>
+          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Cílový deficit kcal</div><input class="sinput" type="number" id="s-deficit" placeholder="500"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.5" id="deficit-calc-info"></div>
+      </div>
+    </div>
+    <div class="sg glass">
+      <div class="sg-lbl">Dnešní výdej (Apple Watch)</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;line-height:1.5">Zadej celkový výdej z Apple Watch pro přesný deficit.</div>
+      <div style="display:flex;gap:8px">
+        <input class="sinput" type="number" id="s-burned" placeholder="Spálené kcal (např. 2650)" style="flex:1">
+        <button onclick="saveBurned()" style="background:var(--btn-ai-bg);color:var(--btn-ai-col);border:1px solid var(--btn-ai-bdr);border-radius:9px;padding:10px 14px;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;white-space:nowrap">Zapsat</button>
+      </div>
+      <div style="font-size:12px;color:var(--accent);font-weight:700;margin-top:8px" id="burned-result"></div>
+    </div>
+    <div class="sg glass">
+      <div class="sg-lbl">Makra</div>
+      <div class="toggle-row" style="margin-bottom:10px">
         <div><div style="font-size:14px;font-weight:700;color:var(--text-primary)">Sledovat makra</div><div style="font-size:11px;color:var(--text-muted);margin-top:1px">B · S · T</div></div>
         <div id="macro-toggle" class="toggle-switch" onclick="toggleMacros()"><div id="macro-thumb" class="toggle-thumb"></div></div>
       </div>
-      <div id="macro-inputs" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:10px;">
+      <div id="macro-inputs" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;">
         <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">B (g)</div><input class="sinput" type="number" id="s-p" placeholder="150"></div>
         <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">S (g)</div><input class="sinput" type="number" id="s-c" placeholder="200"></div>
         <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">T (g)</div><input class="sinput" type="number" id="s-f" placeholder="60"></div>
@@ -424,6 +470,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 </div>
 
 <!-- EDIT MEAL MODAL -->
+
 <div class="modal-overlay" id="edit-modal" onclick="closeEditOutside(event)">
   <div class="modal-box glass-md">
     <div class="modal-handle"></div>
@@ -452,7 +499,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Přidat
   </button>
   <button class="nb" id="n-history" onclick="go('history')">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Historie
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span id="nav-hist-label">Historie</span>
   </button>
   <button class="nb" id="n-settings" onclick="go('settings')">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Nastavení
@@ -462,12 +509,19 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 </div>
 
 <script>
-const DEF={kcal:1800,protein:150,carbs:200,fat:60,weight:'',goal:'maintain',apikey:'',trackMacros:true};
+const DEF={kcal:1800,kcalMin:1200,kcalMax:1500,protein:150,carbs:200,fat:60,weight:'',goal:'maintain',apikey:'',trackMacros:true,goalMode:'fixed',tdee:2200,deficit:500,burnedToday:0};
 let cfg={...DEF},meals=[],mealpreps=[],favs=[],pending=null,pb64=null,pbMime='image/jpeg';
 let editingMealIdx=-1,editingFavId=null;
 
 function td(){return new Date().toISOString().split('T')[0];}
 function parseD(s){return parseFloat(String(s||0).replace(',','.').trim())||0;}
+
+// ── effective kcal target based on mode ──
+function effectiveKcal(){
+  if(cfg.goalMode==='deficit')return Math.max(0,(cfg.tdee||2200)-(cfg.deficit||500));
+  if(cfg.goalMode==='range')return cfg.kcalMin||1200;
+  return cfg.kcal||1800;
+}
 
 function init(){
   const s=localStorage.getItem('nai_cfg');if(s)cfg={...DEF,...JSON.parse(s)};
@@ -484,6 +538,38 @@ document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefaul
 let lastT=0;
 document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastT<300)e.preventDefault();lastT=n;},{passive:false});
 
+// ── GOAL MODE ──
+function setGoalMode(mode){
+  cfg.goalMode=mode;
+  ['fixed','range','deficit'].forEach(m=>{
+    document.getElementById('gm-'+m).classList.toggle('on',m===mode);
+    document.getElementById('gm-'+m+'-inputs').style.display=m===mode?'block':'none';
+  });
+  if(mode==='deficit')updateDeficitCalc();
+}
+function updateDeficitCalc(){
+  const tdee=parseInt(document.getElementById('s-tdee').value)||cfg.tdee||2200;
+  const def=parseInt(document.getElementById('s-deficit').value)||cfg.deficit||500;
+  const target=Math.max(0,tdee-def);
+  const el=document.getElementById('deficit-calc-info');
+  if(el)el.textContent=`Cílový příjem: ${target} kcal/den (${tdee} TDEE − ${def} deficit)`;
+}
+document.addEventListener('input',e=>{if(e.target.id==='s-tdee'||e.target.id==='s-deficit')updateDeficitCalc();});
+
+// ── BURNED TODAY ──
+function saveBurned(){
+  const val=parseInt(document.getElementById('s-burned').value)||0;
+  if(!val)return;
+  cfg.burnedToday=val;
+  localStorage.setItem('nai_cfg',JSON.stringify(cfg));
+  const eaten=meals.reduce((a,m)=>a+m.kcal,0);
+  const realDeficit=val-eaten;
+  const target=effectiveKcal();
+  const el=document.getElementById('burned-result');
+  el.textContent=`Reálný deficit: ${realDeficit > 0 ? '+' : ''}${Math.round(realDeficit)} kcal | Snědeno: ${Math.round(eaten)} | Výdej: ${val}`;
+  toast('Výdej uložen ✓');render();
+}
+
 // ── SETTINGS ──
 function toggleMacros(){cfg.trackMacros=!cfg.trackMacros;localStorage.setItem('nai_cfg',JSON.stringify(cfg));updateMacroUI();}
 function updateMacroUI(){
@@ -498,7 +584,12 @@ function updateMacroUI(){
 }
 function save(){
   cfg.apikey=document.getElementById('s-key').value.trim();
+  cfg.goalMode=(['fixed','range','deficit'].find(m=>document.getElementById('gm-'+m).classList.contains('on')))||'fixed';
   cfg.kcal=parseInt(document.getElementById('s-kcal').value)||1800;
+  cfg.kcalMin=parseInt(document.getElementById('s-kcal-min').value)||1200;
+  cfg.kcalMax=parseInt(document.getElementById('s-kcal-max').value)||1500;
+  cfg.tdee=parseInt(document.getElementById('s-tdee').value)||2200;
+  cfg.deficit=parseInt(document.getElementById('s-deficit').value)||500;
   cfg.protein=parseInt(document.getElementById('s-p').value)||150;
   cfg.carbs=parseInt(document.getElementById('s-c').value)||200;
   cfg.fat=parseInt(document.getElementById('s-f').value)||60;
@@ -510,11 +601,17 @@ function save(){
 function loadS(){
   document.getElementById('s-key').value=cfg.apikey||'';
   document.getElementById('s-kcal').value=cfg.kcal;
+  document.getElementById('s-kcal-min').value=cfg.kcalMin||1200;
+  document.getElementById('s-kcal-max').value=cfg.kcalMax||1500;
+  document.getElementById('s-tdee').value=cfg.tdee||2200;
+  document.getElementById('s-deficit').value=cfg.deficit||500;
   document.getElementById('s-p').value=cfg.protein;
   document.getElementById('s-c').value=cfg.carbs;
   document.getElementById('s-f').value=cfg.fat;
   document.getElementById('s-w').value=cfg.weight||'';
   document.getElementById('s-g').value=cfg.goal||'maintain';
+  setGoalMode(cfg.goalMode||'fixed');
+  if(cfg.burnedToday){document.getElementById('s-burned').value=cfg.burnedToday;}
   const nf=localStorage.getItem('nai_notif_freq')||'0';
   const nt=localStorage.getItem('nai_notif_time')||'08:00';
   document.getElementById('s-notif-freq').value=nf;
@@ -528,45 +625,80 @@ async function saveNotifSettings(){
   localStorage.setItem('nai_notif_freq',freq);
   localStorage.setItem('nai_notif_time',time);
   if(freq==='0'){document.getElementById('notif-status').textContent='Připomínky vypnuty.';return;}
-  if(!('Notification' in window)){document.getElementById('notif-status').textContent='Notifikace nejsou podporovány v tomto prohlížeči.';return;}
+  if(!('Notification' in window)){document.getElementById('notif-status').textContent='Notifikace nejsou podporovány.';return;}
   const perm=await Notification.requestPermission();
   if(perm==='granted'){
     scheduleNotif(parseInt(freq),time);
-    document.getElementById('notif-status').textContent=`Připomínka nastavena: každých ${freq} den/dní v ${time}.`;
+    document.getElementById('notif-status').textContent=`Připomínka: každých ${freq} den/dní v ${time}.`;
   } else {
-    document.getElementById('notif-status').textContent='Přístup k notifikacím zamítnut. Povol je v nastavení Safari.';
+    document.getElementById('notif-status').textContent='Přístup zamítnut. Povol notifikace v Safari nastavení.';
   }
 }
 function scheduleNotif(freqDays,time){
-  if(!('serviceWorker' in navigator))return;
   const [h,m]=time.split(':').map(Number);
   const now=new Date();
   const next=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m,0);
   if(next<=now)next.setDate(next.getDate()+1);
-  const delay=next-now;
   setTimeout(()=>{
-    new Notification('NutriAI — Váha',{body:'Čas zapsat dnešní váhu!',icon:'/icon.png'});
-    setInterval(()=>new Notification('NutriAI — Váha',{body:'Čas zapsat dnešní váhu!',icon:'/icon.png'}),freqDays*24*60*60*1000);
-  },delay);
+    new Notification('NutriAI — Váha',{body:'Čas zapsat dnešní váhu!'});
+    setInterval(()=>new Notification('NutriAI — Váha',{body:'Čas zapsat dnešní váhu!'}),freqDays*24*60*60*1000);
+  },next-now);
 }
 function checkNotifStatus(){
   const freq=localStorage.getItem('nai_notif_freq')||'0';
   const time=localStorage.getItem('nai_notif_time')||'08:00';
   const el=document.getElementById('notif-status');
   if(!el)return;
-  if(freq==='0'){el.textContent='Připomínky jsou vypnuté.';return;}
-  el.textContent=`Připomínka: každých ${freq} den/dní v ${time}.`;
+  el.textContent=freq==='0'?'Připomínky jsou vypnuté.':`Připomínka: každých ${freq} den/dní v ${time}.`;
 }
 
 // ── RENDER ──
 function render(){
   const t=meals.reduce((a,m)=>({kcal:a.kcal+m.kcal,protein:a.protein+m.protein,carbs:a.carbs+m.carbs,fat:a.fat+m.fat}),{kcal:0,protein:0,carbs:0,fat:0});
   document.getElementById('a-kcal').textContent=Math.round(t.kcal);
-  const rem=cfg.kcal-t.kcal;
-  document.getElementById('a-rem').textContent=rem>0?'zbývá '+Math.round(rem):'přebytek '+Math.round(-rem);
-  const pct=Math.min(t.kcal/cfg.kcal,1);
-  document.getElementById('a-ring').setAttribute('stroke-dashoffset',Math.round(490.1*(1-pct)));
-  document.getElementById('a-ring').style.stroke=pct>=1?'var(--ring-over)':'url(#rg)';
+
+  // ring & status text based on goal mode
+  const circ=490.1;
+  const ring=document.getElementById('a-ring');
+  const ringRange=document.getElementById('a-ring-range');
+  const remEl=document.getElementById('a-rem');
+
+  if(cfg.goalMode==='range'){
+    const mn=cfg.kcalMin||1200, mx=cfg.kcalMax||1500;
+    const pctMin=Math.min(t.kcal/mn,1);
+    ring.setAttribute('stroke-dashoffset',Math.round(circ*(1-pctMin)));
+    ring.style.stroke=t.kcal>mx?'var(--ring-over)':'url(#rg)';
+    // range arc — from min to max
+    if(t.kcal>=mn&&t.kcal<=mx){
+      const rangeFrac=(mx-mn)/mn;
+      ringRange.setAttribute('stroke-dashoffset',Math.round(circ*(1-Math.min(t.kcal/mn,1))));
+      ringRange.style.display='block';
+    } else { ringRange.style.display='none'; }
+    if(t.kcal<mn) remEl.textContent=`min ${Math.round(mn-t.kcal)} zbývá`;
+    else if(t.kcal<=mx) remEl.textContent=`v rozmezí ✓`;
+    else remEl.textContent=`přebytek ${Math.round(t.kcal-mx)}`;
+  } else if(cfg.goalMode==='deficit'){
+    const target=effectiveKcal();
+    const pct=Math.min(t.kcal/target,1);
+    ring.setAttribute('stroke-dashoffset',Math.round(circ*(1-pct)));
+    ring.style.stroke=t.kcal>target?'var(--ring-over)':'url(#rg)';
+    ringRange.style.display='none';
+    const burned=cfg.burnedToday||0;
+    if(burned){
+      const realDef=burned-t.kcal;
+      remEl.textContent=`deficit ${realDef>0?'+':''}${Math.round(realDef)} kcal`;
+    } else {
+      remEl.textContent=t.kcal<=target?`zbývá ${Math.round(target-t.kcal)}`:`přebytek ${Math.round(t.kcal-target)}`;
+    }
+  } else {
+    const target=cfg.kcal||1800;
+    const pct=Math.min(t.kcal/target,1);
+    ring.setAttribute('stroke-dashoffset',Math.round(circ*(1-pct)));
+    ring.style.stroke=pct>=1?'var(--ring-over)':'url(#rg)';
+    ringRange.style.display='none';
+    remEl.textContent=t.kcal<=target?`zbývá ${Math.round(target-t.kcal)}`:`přebytek ${Math.round(t.kcal-target)}`;
+  }
+
   document.getElementById('a-p').textContent=Math.round(t.protein)+'g';
   document.getElementById('a-c').textContent=Math.round(t.carbs)+'g';
   document.getElementById('a-f').textContent=Math.round(t.fat)+'g';
@@ -576,6 +708,7 @@ function render(){
   document.getElementById('ab-p').style.width=Math.min(100,t.protein/cfg.protein*100).toFixed(1)+'%';
   document.getElementById('ab-c').style.width=Math.min(100,t.carbs/cfg.carbs*100).toFixed(1)+'%';
   document.getElementById('ab-f').style.width=Math.min(100,t.fat/cfg.fat*100).toFixed(1)+'%';
+
   const el=document.getElementById('a-meals');
   if(!meals.length){el.innerHTML='<div class="no-meal">Zatím nic. Přidej první jídlo ↓</div>';return;}
   el.innerHTML=meals.map((m,i)=>`<div class="meal glass">
@@ -597,8 +730,7 @@ function del(i){meals.splice(i,1);saveMeals();render();}
 
 // ── EDIT MEAL MODAL ──
 function openEditMeal(i){
-  editingMealIdx=i;
-  const m=meals[i];
+  editingMealIdx=i;const m=meals[i];
   document.getElementById('edit-name').value=m.name;
   document.getElementById('edit-kcal').value=m.kcal;
   document.getElementById('edit-p').value=m.protein;
@@ -610,14 +742,7 @@ function closeEdit(){editingMealIdx=-1;document.getElementById('edit-modal').cla
 function closeEditOutside(e){if(e.target===document.getElementById('edit-modal'))closeEdit();}
 function saveEditMeal(){
   if(editingMealIdx<0)return;
-  meals[editingMealIdx]={
-    ...meals[editingMealIdx],
-    name:document.getElementById('edit-name').value.trim(),
-    kcal:parseD(document.getElementById('edit-kcal').value),
-    protein:parseD(document.getElementById('edit-p').value),
-    carbs:parseD(document.getElementById('edit-c').value),
-    fat:parseD(document.getElementById('edit-f').value),
-  };
+  meals[editingMealIdx]={...meals[editingMealIdx],name:document.getElementById('edit-name').value.trim(),kcal:parseD(document.getElementById('edit-kcal').value),protein:parseD(document.getElementById('edit-p').value),carbs:parseD(document.getElementById('edit-c').value),fat:parseD(document.getElementById('edit-f').value)};
   saveMeals();render();closeEdit();toast('Jídlo upraveno ✓');
 }
 
@@ -638,10 +763,8 @@ document.getElementById('a-photo').addEventListener('change',function(e){
       pb64=dataUrl.split(',')[1];pbMime=mime;
       document.getElementById('a-img').src=dataUrl;
       document.getElementById('preview-wrap').style.display='block';
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(f);e.target.value='';
+    };img.src=ev.target.result;
+  };reader.readAsDataURL(f);e.target.value='';
 });
 function removePhoto(){pb64=null;document.getElementById('preview-wrap').style.display='none';document.getElementById('a-img').src='';}
 
@@ -655,7 +778,10 @@ async function analyze(){
   document.getElementById('a-analyze').disabled=true;
   const gm={maintain:'udržení váhy',lose:'hubnutí',gain:'nabírání svalů'};
   const macroGoals=cfg.trackMacros?`, ${cfg.protein}g bílkovin, ${cfg.carbs}g sacharidů, ${cfg.fat}g tuků`:'';
-  const sys=`Jsi nutriční asistent. Analyzuješ jídla a vracíš kalorie + makra.\nUživatel: ${cfg.weight?'váha '+cfg.weight+'kg, ':''}cíl: ${gm[cfg.goal]||'udržení váhy'}.\nDenní cíle: ${cfg.kcal} kcal${macroGoals}.\nVrať POUZE JSON bez markdown: {"name":"","kcal":0,"protein":0,"carbs":0,"fat":0,"feedback":""}`;
+  const sys=`Jsi nutriční asistent. Analyzuješ jídla a vracíš kalorie + makra.
+Uživatel: ${cfg.weight?'váha '+cfg.weight+'kg, ':''}cíl: ${gm[cfg.goal]||'udržení váhy'}.
+Denní cíle: ${effectiveKcal()} kcal${macroGoals}.
+Vrať POUZE JSON bez markdown: {"name":"","kcal":0,"protein":0,"carbs":0,"fat":0,"feedback":""}`;
   try{
     let content=pb64?[{type:'image',source:{type:'base64',media_type:pbMime,data:pb64}},{type:'text',text:txt?`Foto jídla. Poznámka: ${txt}. Odhadni kalorie a makra.`:'Analyzuj jídlo na fotce.'}]:txt;
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:500,system:sys,messages:[{role:'user',content}]})});
@@ -674,39 +800,53 @@ async function analyze(){
   document.getElementById('a-dots').classList.remove('on');
   document.getElementById('a-analyze').disabled=false;
 }
-
 function confirm_meal(){
   if(!pending)return;
   const now=new Date();
   const meal={...pending,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
-  meals.push(meal);saveMeals();
-  pending=null;
+  meals.push(meal);saveMeals();pending=null;
   document.getElementById('a-result').classList.remove('on');
   document.getElementById('a-input').value='';
   removePhoto();render();go('today');toast('Jídlo přidáno ✓');
 }
 
-// ── AI DAILY SUMMARY ──
+// ── AI SUMMARY ──
+function closeSummary(){
+  document.getElementById('summary-box').classList.remove('on');
+  document.getElementById('summary-text').textContent='';
+}
+function renderMarkdown(text){
+  return text
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/
+
+/g,'</p><p>')
+    .replace(/
+/g,'<br>')
+    .replace(/^(.+)$/,'<p>$1</p>');
+}
 async function getDailySummary(){
   if(!cfg.apikey){toast('Nastav API klíč v nastavení');go('settings');return;}
   if(!meals.length){toast('Dnes ještě nemáš žádná jídla');return;}
   const box=document.getElementById('summary-box');
   const dots=document.getElementById('summary-dots');
   const text=document.getElementById('summary-text');
-  box.classList.add('on');dots.classList.add('on');text.textContent='';
+  box.classList.add('on');dots.classList.add('on');text.innerHTML='';
   const totals=meals.reduce((a,m)=>({kcal:a.kcal+m.kcal,protein:a.protein+m.protein,carbs:a.carbs+m.carbs,fat:a.fat+m.fat}),{kcal:0,protein:0,carbs:0,fat:0});
   const mealList=meals.map(m=>`${m.name} (${Math.round(m.kcal)} kcal)`).join(', ');
   const gm={maintain:'udržení váhy',lose:'hubnutí',gain:'nabírání svalů'};
-  const sys=`Jsi nutriční poradce. Zhodnoť stručně dnešní jídelníček uživatele. Buď konkrétní, praktický, motivující ale upřímný. Max 3-4 věty česky.`;
-  const userMsg=`Cíl: ${gm[cfg.goal]}, denní cíl: ${cfg.kcal} kcal${cfg.trackMacros?`, ${cfg.protein}g bílkovin`:''}.
+  const target=effectiveKcal();
+  const burned=cfg.burnedToday?`
+Skutečný výdej (Apple Watch): ${cfg.burnedToday} kcal, reálný deficit: ${cfg.burnedToday-Math.round(totals.kcal)} kcal.`:'';
+  const sys=`Jsi nutriční poradce. Zhodnoť stručně dnešní jídelníček. Formátuj odpověď strukturovaně s odstavci. Používej **tučný text** pro klíčové hodnoty a doporučení. Max 4-5 vět, česky.`;
+  const userMsg=`Cíl: ${gm[cfg.goal]}, denní cíl: ${target} kcal${cfg.trackMacros?`, ${cfg.protein}g B, ${cfg.carbs}g S, ${cfg.fat}g T`:''}.${burned}
 Dnes snědl/a: ${mealList}.
-Celkem: ${Math.round(totals.kcal)} kcal${cfg.trackMacros?`, ${Math.round(totals.protein)}g B, ${Math.round(totals.carbs)}g S, ${Math.round(totals.fat)}g T`:''}.
-Zhodnoť stručně tento den.`;
+Celkem: ${Math.round(totals.kcal)} kcal${cfg.trackMacros?`, ${Math.round(totals.protein)}g B, ${Math.round(totals.carbs)}g S, ${Math.round(totals.fat)}g T`:''}.`;
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:300,system:sys,messages:[{role:'user',content:userMsg}]})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:350,system:sys,messages:[{role:'user',content:userMsg}]})});
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
-    text.textContent=data.content[0].text;
+    text.innerHTML=renderMarkdown(data.content[0].text);
   }catch(e){text.textContent='Chyba: '+e.message;}
   dots.classList.remove('on');
 }
@@ -729,8 +869,8 @@ function eatMealprep(id){
   const mp=mealpreps.find(m=>m.id===id);if(!mp||mp.remaining<=0)return;
   mp.remaining--;
   const now=new Date();
-  const meal={name:mp.name+' (krabička)',kcal:mp.kcal,protein:mp.protein,carbs:mp.carbs,fat:mp.fat,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
-  meals.push(meal);saveMeals();
+  meals.push({name:mp.name+' (krabička)',kcal:mp.kcal,protein:mp.protein,carbs:mp.carbs,fat:mp.fat,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})});
+  saveMeals();
   if(mp.remaining<=0)mealpreps=mealpreps.filter(m=>m.id!==id);
   localStorage.setItem('nai_mealpreps',JSON.stringify(mealpreps));
   render();renderMealpreps();toast('Porce zapsána ✓');
@@ -762,9 +902,7 @@ function saveFav(){
     editingFavId=null;
     document.getElementById('fav-form-title').textContent='Nové jídlo';
     document.getElementById('fav-save-lbl').textContent='Uložit jídlo';
-  } else {
-    favs.push({id:Date.now(),name,kcal,protein:p,carbs:c,fat:f});
-  }
+  } else {favs.push({id:Date.now(),name,kcal,protein:p,carbs:c,fat:f});}
   localStorage.setItem('nai_favs',JSON.stringify(favs));
   ['fav-name','fav-kcal','fav-p','fav-c','fav-f'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('fav-form').style.display='none';
@@ -795,8 +933,8 @@ function cancelFavEdit(){
 function logFav(id){
   const fav=favs.find(f=>f.id===id);if(!fav)return;
   const now=new Date();
-  const meal={name:fav.name,kcal:fav.kcal,protein:fav.protein,carbs:fav.carbs,fat:fav.fat,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
-  meals.push(meal);saveMeals();render();go('today');toast(fav.name+' zapsáno ✓');
+  meals.push({name:fav.name,kcal:fav.kcal,protein:fav.protein,carbs:fav.carbs,fat:fav.fat,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})});
+  saveMeals();render();go('today');toast(fav.name+' zapsáno ✓');
 }
 function deleteFav(id){favs=favs.filter(f=>f.id!==id);localStorage.setItem('nai_favs',JSON.stringify(favs));renderFavs();}
 function renderFavs(){
@@ -842,74 +980,40 @@ function renderStats(){
   const todayEntry=hist.find(d=>d.date===today);
   const todayMeals=todayEntry?todayEntry.meals:meals;
   const todayKcal=todayMeals.reduce((a,m)=>a+m.kcal,0);
-
-  // last 30 days
+  const target=effectiveKcal();
   const last30=hist.slice(0,30);
   const daysTracked=last30.length;
   const avgKcal=daysTracked?Math.round(last30.reduce((a,d)=>a+d.meals.reduce((b,m)=>b+m.kcal,0),0)/daysTracked):0;
-  const daysInDeficit=last30.filter(d=>d.meals.reduce((a,m)=>a+m.kcal,0)<cfg.kcal).length;
-  const pctDeficit=daysTracked?Math.round(daysInDeficit/daysTracked*100):0;
-
-  // macro hits today
+  const daysInGoal=last30.filter(d=>{const k=d.meals.reduce((a,m)=>a+m.kcal,0);return cfg.goalMode==='range'?(k>=cfg.kcalMin&&k<=cfg.kcalMax):k<=target;}).length;
+  const pctGoal=daysTracked?Math.round(daysInGoal/daysTracked*100):0;
   const todayP=todayMeals.reduce((a,m)=>a+m.protein,0);
   const todayC=todayMeals.reduce((a,m)=>a+m.carbs,0);
   const todayF=todayMeals.reduce((a,m)=>a+m.fat,0);
 
-  const grid=document.getElementById('stat-grid');
-  grid.innerHTML=`
-    <div class="stat-card glass">
-      <div class="stat-val">${daysTracked}</div>
-      <div class="stat-lbl">Dní trackováno</div>
-      <div class="stat-sub">posledních 30 dní</div>
-    </div>
-    <div class="stat-card glass">
-      <div class="stat-val">${avgKcal}</div>
-      <div class="stat-lbl">Průměr kcal/den</div>
-      <div class="stat-sub">cíl: ${cfg.kcal} kcal</div>
-    </div>
-    <div class="stat-card glass">
-      <div class="stat-val">${daysInDeficit}/${daysTracked}</div>
-      <div class="stat-lbl">Dní v cíli</div>
-      <div class="stat-sub">${pctDeficit}% dní pod cílem</div>
-      <div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${pctDeficit}%;background:var(--bar1)"></div></div></div>
-    </div>
-    <div class="stat-card glass">
-      <div class="stat-val">${Math.round(todayKcal)}</div>
-      <div class="stat-lbl">Dnes kcal</div>
-      <div class="stat-sub">${todayKcal>=cfg.kcal?'Cíl splněn ✓':'zbývá '+(cfg.kcal-Math.round(todayKcal))}</div>
-    </div>
-    ${cfg.trackMacros?`
-    <div class="stat-card glass" style="grid-column:span 2">
-      <div class="stat-lbl" style="margin-bottom:8px">Dnešní makra</div>
-      <div style="display:flex;gap:12px">
-        <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayP)}g</div><div class="stat-lbl">B (cíl ${cfg.protein}g)</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayP/cfg.protein*100).toFixed(0)}%;background:var(--bar1)"></div></div></div></div>
-        <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayC)}g</div><div class="stat-lbl">S (cíl ${cfg.carbs}g)</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayC/cfg.carbs*100).toFixed(0)}%;background:var(--bar2)"></div></div></div></div>
-        <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayF)}g</div><div class="stat-lbl">T (cíl ${cfg.fat}g)</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayF/cfg.fat*100).toFixed(0)}%;background:var(--bar3)"></div></div></div></div>
-      </div>
-    </div>`:''}
-  `;
+  document.getElementById('stat-grid').innerHTML=`
+    <div class="stat-card glass"><div class="stat-val">${daysTracked}</div><div class="stat-lbl">Dní trackováno</div><div class="stat-sub">posledních 30 dní</div></div>
+    <div class="stat-card glass"><div class="stat-val">${avgKcal}</div><div class="stat-lbl">Průměr kcal/den</div><div class="stat-sub">cíl: ${target} kcal</div></div>
+    <div class="stat-card glass"><div class="stat-val">${daysInGoal}/${daysTracked}</div><div class="stat-lbl">Dní v cíli</div><div class="stat-sub">${pctGoal}%</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${pctGoal}%;background:var(--bar1)"></div></div></div></div>
+    <div class="stat-card glass"><div class="stat-val">${Math.round(todayKcal)}</div><div class="stat-lbl">Dnes kcal</div><div class="stat-sub">${todayKcal>=target?'Cíl splněn ✓':'zbývá '+(target-Math.round(todayKcal))}</div></div>
+    ${cfg.trackMacros?`<div class="stat-card glass" style="grid-column:span 2"><div class="stat-lbl" style="margin-bottom:8px">Dnešní makra</div><div style="display:flex;gap:12px">
+      <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayP)}g</div><div class="stat-lbl">B / ${cfg.protein}g</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayP/cfg.protein*100).toFixed(0)}%;background:var(--bar1)"></div></div></div></div>
+      <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayC)}g</div><div class="stat-lbl">S / ${cfg.carbs}g</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayC/cfg.carbs*100).toFixed(0)}%;background:var(--bar2)"></div></div></div></div>
+      <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayF)}g</div><div class="stat-lbl">T / ${cfg.fat}g</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayF/cfg.fat*100).toFixed(0)}%;background:var(--bar3)"></div></div></div></div>
+    </div></div>`:''}`;
 
-  // week chart
   const days7=[];
   for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().split('T')[0]);}
   const barData=days7.map(date=>{
     const entry=hist.find(d=>d.date===date);
     const kcal=entry?Math.round(entry.meals.reduce((a,m)=>a+m.kcal,0)):(date===today?Math.round(meals.reduce((a,m)=>a+m.kcal,0)):0);
     const dayNames=['Ne','Po','Út','St','Čt','Pá','So'];
-    const d=new Date(date);
-    return {label:dayNames[d.getDay()],kcal,isToday:date===today};
+    return {label:dayNames[new Date(date).getDay()],kcal,isToday:date===today};
   });
-  const maxKcal=Math.max(...barData.map(b=>b.kcal),cfg.kcal,1);
-  const barsEl=document.getElementById('week-bars');
-  barsEl.innerHTML=barData.map(b=>{
+  const maxKcal=Math.max(...barData.map(b=>b.kcal),target,1);
+  document.getElementById('week-bars').innerHTML=barData.map(b=>{
     const h=Math.max(Math.round((b.kcal/maxKcal)*70),b.kcal>0?4:0);
-    const col=b.kcal>cfg.kcal?'var(--ring-over)':b.isToday?'var(--accent)':'var(--bar1)';
-    return `<div class="week-bar-wrap">
-      <div class="week-bar-bg" style="height:70px">
-        <div class="week-bar-fill" style="height:${h}px;background:${col}"></div>
-      </div>
-      <div class="week-day">${b.label}</div>
-    </div>`;
+    const col=b.kcal>target?'var(--ring-over)':b.isToday?'var(--accent)':'var(--bar1)';
+    return `<div class="week-bar-wrap"><div class="week-bar-bg" style="height:70px"><div class="week-bar-fill" style="height:${h}px;background:${col}"></div></div><div class="week-day">${b.label}</div></div>`;
   }).join('');
 }
 
@@ -926,11 +1030,15 @@ function loadH(){
   }).join('');
 }
 
+const histTabLabels={hist:'Historie',stats:'Statistiky',weight:'Váha'};
 function setHistTab(t){
   ['hist','stats','weight'].forEach(s=>{
     document.getElementById('hsub-'+s).style.display=s===t?'block':'none';
     document.getElementById('ht-'+s).classList.toggle('on',s===t);
   });
+  // update nav label
+  const navLbl=document.getElementById('nav-hist-label');
+  if(navLbl)navLbl.textContent=histTabLabels[t]||'Historie';
   if(t==='hist')loadH();
   if(t==='stats')renderStats();
   if(t==='weight')renderWeight();
@@ -950,7 +1058,7 @@ function go(name){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   document.getElementById('s-'+name).classList.add('on');
   document.getElementById('n-'+name).classList.add('on');
-  if(name==='history'){setHistTab('hist');}
+  if(name==='history')setHistTab('hist');
   if(name==='settings')loadS();
   document.getElementById('s-'+name).scrollTop=0;
 }
@@ -958,5 +1066,6 @@ function go(name){
 function toast(msg){const t=document.getElementById('a-toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2400);}
 init();
 </script>
+
 </body>
 </html>
