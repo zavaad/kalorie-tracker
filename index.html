@@ -9,247 +9,70 @@
 <title>NutriAI</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
-
-/* ═══════════════════════════════════
-   CSS VARIABLES — LIGHT MODE
-═══════════════════════════════════ */
 :root {
-  --bg:           #dce8f5;
-  --body-bg:      #c8daf0;
-  --o1-col:       radial-gradient(circle,#ffffff,#d0e4f8);
-  --o2-col:       radial-gradient(circle,#4477ee,#6699ff);
-  --o3-col:       radial-gradient(circle,#aac4ee,#ddeeff);
-  --o1-op: 0.80; --o2-op: 0.55; --o3-op: 0.50;
-  --grain-op:     0.30;
-  --grain-blend:  overlay;
-
-  --glass-bg:     rgba(255,255,255,0.46);
-  --glass-border: rgba(255,255,255,0.78);
-  --glass-shadow: 0 4px 18px rgba(80,60,140,0.07);
-  --glass-inset:  inset 0 1px 0 rgba(255,255,255,0.85);
-  --glass-md-bg:  rgba(255,255,255,0.54);
-  --glass-md-bdr: rgba(255,255,255,0.82);
-  --glass-md-sh:  0 6px 24px rgba(80,60,140,0.09);
-  --glass-md-ins: inset 0 1px 0 rgba(255,255,255,0.9);
-
-  --text-primary: #1a1530;
-  --text-secondary: rgba(50,40,90,0.42);
-  --text-muted:   rgba(40,30,80,0.28);
-  --text-label:   rgba(40,30,80,0.44);
-  --text-hint:    rgba(70,55,120,0.28);
-
-  --accent:       #4477dd;
-  --accent2:      #3366cc;
-  --accent-glow:  rgba(50,100,220,0.10);
-  --bar1:         linear-gradient(90deg,#5588ee,#88aaff);
-  --bar2:         linear-gradient(90deg,#f0a040,#f8cc80);
-  --bar3:         linear-gradient(90deg,#f07080,#f8a0aa);
-
-  --ring1:        #5588ee;
-  --ring2:        #88aaff;
-  --ring-track:   rgba(60,100,200,0.12);
-  --ring-over:    #f07080;
-
-  --nav-bg:       rgba(220,215,245,0.70);
-  --nav-border:   rgba(255,255,255,0.75);
-  --nav-inset:    inset 0 1px 0 rgba(255,255,255,0.82);
-  --nav-shadow:   0 -4px 20px rgba(80,60,160,0.08);
-  --nav-color:    #5560aa;
-  --nav-active:   #3340aa;
-  --nav-act-bg:   rgba(255,255,255,0.55);
-  --nav-act-bdr:  rgba(255,255,255,0.78);
-  --nav-act-sh:   0 2px 10px rgba(70,80,200,0.10);
-
-  --input-bg:     rgba(255,255,255,0.58);
-  --input-bdr:    rgba(160,140,200,0.26);
-  --input-focus:  rgba(90,100,210,0.4);
-  --select-bg:    #f0eef8;
-
-  --btn-ai-bg:    rgba(90,100,210,0.10);
-  --btn-ai-col:   #4455bb;
-  --btn-ai-bdr:   rgba(90,100,210,0.22);
-  --btn-confirm:  linear-gradient(135deg,#55cc88,#33bb77);
-  --btn-conf-sh:  0 3px 14px rgba(50,170,90,0.22);
-  --btn-save:     linear-gradient(135deg,#8090ee,#a8b0f5);
-  --btn-save-sh:  0 3px 16px rgba(90,100,210,0.18);
-
-  --mp-badge-bg:  rgba(85,102,204,0.1);
-  --mp-badge-col: #5566cc;
-  --mp-bar:       linear-gradient(90deg,#8090ee,#a8b8ff);
-  --mp-bar-bg:    rgba(100,80,180,0.1);
-  --mp-eat-bg:    rgba(85,204,136,0.12);
-  --mp-eat-col:   #33aa66;
-  --mp-eat-bdr:   rgba(85,204,136,0.25);
-  --mp-del-bg:    rgba(200,100,100,0.10);
-  --mp-del-col:   rgba(180,60,60,0.6);
-  --mp-del-bdr:   rgba(200,100,100,0.20);
-  --mp-save-bg:   linear-gradient(135deg,#8090ee,#a8b0f5);
-  --mp-save-col:  #fff;
-
-  --stab-bg:      rgba(255,255,255,0.35);
-  --stab-bdr:     rgba(255,255,255,0.6);
-  --stab-col:     rgba(60,50,110,0.45);
-  --stab-on-bg:   rgba(255,255,255,0.65);
-  --stab-on-bdr:  rgba(255,255,255,0.85);
-  --stab-on-col:  #4455bb;
-  --stab-on-sh:   0 2px 10px rgba(70,80,200,0.08);
-
-  --photo-bg:     rgba(90,100,210,0.12);
-  --photo-bdr:    rgba(90,100,210,0.22);
-  --photo-str:    #4455bb;
-
-  --dot-col:      rgba(90,100,210,0.45);
-  --rm-bg:        rgba(255,255,255,0.52);
-  --rm-bdr:       rgba(255,255,255,0.7);
-  --rm-lbl:       rgba(50,40,90,0.38);
-  --feedback-col: rgba(40,30,80,0.52);
-  --feedback-bdr: rgba(160,140,200,0.18);
-
-  --hdiv:         rgba(160,140,200,0.14);
-  --hmeal-col:    rgba(40,30,80,0.52);
-  --hkcal-col:    #4477dd;
-
-  --toast-bg:     rgba(255,255,255,0.9);
-  --toast-col:    #1a1530;
-  --toast-bdr:    rgba(160,140,200,0.28);
-  --toast-sh:     0 3px 16px rgba(80,60,140,0.1);
-
-  --sec-col:      rgba(40,30,80,0.38);
-  --no-col:       rgba(80,60,140,0.28);
-  --meal-del-bg:  rgba(160,140,200,0.12);
-  --meal-del-col: rgba(80,60,130,0.38);
-  --meal-kcal:    #4477dd;
-  --meal-mac:     rgba(40,30,80,0.33);
-  --meal-time:    rgba(40,30,80,0.35);
-  --sg-lbl:       rgba(40,30,80,0.38);
-  --api-note:     rgba(50,40,90,0.32);
-  --sinput-bg:    rgba(255,255,255,0.58);
+  --bg:#dce8f5;--body-bg:#c8daf0;
+  --o1-col:radial-gradient(circle,#ffffff,#d0e4f8);--o2-col:radial-gradient(circle,#4477ee,#6699ff);--o3-col:radial-gradient(circle,#aac4ee,#ddeeff);
+  --o1-op:0.80;--o2-op:0.55;--o3-op:0.50;--grain-op:0.30;--grain-blend:overlay;
+  --glass-bg:rgba(255,255,255,0.46);--glass-border:rgba(255,255,255,0.78);--glass-shadow:0 4px 18px rgba(80,60,140,0.07);--glass-inset:inset 0 1px 0 rgba(255,255,255,0.85);
+  --glass-md-bg:rgba(255,255,255,0.54);--glass-md-bdr:rgba(255,255,255,0.82);--glass-md-sh:0 6px 24px rgba(80,60,140,0.09);--glass-md-ins:inset 0 1px 0 rgba(255,255,255,0.9);
+  --text-primary:#1a1530;--text-secondary:rgba(50,40,90,0.42);--text-muted:rgba(40,30,80,0.28);--text-label:rgba(40,30,80,0.44);--text-hint:rgba(70,55,120,0.28);
+  --accent:#4477dd;--accent2:#3366cc;--accent-glow:rgba(50,100,220,0.10);
+  --bar1:linear-gradient(90deg,#5588ee,#88aaff);--bar2:linear-gradient(90deg,#f0a040,#f8cc80);--bar3:linear-gradient(90deg,#f07080,#f8a0aa);
+  --ring1:#5588ee;--ring2:#88aaff;--ring-track:rgba(60,100,200,0.12);--ring-over:#f07080;
+  --nav-bg:rgba(220,215,245,0.70);--nav-border:rgba(255,255,255,0.75);--nav-inset:inset 0 1px 0 rgba(255,255,255,0.82);--nav-shadow:0 -4px 20px rgba(80,60,160,0.08);
+  --nav-color:#5560aa;--nav-active:#3340aa;--nav-act-bg:rgba(255,255,255,0.55);--nav-act-bdr:rgba(255,255,255,0.78);--nav-act-sh:0 2px 10px rgba(70,80,200,0.10);
+  --input-bg:rgba(255,255,255,0.58);--input-bdr:rgba(160,140,200,0.26);--input-focus:rgba(90,100,210,0.4);--select-bg:#f0eef8;
+  --btn-ai-bg:rgba(90,100,210,0.10);--btn-ai-col:#4455bb;--btn-ai-bdr:rgba(90,100,210,0.22);
+  --btn-confirm:linear-gradient(135deg,#55cc88,#33bb77);--btn-conf-sh:0 3px 14px rgba(50,170,90,0.22);
+  --btn-save:linear-gradient(135deg,#8090ee,#a8b0f5);--btn-save-sh:0 3px 16px rgba(90,100,210,0.18);
+  --mp-badge-bg:rgba(85,102,204,0.1);--mp-badge-col:#5566cc;--mp-bar:linear-gradient(90deg,#8090ee,#a8b8ff);--mp-bar-bg:rgba(100,80,180,0.1);
+  --mp-eat-bg:rgba(85,204,136,0.12);--mp-eat-col:#33aa66;--mp-eat-bdr:rgba(85,204,136,0.25);
+  --mp-del-bg:rgba(200,100,100,0.10);--mp-del-col:rgba(180,60,60,0.6);--mp-del-bdr:rgba(200,100,100,0.20);
+  --mp-save-bg:linear-gradient(135deg,#8090ee,#a8b0f5);--mp-save-col:#fff;
+  --stab-bg:rgba(255,255,255,0.35);--stab-bdr:rgba(255,255,255,0.6);--stab-col:rgba(60,50,110,0.45);
+  --stab-on-bg:rgba(255,255,255,0.65);--stab-on-bdr:rgba(255,255,255,0.85);--stab-on-col:#4455bb;--stab-on-sh:0 2px 10px rgba(70,80,200,0.08);
+  --photo-bg:rgba(90,100,210,0.12);--photo-bdr:rgba(90,100,210,0.22);--photo-str:#4455bb;
+  --dot-col:rgba(90,100,210,0.45);--rm-bg:rgba(255,255,255,0.52);--rm-bdr:rgba(255,255,255,0.7);--rm-lbl:rgba(50,40,90,0.38);
+  --feedback-col:rgba(40,30,80,0.52);--feedback-bdr:rgba(160,140,200,0.18);
+  --hdiv:rgba(160,140,200,0.14);--hmeal-col:rgba(40,30,80,0.52);--hkcal-col:#4477dd;
+  --toast-bg:rgba(255,255,255,0.9);--toast-col:#1a1530;--toast-bdr:rgba(160,140,200,0.28);--toast-sh:0 3px 16px rgba(80,60,140,0.1);
+  --sec-col:rgba(40,30,80,0.38);--no-col:rgba(80,60,140,0.28);
+  --meal-del-bg:rgba(160,140,200,0.12);--meal-del-col:rgba(80,60,130,0.38);--meal-kcal:#4477dd;--meal-mac:rgba(40,30,80,0.33);--meal-time:rgba(40,30,80,0.35);
+  --sg-lbl:rgba(40,30,80,0.38);--api-note:rgba(50,40,90,0.32);--sinput-bg:rgba(255,255,255,0.58);
 }
-
-/* ═══════════════════════════════════
-   CSS VARIABLES — DARK MODE
-═══════════════════════════════════ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:           #060d0a;
-    --body-bg:      #030806;
-    --o1-col:       radial-gradient(circle,#00ff99,#00cc66);
-    --o2-col:       radial-gradient(circle,#00e8cc,#007755);
-    --o3-col:       radial-gradient(circle,#aaffdd,#00aa88);
-    --o1-op: 0.22; --o2-op: 0.26; --o3-op: 0.14;
-    --grain-op:     0.50;
-    --grain-blend:  overlay;
-
-    --glass-bg:     rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.09);
-    --glass-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    --glass-inset:  inset 0 1px 0 rgba(255,255,255,0.07);
-    --glass-md-bg:  rgba(255,255,255,0.06);
-    --glass-md-bdr: rgba(255,255,255,0.11);
-    --glass-md-sh:  0 6px 28px rgba(0,0,0,0.35);
-    --glass-md-ins: inset 0 1px 0 rgba(255,255,255,0.09);
-
-    --text-primary: #e8fff4;
-    --text-secondary: rgba(180,255,210,0.38);
-    --text-muted:   rgba(180,255,210,0.25);
-    --text-label:   rgba(180,255,210,0.35);
-    --text-hint:    rgba(180,255,210,0.20);
-
-    --accent:       #44ffaa;
-    --accent2:      #33dd88;
-    --accent-glow:  rgba(0,200,100,0.08);
-    --bar1:         linear-gradient(90deg,#44ffaa,#00cc77);
-    --bar2:         linear-gradient(90deg,#00e8cc,#00aaaa);
-    --bar3:         linear-gradient(90deg,#aaffdd,#44ccaa);
-
-    --ring1:        #00cc77;
-    --ring2:        #44ffaa;
-    --ring-track:   rgba(0,255,150,0.07);
-    --ring-over:    #ff6666;
-
-    --nav-bg:       rgba(6,15,10,0.80);
-    --nav-border:   rgba(0,255,150,0.10);
-    --nav-inset:    inset 0 1px 0 rgba(0,255,150,0.06);
-    --nav-shadow:   0 -4px 20px rgba(0,0,0,0.3);
-    --nav-color:    rgba(180,255,210,0.32);
-    --nav-active:   #44ffaa;
-    --nav-act-bg:   rgba(0,255,150,0.07);
-    --nav-act-bdr:  rgba(0,255,150,0.15);
-    --nav-act-sh:   0 2px 10px rgba(0,200,100,0.08);
-
-    --input-bg:     rgba(255,255,255,0.04);
-    --input-bdr:    rgba(255,255,255,0.09);
-    --input-focus:  rgba(0,255,150,0.3);
-    --select-bg:    #0a1a10;
-
-    --btn-ai-bg:    rgba(0,255,150,0.08);
-    --btn-ai-col:   #44ffaa;
-    --btn-ai-bdr:   rgba(0,255,150,0.22);
-    --btn-confirm:  linear-gradient(135deg,#00cc77,#009955);
-    --btn-conf-sh:  0 4px 18px rgba(0,180,100,0.3);
-    --btn-save:     linear-gradient(135deg,#00aa66,#007744);
-    --btn-save-sh:  0 4px 18px rgba(0,150,80,0.25);
-
-    --mp-badge-bg:  rgba(0,255,150,0.10);
-    --mp-badge-col: #44ffaa;
-    --mp-bar:       linear-gradient(90deg,#00cc77,#44ffaa);
-    --mp-bar-bg:    rgba(0,255,150,0.08);
-    --mp-eat-bg:    rgba(0,255,150,0.08);
-    --mp-eat-col:   #44ffaa;
-    --mp-eat-bdr:   rgba(0,255,150,0.2);
-    --mp-del-bg:    rgba(255,80,80,0.07);
-    --mp-del-col:   rgba(255,120,120,0.6);
-    --mp-del-bdr:   rgba(255,80,80,0.15);
-    --mp-save-bg:   rgba(0,255,150,0.08);
-    --mp-save-col:  #44ffaa;
-
-    --stab-bg:      rgba(255,255,255,0.03);
-    --stab-bdr:     rgba(255,255,255,0.07);
-    --stab-col:     rgba(180,255,210,0.35);
-    --stab-on-bg:   rgba(0,255,150,0.07);
-    --stab-on-bdr:  rgba(0,255,150,0.20);
-    --stab-on-col:  #44ffaa;
-    --stab-on-sh:   0 2px 12px rgba(0,200,100,0.10);
-
-    --photo-bg:     rgba(0,255,150,0.08);
-    --photo-bdr:    rgba(0,255,150,0.18);
-    --photo-str:    #44ffaa;
-
-    --dot-col:      rgba(0,255,150,0.5);
-    --rm-bg:        rgba(255,255,255,0.04);
-    --rm-bdr:       rgba(255,255,255,0.07);
-    --rm-lbl:       rgba(180,255,210,0.30);
-    --feedback-col: rgba(180,255,210,0.45);
-    --feedback-bdr: rgba(255,255,255,0.06);
-
-    --hdiv:         rgba(255,255,255,0.05);
-    --hmeal-col:    rgba(180,255,210,0.45);
-    --hkcal-col:    #44ffaa;
-
-    --toast-bg:     rgba(10,25,15,0.92);
-    --toast-col:    #e8fff4;
-    --toast-bdr:    rgba(0,255,150,0.15);
-    --toast-sh:     0 3px 16px rgba(0,0,0,0.4);
-
-    --sec-col:      rgba(180,255,210,0.30);
-    --no-col:       rgba(180,255,210,0.20);
-    --meal-del-bg:  rgba(255,255,255,0.05);
-    --meal-del-col: rgba(180,255,210,0.25);
-    --meal-kcal:    #44ffaa;
-    --meal-mac:     rgba(180,255,210,0.30);
-    --meal-time:    rgba(180,255,210,0.35);
-    --sg-lbl:       rgba(180,255,210,0.30);
-    --api-note:     rgba(180,255,210,0.22);
-    --sinput-bg:    rgba(255,255,255,0.04);
-  }
-}
-
-/* ═══════════════════════════════════
-   BASE
-═══════════════════════════════════ */
+@media(prefers-color-scheme:dark){:root{
+  --bg:#060d0a;--body-bg:#030806;
+  --o1-col:radial-gradient(circle,#00ff99,#00cc66);--o2-col:radial-gradient(circle,#00e8cc,#007755);--o3-col:radial-gradient(circle,#aaffdd,#00aa88);
+  --o1-op:0.22;--o2-op:0.26;--o3-op:0.14;--grain-op:0.50;--grain-blend:overlay;
+  --glass-bg:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.09);--glass-shadow:0 4px 20px rgba(0,0,0,0.3);--glass-inset:inset 0 1px 0 rgba(255,255,255,0.07);
+  --glass-md-bg:rgba(255,255,255,0.06);--glass-md-bdr:rgba(255,255,255,0.11);--glass-md-sh:0 6px 28px rgba(0,0,0,0.35);--glass-md-ins:inset 0 1px 0 rgba(255,255,255,0.09);
+  --text-primary:#e8fff4;--text-secondary:rgba(180,255,210,0.38);--text-muted:rgba(180,255,210,0.25);--text-label:rgba(180,255,210,0.35);--text-hint:rgba(180,255,210,0.20);
+  --accent:#44ffaa;--accent2:#33dd88;--accent-glow:rgba(0,200,100,0.08);
+  --bar1:linear-gradient(90deg,#44ffaa,#00cc77);--bar2:linear-gradient(90deg,#00e8cc,#00aaaa);--bar3:linear-gradient(90deg,#aaffdd,#44ccaa);
+  --ring1:#00cc77;--ring2:#44ffaa;--ring-track:rgba(0,255,150,0.07);--ring-over:#ff6666;
+  --nav-bg:rgba(6,15,10,0.80);--nav-border:rgba(0,255,150,0.10);--nav-inset:inset 0 1px 0 rgba(0,255,150,0.06);--nav-shadow:0 -4px 20px rgba(0,0,0,0.3);
+  --nav-color:rgba(180,255,210,0.32);--nav-active:#44ffaa;--nav-act-bg:rgba(0,255,150,0.07);--nav-act-bdr:rgba(0,255,150,0.15);--nav-act-sh:0 2px 10px rgba(0,200,100,0.08);
+  --input-bg:rgba(255,255,255,0.04);--input-bdr:rgba(255,255,255,0.09);--input-focus:rgba(0,255,150,0.3);--select-bg:#0a1a10;
+  --btn-ai-bg:rgba(0,255,150,0.08);--btn-ai-col:#44ffaa;--btn-ai-bdr:rgba(0,255,150,0.22);
+  --btn-confirm:linear-gradient(135deg,#00cc77,#009955);--btn-conf-sh:0 4px 18px rgba(0,180,100,0.3);
+  --btn-save:linear-gradient(135deg,#00aa66,#007744);--btn-save-sh:0 4px 18px rgba(0,150,80,0.25);
+  --mp-badge-bg:rgba(0,255,150,0.10);--mp-badge-col:#44ffaa;--mp-bar:linear-gradient(90deg,#00cc77,#44ffaa);--mp-bar-bg:rgba(0,255,150,0.08);
+  --mp-eat-bg:rgba(0,255,150,0.08);--mp-eat-col:#44ffaa;--mp-eat-bdr:rgba(0,255,150,0.2);
+  --mp-del-bg:rgba(255,80,80,0.07);--mp-del-col:rgba(255,120,120,0.6);--mp-del-bdr:rgba(255,80,80,0.15);
+  --mp-save-bg:rgba(0,255,150,0.08);--mp-save-col:#44ffaa;
+  --stab-bg:rgba(255,255,255,0.03);--stab-bdr:rgba(255,255,255,0.07);--stab-col:rgba(180,255,210,0.35);
+  --stab-on-bg:rgba(0,255,150,0.07);--stab-on-bdr:rgba(0,255,150,0.20);--stab-on-col:#44ffaa;--stab-on-sh:0 2px 12px rgba(0,200,100,0.10);
+  --photo-bg:rgba(0,255,150,0.08);--photo-bdr:rgba(0,255,150,0.18);--photo-str:#44ffaa;
+  --dot-col:rgba(0,255,150,0.5);--rm-bg:rgba(255,255,255,0.04);--rm-bdr:rgba(255,255,255,0.07);--rm-lbl:rgba(180,255,210,0.30);
+  --feedback-col:rgba(180,255,210,0.45);--feedback-bdr:rgba(255,255,255,0.06);
+  --hdiv:rgba(255,255,255,0.05);--hmeal-col:rgba(180,255,210,0.45);--hkcal-col:#44ffaa;
+  --toast-bg:rgba(10,25,15,0.92);--toast-col:#e8fff4;--toast-bdr:rgba(0,255,150,0.15);--toast-sh:0 3px 16px rgba(0,0,0,0.4);
+  --sec-col:rgba(180,255,210,0.30);--no-col:rgba(180,255,210,0.20);
+  --meal-del-bg:rgba(255,255,255,0.05);--meal-del-col:rgba(180,255,210,0.25);--meal-kcal:#44ffaa;--meal-mac:rgba(180,255,210,0.30);--meal-time:rgba(180,255,210,0.35);
+  --sg-lbl:rgba(180,255,210,0.30);--api-note:rgba(180,255,210,0.22);--sinput-bg:rgba(255,255,255,0.04);
+}}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
-
 .bg-fixed{position:fixed;inset:0;z-index:0;background:var(--bg);overflow:hidden;}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);animation:fl 12s ease-in-out infinite;}
 .o1{width:380px;height:380px;background:var(--o1-col);top:-80px;left:-60px;opacity:var(--o1-op);animation-delay:0s;}
@@ -257,25 +80,19 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 .o3{width:320px;height:320px;background:var(--o3-col);bottom:100px;left:-40px;opacity:var(--o3-op);animation-delay:-9s;}
 @keyframes fl{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(18px,-18px) scale(1.05)}66%{transform:translate(-12px,14px) scale(0.96)}}
 .grain{position:absolute;inset:0;pointer-events:none;z-index:1;opacity:var(--grain-op);mix-blend-mode:var(--grain-blend);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-
 #app{position:fixed;inset:0;z-index:1;overflow:hidden;font-family:'Nunito',sans-serif;}
-
 .glass{background:var(--glass-bg);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),var(--glass-inset);}
 .glass-md{background:var(--glass-md-bg);backdrop-filter:blur(30px) saturate(170%);-webkit-backdrop-filter:blur(30px) saturate(170%);border:1px solid var(--glass-md-bdr);box-shadow:var(--glass-md-sh),var(--glass-md-ins);}
-
 .screen{position:absolute;inset:0;z-index:2;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 16px calc(80px + env(safe-area-inset-bottom));display:none;}
 .screen.on{display:block;}
-
 .topbar{padding:calc(54px + env(safe-area-inset-top)) 0 16px;}
 .topbar h1{font-size:24px;font-weight:800;color:var(--text-primary);}
 .topbar .sub{font-size:12px;color:var(--text-secondary);margin-top:2px;font-weight:500;}
-
 .ring-wrap{display:flex;justify-content:center;margin:0 0 18px;position:relative;}
 .ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;}
 .ring-num{font-size:30px;font-weight:800;color:var(--text-primary);line-height:1;}
 .ring-lbl{font-size:12px;color:var(--text-secondary);margin-top:3px;font-weight:500;}
 .ring-rem{font-size:11px;color:var(--text-muted);margin-top:2px;}
-
 .macro-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
 .mc{border-radius:16px;padding:12px 11px;overflow:hidden;min-width:0;}
 .mc .lbl{font-size:10px;color:var(--text-label);font-weight:700;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -283,9 +100,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 .mc .goal{font-size:10px;color:var(--text-muted);margin-top:1px;}
 .bar-bg{height:4px;background:rgba(128,128,128,0.1);border-radius:4px;margin-top:8px;overflow:hidden;width:100%;}
 .bar-fill{height:4px;border-radius:4px;transition:width 0.5s ease;max-width:100%;}
-
 .sec-title{font-size:10px;color:var(--sec-col);font-weight:800;letter-spacing:0.09em;text-transform:uppercase;margin-bottom:10px;}
-
 .meals{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
 .meal{border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;}
 .meal-info{flex:1;min-width:0;}
@@ -295,12 +110,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 .meal-kcal{font-size:15px;font-weight:800;color:var(--meal-kcal);}
 .meal-macros{font-size:10px;color:var(--meal-mac);margin-top:1px;white-space:nowrap;}
 .meal-del{background:var(--meal-del-bg);border:none;color:var(--meal-del-col);width:26px;height:26px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.meal-edit{background:var(--btn-ai-bg);border:1px solid var(--btn-ai-bdr);color:var(--btn-ai-col);width:26px;height:26px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:2px;}
 .no-meal{text-align:center;padding:26px 16px;color:var(--no-col);font-size:14px;font-weight:500;}
-
-.subtabs{display:flex;gap:8px;margin-bottom:14px;}
-.stab{flex:1;padding:10px 6px;text-align:center;font-size:12px;font-weight:700;color:var(--stab-col);cursor:pointer;background:var(--stab-bg);border:1px solid var(--stab-bdr);border-radius:12px;font-family:'Nunito',sans-serif;transition:all 0.2s;}
+.subtabs{display:flex;gap:6px;margin-bottom:14px;}
+.stab{flex:1;padding:9px 4px;text-align:center;font-size:11px;font-weight:700;color:var(--stab-col);cursor:pointer;background:var(--stab-bg);border:1px solid var(--stab-bdr);border-radius:12px;font-family:'Nunito',sans-serif;transition:all 0.2s;}
 .stab.on{color:var(--stab-on-col);background:var(--stab-on-bg);border-color:var(--stab-on-bdr);box-shadow:var(--stab-on-sh);}
-
 .input-wrap{position:relative;margin-bottom:14px;}
 .input-card{border-radius:20px;overflow:hidden;}
 .ai-textarea{width:100%;background:transparent;border:none;outline:none;color:var(--text-primary);font-family:'Nunito',sans-serif;font-size:15px;padding:14px 52px 14px 14px;resize:none;min-height:80px;display:block;}
@@ -311,27 +125,21 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 .preview-wrap{padding:0 14px 10px;display:none;}
 .preview-wrap img{max-width:100%;border-radius:10px;max-height:160px;object-fit:cover;}
 .preview-remove{display:block;font-size:11px;color:var(--text-muted);margin-top:5px;cursor:pointer;font-weight:600;background:none;border:none;font-family:'Nunito',sans-serif;}
-
 .ai-btn{width:calc(100% - 28px);margin:0 14px 14px;background:var(--btn-ai-bg);color:var(--btn-ai-col);border:1px solid var(--btn-ai-bdr);border-radius:12px;padding:12px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;transition:all 0.2s;}
-.ai-btn:disabled{opacity:0.3;cursor:default;}
-.ai-btn:active{transform:scale(0.98);}
-
+.ai-btn:disabled{opacity:0.3;cursor:default;}.ai-btn:active{transform:scale(0.98);}
 .dots{display:none;text-align:center;padding:22px;color:var(--text-muted);font-size:14px;font-weight:500;}
 .dots.on{display:block;}
 .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--dot-col);margin:0 3px;animation:bonce 1.2s infinite;}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes bonce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
-
 .result-card{border-radius:20px;padding:15px;margin-bottom:14px;display:none;}
 .result-card.on{display:block;}
 .result-name{font-size:16px;font-weight:800;color:var(--text-primary);margin-bottom:10px;}
 .result-macros{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px;}
 .rm{text-align:center;background:var(--rm-bg);border-radius:9px;padding:7px 3px;border:1px solid var(--rm-bdr);}
-.rm-val{font-size:14px;font-weight:800;}
-.rm-lbl{font-size:10px;color:var(--rm-lbl);margin-top:1px;}
+.rm-val{font-size:14px;font-weight:800;}.rm-lbl{font-size:10px;color:var(--rm-lbl);margin-top:1px;}
 .feedback{font-size:13px;color:var(--feedback-col);line-height:1.55;border-top:1px solid var(--feedback-bdr);padding-top:10px;}
 .confirm-btn{width:100%;background:var(--btn-confirm);color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;margin-top:11px;box-shadow:var(--btn-conf-sh);}
-
 .mp-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
 .mp-item{border-radius:16px;padding:13px 15px;}
 .mp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
@@ -351,251 +159,342 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 .mp-input-full{margin-bottom:9px;}
 .mp-label{font-size:10px;color:var(--text-muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;}
 .mp-input{width:100%;background:var(--input-bg);border:1px solid var(--input-bdr);border-radius:9px;padding:10px 12px;color:var(--text-primary);font-family:'Nunito',sans-serif;font-size:14px;outline:none;font-weight:500;}
-.mp-input::placeholder{color:var(--text-hint);}
-.mp-input:focus{border-color:var(--input-focus);}
-.mp-save-btn{width:100%;background:var(--mp-save-bg);color:var(--mp-save-col);border:1px solid var(--mp-eat-bdr);border-radius:12px;padding:13px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;margin-top:4px;}
+.mp-input::placeholder{color:var(--text-hint);}.mp-input:focus{border-color:var(--input-focus);}
+.mp-save-btn{width:100%;background:var(--mp-save-bg);color:var(--mp-save-col);border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;margin-top:4px;}
 .no-mp{text-align:center;padding:20px 16px;color:var(--no-col);font-size:14px;font-weight:500;}
-
+.fav-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.fav-item{border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:opacity 0.15s;}
+.fav-item:active{opacity:0.7;}
+.fav-info{flex:1;min-width:0;}
+.fav-name{font-size:14px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fav-sub{font-size:11px;color:var(--text-muted);margin-top:1px;}
+.fav-edit{background:var(--btn-ai-bg);border:1px solid var(--btn-ai-bdr);color:var(--btn-ai-col);width:26px;height:26px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fav-del{background:var(--meal-del-bg);border:none;color:var(--meal-del-col);width:26px;height:26px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hist-list{display:flex;flex-direction:column;gap:11px;}
 .hday{border-radius:18px;overflow:hidden;}
 .hday-header{padding:11px 14px;border-bottom:1px solid var(--hdiv);display:flex;justify-content:space-between;align-items:center;}
 .hday-date{font-size:13px;font-weight:700;color:var(--text-primary);}
 .hday-kcal{font-size:13px;color:var(--hkcal-col);font-weight:700;}
 .hmeal{padding:7px 14px;display:flex;justify-content:space-between;font-size:12px;}
-.hmeal-name{color:var(--hmeal-col);}
-.hmeal-kcal{color:var(--text-muted);font-weight:600;}
-
+.hmeal-name{color:var(--hmeal-col);}.hmeal-kcal{color:var(--text-muted);font-weight:600;}
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat-card{border-radius:16px;padding:14px 13px;}
+.stat-val{font-size:22px;font-weight:800;color:var(--text-primary);line-height:1;}
+.stat-lbl{font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-top:3px;}
+.stat-sub{font-size:11px;color:var(--text-muted);margin-top:4px;}
+.stat-bar-wrap{margin-top:8px;}
+.stat-bar-bg{height:5px;background:rgba(128,128,128,0.1);border-radius:3px;overflow:hidden;}
+.stat-bar-fill{height:5px;border-radius:3px;transition:width 0.5s;}
+.week-chart{border-radius:16px;padding:14px;margin-bottom:16px;}
+.week-bars{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:10px;}
+.week-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.week-bar-bg{width:100%;border-radius:4px;background:rgba(128,128,128,0.1);overflow:hidden;display:flex;align-items:flex-end;}
+.week-bar-fill{width:100%;border-radius:4px;transition:height 0.5s;min-height:2px;}
+.week-day{font-size:9px;color:var(--text-muted);font-weight:700;text-transform:uppercase;}
+/* AI SUMMARY */
+.summary-btn{width:100%;background:var(--btn-ai-bg);color:var(--btn-ai-col);border:1px solid var(--btn-ai-bdr);border-radius:14px;padding:14px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;margin-bottom:14px;}
+.summary-box{border-radius:18px;padding:16px;margin-bottom:14px;display:none;}
+.summary-box.on{display:block;}
+.summary-text{font-size:14px;color:var(--text-primary);line-height:1.65;}
+/* WEIGHT */
+.weight-entries{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.weight-entry{border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;}
+.weight-val{font-size:16px;font-weight:800;color:var(--text-primary);}
+.weight-date{font-size:11px;color:var(--text-muted);}
+.weight-diff-pos{color:#f07080;font-size:12px;font-weight:700;}
+.weight-diff-neg{color:#44cc88;font-size:12px;font-weight:700;}
+/* EDIT MEAL MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.on{display:flex;}
+.modal-box{width:100%;max-width:430px;border-radius:24px 24px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--glass-border);margin:0 auto 16px;}
+.modal-title{font-size:15px;font-weight:800;color:var(--text-primary);margin-bottom:14px;}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px;}
+.modal-input{width:100%;background:var(--input-bg);border:1px solid var(--input-bdr);border-radius:9px;padding:10px 12px;color:var(--text-primary);font-family:'Nunito',sans-serif;font-size:14px;outline:none;font-weight:500;}
+.modal-input::placeholder{color:var(--text-hint);}.modal-input:focus{border-color:var(--input-focus);}
+.modal-actions{display:flex;gap:8px;margin-top:12px;}
+.modal-save{flex:1;background:var(--btn-confirm);color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+.modal-cancel{background:var(--mp-del-bg);color:var(--mp-del-col);border:1px solid var(--mp-del-bdr);border-radius:12px;padding:13px 18px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+/* SETTINGS */
 .sform{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
 .sg{border-radius:18px;padding:15px;}
 .sg-lbl{font-size:10px;color:var(--sg-lbl);margin-bottom:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;}
 .sinput{width:100%;background:var(--sinput-bg);border:1px solid var(--input-bdr);border-radius:9px;padding:10px 12px;color:var(--text-primary);font-family:'Nunito',sans-serif;font-size:14px;outline:none;font-weight:500;}
-.sinput::placeholder{color:var(--text-hint);}
-.sinput:focus{border-color:var(--input-focus);}
+.sinput::placeholder{color:var(--text-hint);}.sinput:focus{border-color:var(--input-focus);}
 .sinput option{background:var(--select-bg);color:var(--text-primary);}
 .api-note{font-size:11px;color:var(--api-note);margin-top:7px;line-height:1.5;}
 .save-btn{background:var(--btn-save);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;box-shadow:var(--btn-save-sh);}
-
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--input-bg);border:1px solid var(--input-bdr);border-radius:9px;}
+.toggle-switch{width:44px;height:26px;border-radius:13px;background:var(--input-bdr);cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
+.toggle-thumb{position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.25);}
+.toggle-switch.on{background:var(--accent);}
+.toggle-switch.on .toggle-thumb{left:21px;}
+/* NAV */
 .nav{position:fixed;bottom:0;left:0;right:0;z-index:10;display:flex;align-items:stretch;padding:0 6px calc(env(safe-area-inset-bottom) + 8px);background:var(--nav-bg);backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border-top:1px solid var(--nav-border);box-shadow:var(--nav-inset),var(--nav-shadow);}
 .nb{flex:1;background:none;border:none;color:var(--nav-color);font-family:'Nunito',sans-serif;font-size:10px;font-weight:700;cursor:pointer;padding:12px 4px 0;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color 0.18s;-webkit-tap-highlight-color:transparent;border-radius:14px;margin:8px 2px 0;}
 .nb svg{width:21px;height:21px;display:block;flex-shrink:0;stroke:var(--nav-color);}
 .nb.on{color:var(--nav-active);background:var(--nav-act-bg);border:1px solid var(--nav-act-bdr);box-shadow:var(--nav-act-sh);}
 .nb.on svg{stroke:var(--nav-active);}
-
 .toast{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-80px);background:var(--toast-bg);backdrop-filter:blur(16px);color:var(--toast-col);padding:9px 20px;border-radius:18px;font-size:13px;font-weight:700;border:1px solid var(--toast-bdr);transition:transform 0.28s;z-index:99;white-space:nowrap;box-shadow:var(--toast-sh);}
 .toast.on{transform:translateX(-50%) translateY(0);}
 .empty-h{text-align:center;padding:36px 20px;color:var(--no-col);font-size:14px;}
-.fav-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
-.fav-item{border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:opacity 0.15s;}
-.fav-item:active{opacity:0.7;}
-.fav-info{flex:1;min-width:0;}
-.fav-name{font-size:14px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.fav-macros{font-size:11px;color:var(--text-muted);margin-top:1px;}
-.fav-kcal{font-size:15px;font-weight:800;color:var(--meal-kcal);flex-shrink:0;margin-right:4px;}
-.fav-del{background:var(--meal-del-bg);border:none;color:var(--meal-del-col);width:26px;height:26px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.fav-edit{background:var(--btn-ai-bg);border:1px solid var(--btn-ai-bdr);color:var(--btn-ai-col);width:26px;height:26px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:2px;}
-
 </style>
 </head>
 <body>
-<div class="bg-fixed">
-  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
-  <div class="grain"></div>
-</div>
+<div class="bg-fixed"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grain"></div></div>
 <div id="app">
 
-  <div id="s-today" class="screen on">
-    <div class="topbar"><h1>Dnes</h1><div class="sub" id="a-date"></div></div>
-    <div class="ring-wrap">
-      <svg width="188" height="188" viewBox="0 0 188 188">
-        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="var(--ring1)"/><stop offset="100%" stop-color="var(--ring2)"/></linearGradient></defs>
-        <circle cx="94" cy="94" r="78" fill="none" stroke="var(--ring-track)" stroke-width="13"/>
-        <circle cx="94" cy="94" r="78" fill="none" stroke="url(#rg)" stroke-width="13" stroke-linecap="round" stroke-dasharray="490.1" stroke-dashoffset="490.1" transform="rotate(-90 94 94)" id="a-ring" style="transition:stroke-dashoffset 0.65s ease"/>
-      </svg>
-      <div class="ring-center">
-        <div class="ring-num" id="a-kcal">0</div>
-        <div class="ring-lbl">kcal</div>
-        <div class="ring-rem" id="a-rem"></div>
-      </div>
-    </div>
-    <div class="macro-row" id="macro-row-el">
-      <div class="mc glass"><div class="lbl">Bílkoviny</div><div class="val" id="a-p">0g</div><div class="goal" id="ag-p"></div><div class="bar-bg"><div class="bar-fill" id="ab-p" style="background:var(--bar1)"></div></div></div>
-      <div class="mc glass"><div class="lbl">Sacharidy</div><div class="val" id="a-c">0g</div><div class="goal" id="ag-c"></div><div class="bar-bg"><div class="bar-fill" id="ab-c" style="background:var(--bar2)"></div></div></div>
-      <div class="mc glass"><div class="lbl">Tuky</div><div class="val" id="a-f">0g</div><div class="goal" id="ag-f"></div><div class="bar-bg"><div class="bar-fill" id="ab-f" style="background:var(--bar3)"></div></div></div>
-    </div>
-    <div class="sec-title">Jídla dnes</div>
-    <div class="meals" id="a-meals"><div class="no-meal">Zatím nic. Přidej první jídlo ↓</div></div>
+<!-- TODAY -->
+<div id="s-today" class="screen on">
+  <div class="topbar"><h1>Dnes</h1><div class="sub" id="a-date"></div></div>
+  <div class="ring-wrap">
+    <svg width="188" height="188" viewBox="0 0 188 188">
+      <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="var(--ring1)"/><stop offset="100%" stop-color="var(--ring2)"/></linearGradient></defs>
+      <circle cx="94" cy="94" r="78" fill="none" stroke="var(--ring-track)" stroke-width="13"/>
+      <circle cx="94" cy="94" r="78" fill="none" stroke="url(#rg)" stroke-width="13" stroke-linecap="round" stroke-dasharray="490.1" stroke-dashoffset="490.1" transform="rotate(-90 94 94)" id="a-ring" style="transition:stroke-dashoffset 0.65s ease"/>
+    </svg>
+    <div class="ring-center"><div class="ring-num" id="a-kcal">0</div><div class="ring-lbl">kcal</div><div class="ring-rem" id="a-rem"></div></div>
   </div>
+  <div class="macro-row" id="macro-row-el">
+    <div class="mc glass"><div class="lbl">Bílkoviny</div><div class="val" id="a-p">0g</div><div class="goal" id="ag-p"></div><div class="bar-bg"><div class="bar-fill" id="ab-p" style="background:var(--bar1)"></div></div></div>
+    <div class="mc glass"><div class="lbl">Sacharidy</div><div class="val" id="a-c">0g</div><div class="goal" id="ag-c"></div><div class="bar-bg"><div class="bar-fill" id="ab-c" style="background:var(--bar2)"></div></div></div>
+    <div class="mc glass"><div class="lbl">Tuky</div><div class="val" id="a-f">0g</div><div class="goal" id="ag-f"></div><div class="bar-bg"><div class="bar-fill" id="ab-f" style="background:var(--bar3)"></div></div></div>
+  </div>
+  <button class="summary-btn" onclick="getDailySummary()">✦ Zhodnoť dnešní den pomocí AI</button>
+  <div class="summary-box glass-md" id="summary-box"><div class="dots on" id="summary-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div class="summary-text" id="summary-text"></div></div>
+  <div class="sec-title">Jídla dnes</div>
+  <div class="meals" id="a-meals"><div class="no-meal">Zatím nic. Přidej první jídlo ↓</div></div>
+</div>
 
-  <div id="s-add" class="screen">
-    <div class="topbar"><h1>Přidat jídlo</h1></div>
-    <div class="subtabs">
-      <button class="stab on" id="st-manual" onclick="setSubtab('manual')">AI zápis</button>
-      <button class="stab" id="st-mealprep" onclick="setSubtab('mealprep')">Mealprep</button>
-      <button class="stab" id="st-favs" onclick="setSubtab('favs')">Oblíbená</button>
+<!-- ADD -->
+<div id="s-add" class="screen">
+  <div class="topbar"><h1>Přidat jídlo</h1></div>
+  <div class="subtabs">
+    <button class="stab on" id="st-manual" onclick="setSubtab('manual')">AI zápis</button>
+    <button class="stab" id="st-mealprep" onclick="setSubtab('mealprep')">Mealprep</button>
+    <button class="stab" id="st-favs" onclick="setSubtab('favs')">Oblíbená</button>
+  </div>
+  <div id="sub-manual">
+    <div class="input-wrap">
+      <div class="input-card glass-md">
+        <div id="preview-wrap" class="preview-wrap"><img id="a-img"><button class="preview-remove" onclick="removePhoto()">× Odebrat fotku</button></div>
+        <textarea id="a-input" class="ai-textarea" placeholder="Co jsi jedl/a? Popiš jídlo nebo přidej fotku…" rows="3"></textarea>
+        <button class="photo-icon-btn" title="Foto / Galerie / Soubory">
+          <input type="file" id="a-photo" accept="image/*">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+      </div>
+      <button class="ai-btn" id="a-analyze" onclick="analyze()">✦ Analyzovat pomocí AI</button>
     </div>
-    <div id="sub-manual">
-      <div class="input-wrap">
-        <div class="input-card glass-md">
-          <div id="preview-wrap" class="preview-wrap"><img id="a-img"><button class="preview-remove" onclick="removePhoto()">× Odebrat fotku</button></div>
-          <textarea id="a-input" class="ai-textarea" placeholder="Co jsi jedl/a? Popiš jídlo nebo přidej fotku…" rows="3"></textarea>
-          <button class="photo-icon-btn" title="Foto / Galerie / Soubory">
-            <input type="file" id="a-photo" accept="image/*">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          </button>
-        </div>
-        <button class="ai-btn" id="a-analyze" onclick="analyze()">✦ Analyzovat pomocí AI</button>
+    <div class="dots" id="a-dots"><div style="margin-bottom:10px"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>AI analyzuje…</div>
+    <div class="result-card glass-md" id="a-result">
+      <div class="result-name" id="r-name"></div>
+      <div class="result-macros">
+        <div class="rm"><div class="rm-val" id="r-kcal" style="color:var(--accent)"></div><div class="rm-lbl">kcal</div></div>
+        <div class="rm"><div class="rm-val" id="r-p" style="color:var(--accent)"></div><div class="rm-lbl">B</div></div>
+        <div class="rm"><div class="rm-val" id="r-c" style="color:var(--accent)"></div><div class="rm-lbl">S</div></div>
+        <div class="rm"><div class="rm-val" id="r-f" style="color:var(--accent)"></div><div class="rm-lbl">T</div></div>
       </div>
-      <div class="dots" id="a-dots"><div style="margin-bottom:10px"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>AI analyzuje…</div>
-      <div class="result-card glass-md" id="a-result">
-        <div class="result-name" id="r-name"></div>
-        <div class="result-macros">
-          <div class="rm"><div class="rm-val" id="r-kcal" style="color:var(--accent)"></div><div class="rm-lbl">kcal</div></div>
-          <div class="rm"><div class="rm-val" id="r-p" style="color:var(--accent)"></div><div class="rm-lbl">B</div></div>
-          <div class="rm"><div class="rm-val" id="r-c" style="color:var(--accent)"></div><div class="rm-lbl">S</div></div>
-          <div class="rm"><div class="rm-val" id="r-f" style="color:var(--accent)"></div><div class="rm-lbl">T</div></div>
-        </div>
-        <div class="feedback" id="r-fb"></div>
-        <button class="confirm-btn" onclick="confirm_meal()">✓ Přidat do deníku</button>
-      </div>
-    </div>
-    <div id="sub-mealprep" style="display:none">
-      <div class="sec-title">Moje krabičky</div>
-      <div class="mp-list" id="mp-list"><div class="no-mp">Zatím žádné krabičky.</div></div>
-      <div class="mp-form glass-md">
-        <div class="mp-form-title">Nová krabička</div>
-        <div class="mp-input-full"><div class="mp-label">Název</div><input class="mp-input" type="text" id="mp-name" placeholder="Kuřecí rýže se zeleninou"></div>
-        <div class="mp-input-row">
-          <div><div class="mp-label">Porce celkem</div><input class="mp-input" type="number" id="mp-portions" placeholder="5"></div>
-          <div><div class="mp-label">Kcal / porce</div><input class="mp-input" type="number" id="mp-kcal" placeholder="450"></div>
-        </div>
-        <div class="mp-input-row">
-          <div><div class="mp-label">B (g)</div><input class="mp-input" type="number" id="mp-p" placeholder="40"></div>
-          <div><div class="mp-label">S (g)</div><input class="mp-input" type="number" id="mp-c" placeholder="50"></div>
-        </div>
-        <div class="mp-input-row">
-          <div><div class="mp-label">T (g)</div><input class="mp-input" type="number" id="mp-f" placeholder="12"></div>
-          <div></div>
-        </div>
-        <button class="mp-save-btn" onclick="saveMealprep()">+ Přidat krabičku</button>
-      </div>
-    </div>
-
-    <!-- OBLÍBENÁ -->
-    <div id="sub-favs" style="display:none">
-      <div class="sec-title">Oblíbená jídla</div>
-      <div class="fav-list" id="fav-list"><div class="no-mp">Zatím žádná oblíbená jídla.</div></div>
-      <div class="mp-form glass-md" id="fav-form" style="display:none">
-        <div class="mp-form-title" id="fav-form-title">Nové jídlo</div>
-        <div class="mp-input-full"><div class="mp-label">Název</div><input class="mp-input" type="text" id="fav-name" placeholder="Např. Vejce na tvrdo 2ks"></div>
-        <div class="mp-input-row">
-          <div><div class="mp-label">Kcal</div><input class="mp-input" type="text" inputmode="decimal" id="fav-kcal" placeholder="150"></div>
-          <div><div class="mp-label">B (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-p" placeholder="12"></div>
-        </div>
-        <div class="mp-input-row">
-          <div><div class="mp-label">S (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-c" placeholder="1"></div>
-          <div><div class="mp-label">T (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-f" placeholder="10"></div>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="mp-save-btn" style="flex:1" onclick="saveFav()"><span id="fav-save-lbl">Uložit jídlo</span></button>
-          <button onclick="document.getElementById('fav-form').style.display='none'" style="background:var(--mp-del-bg);color:var(--mp-del-col);border:1px solid var(--mp-del-bdr);border-radius:12px;padding:13px 16px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;">Zrušit</button>
-        </div>
-      </div>
-      <button id="fav-add-btn" class="ai-btn" style="width:100%;margin:0 0 14px" onclick="document.getElementById('fav-form').style.display='block';document.getElementById('fav-add-btn').style.display='none'">+ Přidat jídlo</button>
+      <div class="feedback" id="r-fb"></div>
+      <button class="confirm-btn" onclick="confirm_meal()">✓ Přidat do deníku</button>
     </div>
   </div>
+  <div id="sub-mealprep" style="display:none">
+    <div class="sec-title">Moje krabičky</div>
+    <div class="mp-list" id="mp-list"><div class="no-mp">Zatím žádné krabičky.</div></div>
+    <div class="mp-form glass-md">
+      <div class="mp-form-title">Nová krabička</div>
+      <div class="mp-input-full"><div class="mp-label">Název</div><input class="mp-input" type="text" id="mp-name" placeholder="Kuřecí rýže se zeleninou"></div>
+      <div class="mp-input-row">
+        <div><div class="mp-label">Porce celkem</div><input class="mp-input" type="number" id="mp-portions" placeholder="5"></div>
+        <div><div class="mp-label">Kcal / porce</div><input class="mp-input" type="text" inputmode="decimal" id="mp-kcal" placeholder="450"></div>
+      </div>
+      <div class="mp-input-row">
+        <div><div class="mp-label">B (g)</div><input class="mp-input" type="text" inputmode="decimal" id="mp-p" placeholder="40"></div>
+        <div><div class="mp-label">S (g)</div><input class="mp-input" type="text" inputmode="decimal" id="mp-c" placeholder="50"></div>
+      </div>
+      <div class="mp-input-row">
+        <div><div class="mp-label">T (g)</div><input class="mp-input" type="text" inputmode="decimal" id="mp-f" placeholder="12"></div>
+        <div></div>
+      </div>
+      <button class="mp-save-btn" onclick="saveMealprep()">+ Přidat krabičku</button>
+    </div>
+  </div>
+  <div id="sub-favs" style="display:none">
+    <div class="sec-title">Oblíbená jídla</div>
+    <div class="fav-list" id="fav-list"><div class="no-mp">Zatím žádná oblíbená jídla.</div></div>
+    <div class="mp-form glass-md" id="fav-form" style="display:none">
+      <div class="mp-form-title" id="fav-form-title">Nové jídlo</div>
+      <div class="mp-input-full"><div class="mp-label">Název</div><input class="mp-input" type="text" id="fav-name" placeholder="Vejce na tvrdo 2ks"></div>
+      <div class="mp-input-row">
+        <div><div class="mp-label">Kcal</div><input class="mp-input" type="text" inputmode="decimal" id="fav-kcal" placeholder="150"></div>
+        <div><div class="mp-label">B (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-p" placeholder="12"></div>
+      </div>
+      <div class="mp-input-row">
+        <div><div class="mp-label">S (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-c" placeholder="1"></div>
+        <div><div class="mp-label">T (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-f" placeholder="10"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="mp-save-btn" style="flex:1" onclick="saveFav()"><span id="fav-save-lbl">Uložit jídlo</span></button>
+        <button onclick="cancelFavEdit()" style="background:var(--mp-del-bg);color:var(--mp-del-col);border:1px solid var(--mp-del-bdr);border-radius:12px;padding:13px 16px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;">Zrušit</button>
+      </div>
+    </div>
+    <button id="fav-add-btn" class="ai-btn" style="width:100%;margin:0 0 14px" onclick="document.getElementById('fav-form').style.display='block';document.getElementById('fav-add-btn').style.display='none'">+ Přidat jídlo</button>
+  </div>
+</div>
 
-  <div id="s-history" class="screen">
-    <div class="topbar"><h1>Historie</h1></div>
+<!-- HISTORY + STATS -->
+<div id="s-history" class="screen">
+  <div class="topbar"><h1>Historie</h1></div>
+  <div class="subtabs">
+    <button class="stab on" id="ht-hist" onclick="setHistTab('hist')">Záznamy</button>
+    <button class="stab" id="ht-stats" onclick="setHistTab('stats')">Statistiky</button>
+    <button class="stab" id="ht-weight" onclick="setHistTab('weight')">Váha</button>
+  </div>
+  <div id="hsub-hist">
     <div class="hist-list" id="a-hist"></div>
   </div>
-
-  <div id="s-settings" class="screen">
-    <div class="topbar"><h1>Nastavení</h1></div>
-    <div class="sform">
-      <div class="sg glass"><div class="sg-lbl">API klíč (Anthropic)</div><input class="sinput" type="password" id="s-key" placeholder="sk-ant-..."><div class="api-note">Ukládá se jen v tvém prohlížeči. Získej na console.anthropic.com</div></div>
-      <div class="sg glass">
-        <div class="sg-lbl">Denní cíle</div>
-        <div style="margin-bottom:12px">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Kalorie</div>
-          <input class="sinput" type="number" id="s-kcal" placeholder="1800">
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--input-bg);border:1px solid var(--input-bdr);border-radius:9px;">
-          <div>
-            <div style="font-size:14px;font-weight:700;color:var(--text-primary)">Sledovat makra</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:1px">B · S · T</div>
-          </div>
-          <div id="macro-toggle" onclick="toggleMacros()" style="width:44px;height:26px;border-radius:13px;background:var(--input-bdr);cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;">
-            <div id="macro-thumb" style="position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.25);"></div>
-          </div>
-        </div>
-        <div id="macro-inputs" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:10px;">
-          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">B (g)</div><input class="sinput" type="number" id="s-p" placeholder="150"></div>
-          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">S (g)</div><input class="sinput" type="number" id="s-c" placeholder="200"></div>
-          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">T (g)</div><input class="sinput" type="number" id="s-f" placeholder="60"></div>
-        </div>
-      </div>
-      <div class="sg glass">
-        <div class="sg-lbl">Osobní údaje</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
-          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Váha (kg)</div><input class="sinput" type="number" id="s-w" placeholder="80"></div>
-          <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Cíl</div><select class="sinput" id="s-g"><option value="maintain">Udržet váhu</option><option value="lose">Zhubnout</option><option value="gain">Nabrat svaly</option></select></div>
-        </div>
-      </div>
-      <button class="save-btn" onclick="save()">Uložit nastavení</button>
+  <div id="hsub-stats" style="display:none">
+    <div class="stat-grid" id="stat-grid"></div>
+    <div class="week-chart glass" id="week-chart">
+      <div class="sec-title" style="margin-bottom:4px">Posledních 7 dní</div>
+      <div class="week-bars" id="week-bars"></div>
     </div>
   </div>
+  <div id="hsub-weight" style="display:none">
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <input class="sinput" type="text" inputmode="decimal" id="w-val" placeholder="Váha v kg (např. 82,5)" style="flex:1">
+      <button onclick="logWeight()" style="background:var(--btn-ai-bg);color:var(--btn-ai-col);border:1px solid var(--btn-ai-bdr);border-radius:9px;padding:10px 16px;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;white-space:nowrap">Zapsat</button>
+    </div>
+    <div class="weight-entries" id="weight-list"><div class="no-mp">Zatím žádné záznamy váhy.</div></div>
+  </div>
+</div>
 
-  <nav class="nav">
-    <button class="nb on" id="n-today" onclick="go('today')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>Dnes
-    </button>
-    <button class="nb" id="n-add" onclick="go('add')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Přidat
-    </button>
-    <button class="nb" id="n-history" onclick="go('history')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Historie
-    </button>
-    <button class="nb" id="n-settings" onclick="go('settings')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Nastavení
-    </button>
-  </nav>
-  <div class="toast" id="a-toast"></div>
+<!-- SETTINGS -->
+<div id="s-settings" class="screen">
+  <div class="topbar"><h1>Nastavení</h1></div>
+  <div class="sform">
+    <div class="sg glass"><div class="sg-lbl">API klíč (Anthropic)</div><input class="sinput" type="password" id="s-key" placeholder="sk-ant-..."><div class="api-note">Ukládá se jen v tvém prohlížeči. Získej na console.anthropic.com</div></div>
+    <div class="sg glass">
+      <div class="sg-lbl">Denní cíle</div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Kalorie</div>
+        <input class="sinput" type="number" id="s-kcal" placeholder="1800">
+      </div>
+      <div class="toggle-row">
+        <div><div style="font-size:14px;font-weight:700;color:var(--text-primary)">Sledovat makra</div><div style="font-size:11px;color:var(--text-muted);margin-top:1px">B · S · T</div></div>
+        <div id="macro-toggle" class="toggle-switch" onclick="toggleMacros()"><div id="macro-thumb" class="toggle-thumb"></div></div>
+      </div>
+      <div id="macro-inputs" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:10px;">
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">B (g)</div><input class="sinput" type="number" id="s-p" placeholder="150"></div>
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">S (g)</div><input class="sinput" type="number" id="s-c" placeholder="200"></div>
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">T (g)</div><input class="sinput" type="number" id="s-f" placeholder="60"></div>
+      </div>
+    </div>
+    <div class="sg glass">
+      <div class="sg-lbl">Notifikace — váha</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px">
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Frekvence</div>
+          <select class="sinput" id="s-notif-freq">
+            <option value="0">Vypnuto</option>
+            <option value="1">Denně</option>
+            <option value="2">Každé 2 dny</option>
+            <option value="7">Týdně</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Čas</div>
+          <input class="sinput" type="time" id="s-notif-time" value="08:00">
+        </div>
+      </div>
+      <button onclick="saveNotifSettings()" style="width:100%;background:var(--btn-ai-bg);color:var(--btn-ai-col);border:1px solid var(--btn-ai-bdr);border-radius:10px;padding:11px;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;">Nastavit připomínky</button>
+      <div class="api-note" id="notif-status">Notifikace nejsou nastaveny.</div>
+    </div>
+    <div class="sg glass">
+      <div class="sg-lbl">Osobní údaje</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Váha (kg)</div><input class="sinput" type="number" id="s-w" placeholder="80"></div>
+        <div><div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;font-weight:600">Cíl</div><select class="sinput" id="s-g"><option value="maintain">Udržet váhu</option><option value="lose">Zhubnout</option><option value="gain">Nabrat svaly</option></select></div>
+      </div>
+    </div>
+    <button class="save-btn" onclick="save()">Uložit nastavení</button>
+  </div>
+</div>
+
+<!-- EDIT MEAL MODAL -->
+<div class="modal-overlay" id="edit-modal" onclick="closeEditOutside(event)">
+  <div class="modal-box glass-md">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Upravit jídlo</div>
+    <div style="margin-bottom:9px"><div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Název</div><input class="modal-input" type="text" id="edit-name" style="width:100%"></div>
+    <div class="modal-row">
+      <div><div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">Kcal</div><input class="modal-input" type="text" inputmode="decimal" id="edit-kcal"></div>
+      <div><div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">B (g)</div><input class="modal-input" type="text" inputmode="decimal" id="edit-p"></div>
+    </div>
+    <div class="modal-row">
+      <div><div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">S (g)</div><input class="modal-input" type="text" inputmode="decimal" id="edit-c"></div>
+      <div><div style="font-size:10px;color:var(--text-muted);margin-bottom:4px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">T (g)</div><input class="modal-input" type="text" inputmode="decimal" id="edit-f"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-save" onclick="saveEditMeal()">Uložit</button>
+      <button class="modal-cancel" onclick="closeEdit()">Zrušit</button>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nb on" id="n-today" onclick="go('today')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>Dnes
+  </button>
+  <button class="nb" id="n-add" onclick="go('add')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Přidat
+  </button>
+  <button class="nb" id="n-history" onclick="go('history')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Historie
+  </button>
+  <button class="nb" id="n-settings" onclick="go('settings')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Nastavení
+  </button>
+</nav>
+<div class="toast" id="a-toast"></div>
 </div>
 
 <script>
-// ── MAIN ──────────────────────────────────────────────
 const DEF={kcal:1800,protein:150,carbs:200,fat:60,weight:'',goal:'maintain',apikey:'',trackMacros:true};
-let cfg={...DEF},meals=[],mealpreps=[],pending=null,pb64=null,pbMime='image/jpeg';
+let cfg={...DEF},meals=[],mealpreps=[],favs=[],pending=null,pb64=null,pbMime='image/jpeg';
+let editingMealIdx=-1,editingFavId=null;
+
 function td(){return new Date().toISOString().split('T')[0];}
+function parseD(s){return parseFloat(String(s||0).replace(',','.').trim())||0;}
+
 function init(){
   const s=localStorage.getItem('nai_cfg');if(s)cfg={...DEF,...JSON.parse(s)};
   const d=localStorage.getItem('nai_'+td());if(d)meals=JSON.parse(d);
   const mp=localStorage.getItem('nai_mealpreps');if(mp)mealpreps=JSON.parse(mp);
-  loadFavs();render();loadS();
+  const fv=localStorage.getItem('nai_favs');if(fv)favs=JSON.parse(fv);
+  render();loadS();updateMacroUI();
   document.getElementById('a-date').textContent=new Date().toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long'});
-  updateMacroUI();
+  checkNotifStatus();
 }
+
 document.addEventListener('dblclick',e=>e.preventDefault());
 document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
 let lastT=0;
 document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastT<300)e.preventDefault();lastT=n;},{passive:false});
-function toggleMacros(){
-  cfg.trackMacros=!cfg.trackMacros;
-  localStorage.setItem('nai_cfg',JSON.stringify(cfg));
-  updateMacroUI();
-}
+
+// ── SETTINGS ──
+function toggleMacros(){cfg.trackMacros=!cfg.trackMacros;localStorage.setItem('nai_cfg',JSON.stringify(cfg));updateMacroUI();}
 function updateMacroUI(){
   const on=cfg.trackMacros;
-  const toggle=document.getElementById('macro-toggle');
-  const thumb=document.getElementById('macro-thumb');
+  const tog=document.getElementById('macro-toggle');
   const inputs=document.getElementById('macro-inputs');
-  const macroRow=document.getElementById('macro-row-el');
-  const mealMacros=document.querySelectorAll('.meal-macros');
-  if(toggle){toggle.style.background=on?'var(--accent)':'var(--input-bdr)';}
-  if(thumb){thumb.style.left=on?'21px':'3px';}
-  if(inputs){inputs.style.display=on?'grid':'none';}
-  if(macroRow){macroRow.style.display=on?'grid':'none';}
-  mealMacros.forEach(el=>el.style.display=on?'block':'none');
+  const row=document.getElementById('macro-row-el');
+  if(tog)tog.classList.toggle('on',on);
+  if(inputs)inputs.style.display=on?'grid':'none';
+  if(row)row.style.display=on?'grid':'none';
+  document.querySelectorAll('.meal-macros').forEach(el=>el.style.display=on?'block':'none');
 }
 function save(){
   cfg.apikey=document.getElementById('s-key').value.trim();
@@ -606,8 +505,7 @@ function save(){
   cfg.weight=document.getElementById('s-w').value;
   cfg.goal=document.getElementById('s-g').value;
   localStorage.setItem('nai_cfg',JSON.stringify(cfg));
-  updateMacroUI();
-  toast('Nastavení uloženo ✓');render();
+  updateMacroUI();toast('Nastavení uloženo ✓');render();
 }
 function loadS(){
   document.getElementById('s-key').value=cfg.apikey||'';
@@ -617,8 +515,50 @@ function loadS(){
   document.getElementById('s-f').value=cfg.fat;
   document.getElementById('s-w').value=cfg.weight||'';
   document.getElementById('s-g').value=cfg.goal||'maintain';
-  updateMacroUI();
+  const nf=localStorage.getItem('nai_notif_freq')||'0';
+  const nt=localStorage.getItem('nai_notif_time')||'08:00';
+  document.getElementById('s-notif-freq').value=nf;
+  document.getElementById('s-notif-time').value=nt;
 }
+
+// ── NOTIFICATIONS ──
+async function saveNotifSettings(){
+  const freq=document.getElementById('s-notif-freq').value;
+  const time=document.getElementById('s-notif-time').value;
+  localStorage.setItem('nai_notif_freq',freq);
+  localStorage.setItem('nai_notif_time',time);
+  if(freq==='0'){document.getElementById('notif-status').textContent='Připomínky vypnuty.';return;}
+  if(!('Notification' in window)){document.getElementById('notif-status').textContent='Notifikace nejsou podporovány v tomto prohlížeči.';return;}
+  const perm=await Notification.requestPermission();
+  if(perm==='granted'){
+    scheduleNotif(parseInt(freq),time);
+    document.getElementById('notif-status').textContent=`Připomínka nastavena: každých ${freq} den/dní v ${time}.`;
+  } else {
+    document.getElementById('notif-status').textContent='Přístup k notifikacím zamítnut. Povol je v nastavení Safari.';
+  }
+}
+function scheduleNotif(freqDays,time){
+  if(!('serviceWorker' in navigator))return;
+  const [h,m]=time.split(':').map(Number);
+  const now=new Date();
+  const next=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m,0);
+  if(next<=now)next.setDate(next.getDate()+1);
+  const delay=next-now;
+  setTimeout(()=>{
+    new Notification('NutriAI — Váha',{body:'Čas zapsat dnešní váhu!',icon:'/icon.png'});
+    setInterval(()=>new Notification('NutriAI — Váha',{body:'Čas zapsat dnešní váhu!',icon:'/icon.png'}),freqDays*24*60*60*1000);
+  },delay);
+}
+function checkNotifStatus(){
+  const freq=localStorage.getItem('nai_notif_freq')||'0';
+  const time=localStorage.getItem('nai_notif_time')||'08:00';
+  const el=document.getElementById('notif-status');
+  if(!el)return;
+  if(freq==='0'){el.textContent='Připomínky jsou vypnuté.';return;}
+  el.textContent=`Připomínka: každých ${freq} den/dní v ${time}.`;
+}
+
+// ── RENDER ──
 function render(){
   const t=meals.reduce((a,m)=>({kcal:a.kcal+m.kcal,protein:a.protein+m.protein,carbs:a.carbs+m.carbs,fat:a.fat+m.fat}),{kcal:0,protein:0,carbs:0,fat:0});
   document.getElementById('a-kcal').textContent=Math.round(t.kcal);
@@ -638,9 +578,50 @@ function render(){
   document.getElementById('ab-f').style.width=Math.min(100,t.fat/cfg.fat*100).toFixed(1)+'%';
   const el=document.getElementById('a-meals');
   if(!meals.length){el.innerHTML='<div class="no-meal">Zatím nic. Přidej první jídlo ↓</div>';return;}
-  el.innerHTML=meals.map((m,i)=>`<div class="meal glass"><div class="meal-info"><div class="meal-name">${m.name}</div><div class="meal-time">${m.time}</div></div><div class="meal-right"><div class="meal-kcal">${Math.round(m.kcal)} kcal</div><div class="meal-macros">${Math.round(m.protein)}B · ${Math.round(m.carbs)}S · ${Math.round(m.fat)}T</div></div><button class="meal-del" onclick="del(${i})">×</button></div>`).join('');
+  el.innerHTML=meals.map((m,i)=>`<div class="meal glass">
+    <div class="meal-info"><div class="meal-name">${m.name}</div><div class="meal-time">${m.time}</div></div>
+    <div class="meal-right"><div class="meal-kcal">${Math.round(m.kcal)} kcal</div><div class="meal-macros" style="display:${cfg.trackMacros?'block':'none'}">${Math.round(m.protein)}B · ${Math.round(m.carbs)}S · ${Math.round(m.fat)}T</div></div>
+    <button class="meal-edit" onclick="openEditMeal(${i})">✎</button>
+    <button class="meal-del" onclick="del(${i})">×</button>
+  </div>`).join('');
 }
-function del(i){meals.splice(i,1);localStorage.setItem('nai_'+td(),JSON.stringify(meals));render();}
+
+function saveMeals(){
+  localStorage.setItem('nai_'+td(),JSON.stringify(meals));
+  const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
+  const today=td();const idx=hist.findIndex(d=>d.date===today);
+  if(idx>=0)hist[idx].meals=[...meals];else hist.unshift({date:today,meals:[...meals]});
+  localStorage.setItem('nai_hist',JSON.stringify(hist));
+}
+function del(i){meals.splice(i,1);saveMeals();render();}
+
+// ── EDIT MEAL MODAL ──
+function openEditMeal(i){
+  editingMealIdx=i;
+  const m=meals[i];
+  document.getElementById('edit-name').value=m.name;
+  document.getElementById('edit-kcal').value=m.kcal;
+  document.getElementById('edit-p').value=m.protein;
+  document.getElementById('edit-c').value=m.carbs;
+  document.getElementById('edit-f').value=m.fat;
+  document.getElementById('edit-modal').classList.add('on');
+}
+function closeEdit(){editingMealIdx=-1;document.getElementById('edit-modal').classList.remove('on');}
+function closeEditOutside(e){if(e.target===document.getElementById('edit-modal'))closeEdit();}
+function saveEditMeal(){
+  if(editingMealIdx<0)return;
+  meals[editingMealIdx]={
+    ...meals[editingMealIdx],
+    name:document.getElementById('edit-name').value.trim(),
+    kcal:parseD(document.getElementById('edit-kcal').value),
+    protein:parseD(document.getElementById('edit-p').value),
+    carbs:parseD(document.getElementById('edit-c').value),
+    fat:parseD(document.getElementById('edit-f').value),
+  };
+  saveMeals();render();closeEdit();toast('Jídlo upraveno ✓');
+}
+
+// ── PHOTO ──
 document.getElementById('a-photo').addEventListener('change',function(e){
   const f=e.target.files[0];if(!f)return;
   pbMime=f.type||'image/jpeg';
@@ -663,6 +644,8 @@ document.getElementById('a-photo').addEventListener('change',function(e){
   reader.readAsDataURL(f);e.target.value='';
 });
 function removePhoto(){pb64=null;document.getElementById('preview-wrap').style.display='none';document.getElementById('a-img').src='';}
+
+// ── AI ANALYZE ──
 async function analyze(){
   if(!cfg.apikey){toast('Nastav API klíč v nastavení');go('settings');return;}
   const txt=document.getElementById('a-input').value.trim();
@@ -671,10 +654,8 @@ async function analyze(){
   document.getElementById('a-result').classList.remove('on');
   document.getElementById('a-analyze').disabled=true;
   const gm={maintain:'udržení váhy',lose:'hubnutí',gain:'nabírání svalů'};
-  const sys=`Jsi nutriční asistent. Analyzuješ jídla a vracíš kalorie + makra.
-Uživatel: ${cfg.weight?'váha '+cfg.weight+'kg, ':''}cíl: ${gm[cfg.goal]||'udržení váhy'}.
-Denní cíle: ${cfg.kcal} kcal, ${cfg.protein}g bílkovin, ${cfg.carbs}g sacharidů, ${cfg.fat}g tuků.
-Vrať POUZE JSON bez markdown: {"name":"","kcal":0,"protein":0,"carbs":0,"fat":0,"feedback":""}`;
+  const macroGoals=cfg.trackMacros?`, ${cfg.protein}g bílkovin, ${cfg.carbs}g sacharidů, ${cfg.fat}g tuků`:'';
+  const sys=`Jsi nutriční asistent. Analyzuješ jídla a vracíš kalorie + makra.\nUživatel: ${cfg.weight?'váha '+cfg.weight+'kg, ':''}cíl: ${gm[cfg.goal]||'udržení váhy'}.\nDenní cíle: ${cfg.kcal} kcal${macroGoals}.\nVrať POUZE JSON bez markdown: {"name":"","kcal":0,"protein":0,"carbs":0,"fat":0,"feedback":""}`;
   try{
     let content=pb64?[{type:'image',source:{type:'base64',media_type:pbMime,data:pb64}},{type:'text',text:txt?`Foto jídla. Poznámka: ${txt}. Odhadni kalorie a makra.`:'Analyzuj jídlo na fotce.'}]:txt;
     const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:500,system:sys,messages:[{role:'user',content}]})});
@@ -693,28 +674,51 @@ Vrať POUZE JSON bez markdown: {"name":"","kcal":0,"protein":0,"carbs":0,"fat":0
   document.getElementById('a-dots').classList.remove('on');
   document.getElementById('a-analyze').disabled=false;
 }
+
 function confirm_meal(){
   if(!pending)return;
   const now=new Date();
   const meal={...pending,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
-  meals.push(meal);
-  localStorage.setItem('nai_'+td(),JSON.stringify(meals));
-  const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
-  const today=td();const idx=hist.findIndex(d=>d.date===today);
-  if(idx>=0)hist[idx].meals=meals;else hist.unshift({date:today,meals:[...meals]});
-  localStorage.setItem('nai_hist',JSON.stringify(hist));
+  meals.push(meal);saveMeals();
   pending=null;
   document.getElementById('a-result').classList.remove('on');
   document.getElementById('a-input').value='';
   removePhoto();render();go('today');toast('Jídlo přidáno ✓');
 }
+
+// ── AI DAILY SUMMARY ──
+async function getDailySummary(){
+  if(!cfg.apikey){toast('Nastav API klíč v nastavení');go('settings');return;}
+  if(!meals.length){toast('Dnes ještě nemáš žádná jídla');return;}
+  const box=document.getElementById('summary-box');
+  const dots=document.getElementById('summary-dots');
+  const text=document.getElementById('summary-text');
+  box.classList.add('on');dots.classList.add('on');text.textContent='';
+  const totals=meals.reduce((a,m)=>({kcal:a.kcal+m.kcal,protein:a.protein+m.protein,carbs:a.carbs+m.carbs,fat:a.fat+m.fat}),{kcal:0,protein:0,carbs:0,fat:0});
+  const mealList=meals.map(m=>`${m.name} (${Math.round(m.kcal)} kcal)`).join(', ');
+  const gm={maintain:'udržení váhy',lose:'hubnutí',gain:'nabírání svalů'};
+  const sys=`Jsi nutriční poradce. Zhodnoť stručně dnešní jídelníček uživatele. Buď konkrétní, praktický, motivující ale upřímný. Max 3-4 věty česky.`;
+  const userMsg=`Cíl: ${gm[cfg.goal]}, denní cíl: ${cfg.kcal} kcal${cfg.trackMacros?`, ${cfg.protein}g bílkovin`:''}.
+Dnes snědl/a: ${mealList}.
+Celkem: ${Math.round(totals.kcal)} kcal${cfg.trackMacros?`, ${Math.round(totals.protein)}g B, ${Math.round(totals.carbs)}g S, ${Math.round(totals.fat)}g T`:''}.
+Zhodnoť stručně tento den.`;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:300,system:sys,messages:[{role:'user',content:userMsg}]})});
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error.message);
+    text.textContent=data.content[0].text;
+  }catch(e){text.textContent='Chyba: '+e.message;}
+  dots.classList.remove('on');
+}
+
+// ── MEALPREP ──
 function saveMealprep(){
   const name=document.getElementById('mp-name').value.trim();
   const portions=parseInt(document.getElementById('mp-portions').value)||0;
-  const kcal=parseFloat(document.getElementById('mp-kcal').value)||0;
-  const p=parseFloat(document.getElementById('mp-p').value)||0;
-  const c=parseFloat(document.getElementById('mp-c').value)||0;
-  const f=parseFloat(document.getElementById('mp-f').value)||0;
+  const kcal=parseD(document.getElementById('mp-kcal').value);
+  const p=parseD(document.getElementById('mp-p').value);
+  const c=parseD(document.getElementById('mp-c').value);
+  const f=parseD(document.getElementById('mp-f').value);
   if(!name||!portions||!kcal){toast('Vyplň název, porce a kcal');return;}
   mealpreps.push({id:Date.now(),name,portions,remaining:portions,kcal,protein:p,carbs:c,fat:f});
   localStorage.setItem('nai_mealpreps',JSON.stringify(mealpreps));
@@ -726,49 +730,31 @@ function eatMealprep(id){
   mp.remaining--;
   const now=new Date();
   const meal={name:mp.name+' (krabička)',kcal:mp.kcal,protein:mp.protein,carbs:mp.carbs,fat:mp.fat,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
-  meals.push(meal);
-  localStorage.setItem('nai_'+td(),JSON.stringify(meals));
-  const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
-  const today=td();const idx=hist.findIndex(d=>d.date===today);
-  if(idx>=0)hist[idx].meals=meals;else hist.unshift({date:today,meals:[...meals]});
-  localStorage.setItem('nai_hist',JSON.stringify(hist));
+  meals.push(meal);saveMeals();
   if(mp.remaining<=0)mealpreps=mealpreps.filter(m=>m.id!==id);
   localStorage.setItem('nai_mealpreps',JSON.stringify(mealpreps));
   render();renderMealpreps();toast('Porce zapsána ✓');
 }
-function deleteMealprep(id){
-  mealpreps=mealpreps.filter(m=>m.id!==id);
-  localStorage.setItem('nai_mealpreps',JSON.stringify(mealpreps));
-  renderMealpreps();
-}
+function deleteMealprep(id){mealpreps=mealpreps.filter(m=>m.id!==id);localStorage.setItem('nai_mealpreps',JSON.stringify(mealpreps));renderMealpreps();}
 function renderMealpreps(){
   const el=document.getElementById('mp-list');
   if(!mealpreps.length){el.innerHTML='<div class="no-mp">Zatím žádné krabičky.</div>';return;}
   el.innerHTML=mealpreps.map(mp=>{
     const pct=Math.round((mp.remaining/mp.portions)*100);
-    return `<div class="mp-item glass"><div class="mp-top"><div class="mp-name">${mp.name}</div><div class="mp-badge">${mp.remaining}/${mp.portions} porcí</div></div><div class="mp-macros">${Math.round(mp.kcal)} kcal · ${Math.round(mp.protein)}B · ${Math.round(mp.carbs)}S · ${Math.round(mp.fat)}T</div><div class="mp-portions"><div class="mp-bar-bg"><div class="mp-bar-fill" style="width:${pct}%"></div></div><div class="mp-count">${pct}%</div></div><div class="mp-actions"><button class="mp-eat-btn" onclick="eatMealprep(${mp.id})">✓ Sním porci</button><button class="mp-del-btn" onclick="deleteMealprep(${mp.id})">Smazat</button></div></div>`;
+    return `<div class="mp-item glass"><div class="mp-top"><div class="mp-name">${mp.name}</div><div class="mp-badge">${mp.remaining}/${mp.portions} porcí</div></div>
+    <div class="mp-macros">${Math.round(mp.kcal)} kcal · ${Math.round(mp.protein)}B · ${Math.round(mp.carbs)}S · ${Math.round(mp.fat)}T</div>
+    <div class="mp-portions"><div class="mp-bar-bg"><div class="mp-bar-fill" style="width:${pct}%"></div></div><div class="mp-count">${pct}%</div></div>
+    <div class="mp-actions"><button class="mp-eat-btn" onclick="eatMealprep(${mp.id})">✓ Sním porci</button><button class="mp-del-btn" onclick="deleteMealprep(${mp.id})">Smazat</button></div></div>`;
   }).join('');
 }
-// ── OBLÍBENÁ ──────────────────────────────────────────
-let favs = [];
-let editingFavId = null;
-function parseDecimal(str){
-  if(!str&&str!==0)return 0;
-  return parseFloat(String(str).replace(',','.').trim())||0;
-}
-function loadFavs(){
-  const f=localStorage.getItem('nai_favs');
-  favs=f?JSON.parse(f):[];
-}
-function saveFavStorage(){
-  localStorage.setItem('nai_favs',JSON.stringify(favs));
-}
+
+// ── FAVS ──
 function saveFav(){
   const name=document.getElementById('fav-name').value.trim();
-  const kcal=parseDecimal(document.getElementById('fav-kcal').value);
-  const p=parseDecimal(document.getElementById('fav-p').value);
-  const c=parseDecimal(document.getElementById('fav-c').value);
-  const f=parseDecimal(document.getElementById('fav-f').value);
+  const kcal=parseD(document.getElementById('fav-kcal').value);
+  const p=parseD(document.getElementById('fav-p').value);
+  const c=parseD(document.getElementById('fav-c').value);
+  const f=parseD(document.getElementById('fav-f').value);
   if(!name||!kcal){toast('Vyplň název a kcal');return;}
   if(editingFavId){
     const idx=favs.findIndex(fv=>fv.id===editingFavId);
@@ -779,12 +765,11 @@ function saveFav(){
   } else {
     favs.push({id:Date.now(),name,kcal,protein:p,carbs:c,fat:f});
   }
-  saveFavStorage();
+  localStorage.setItem('nai_favs',JSON.stringify(favs));
   ['fav-name','fav-kcal','fav-p','fav-c','fav-f'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('fav-form').style.display='none';
   document.getElementById('fav-add-btn').style.display='block';
-  renderFavs();
-  toast('Jídlo uloženo ✓');
+  renderFavs();toast('Jídlo uloženo ✓');
 }
 function editFav(id){
   const fav=favs.find(f=>f.id===id);if(!fav)return;
@@ -798,51 +783,137 @@ function editFav(id){
   document.getElementById('fav-save-lbl').textContent='Uložit změny';
   document.getElementById('fav-form').style.display='block';
   document.getElementById('fav-add-btn').style.display='none';
-  document.getElementById('fav-form').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function cancelFavEdit(){
+  editingFavId=null;
+  document.getElementById('fav-form-title').textContent='Nové jídlo';
+  document.getElementById('fav-save-lbl').textContent='Uložit jídlo';
+  ['fav-name','fav-kcal','fav-p','fav-c','fav-f'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fav-form').style.display='none';
+  document.getElementById('fav-add-btn').style.display='block';
 }
 function logFav(id){
   const fav=favs.find(f=>f.id===id);if(!fav)return;
   const now=new Date();
   const meal={name:fav.name,kcal:fav.kcal,protein:fav.protein,carbs:fav.carbs,fat:fav.fat,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
-  meals.push(meal);
-  localStorage.setItem('nai_'+td(),JSON.stringify(meals));
-  const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
-  const today=td();const idx=hist.findIndex(d=>d.date===today);
-  if(idx>=0)hist[idx].meals=meals;else hist.unshift({date:today,meals:[...meals]});
-  localStorage.setItem('nai_hist',JSON.stringify(hist));
-  render();go('today');toast(fav.name+' zapsáno ✓');
+  meals.push(meal);saveMeals();render();go('today');toast(fav.name+' zapsáno ✓');
 }
-function deleteFav(id){
-  favs=favs.filter(f=>f.id!==id);
-  saveFavStorage();renderFavs();
-}
+function deleteFav(id){favs=favs.filter(f=>f.id!==id);localStorage.setItem('nai_favs',JSON.stringify(favs));renderFavs();}
 function renderFavs(){
-  loadFavs();
   const el=document.getElementById('fav-list');
   if(!favs.length){el.innerHTML='<div class="no-mp">Zatím žádná oblíbená jídla.</div>';return;}
   el.innerHTML=favs.map(fav=>{
     const macroStr=cfg.trackMacros?` · ${Math.round(fav.protein)}B · ${Math.round(fav.carbs)}S · ${Math.round(fav.fat)}T`:'';
     return `<div class="fav-item glass" onclick="logFav(${fav.id})">
-      <div class="fav-info">
-        <div class="fav-name">${fav.name}</div>
-        <div class="fav-macros">${Math.round(fav.kcal)} kcal${macroStr}</div>
-      </div>
-      <button class="fav-edit" onclick="event.stopPropagation();editFav(${fav.id})" title="Upravit">✎</button>
+      <div class="fav-info"><div class="fav-name">${fav.name}</div><div class="fav-sub">${Math.round(fav.kcal)} kcal${macroStr}</div></div>
+      <button class="fav-edit" onclick="event.stopPropagation();editFav(${fav.id})">✎</button>
       <button class="fav-del" onclick="event.stopPropagation();deleteFav(${fav.id})">×</button>
     </div>`;
   }).join('');
 }
 
-function setSubtab(t){
-  document.getElementById('sub-manual').style.display=t==='manual'?'block':'none';
-  document.getElementById('sub-mealprep').style.display=t==='mealprep'?'block':'none';
-  document.getElementById('sub-favs').style.display=t==='favs'?'block':'none';
-  document.getElementById('st-manual').classList.toggle('on',t==='manual');
-  document.getElementById('st-mealprep').classList.toggle('on',t==='mealprep');
-  document.getElementById('st-favs').classList.toggle('on',t==='favs');
-  if(t==='mealprep')renderMealpreps();
-  if(t==='favs')renderFavs();
+// ── WEIGHT ──
+function logWeight(){
+  const val=parseD(document.getElementById('w-val').value);
+  if(!val){toast('Zadej váhu');return;}
+  const entries=JSON.parse(localStorage.getItem('nai_weight')||'[]');
+  entries.unshift({date:td(),val});
+  localStorage.setItem('nai_weight',JSON.stringify(entries));
+  document.getElementById('w-val').value='';
+  renderWeight();toast('Váha zapsána ✓');
 }
+function renderWeight(){
+  const entries=JSON.parse(localStorage.getItem('nai_weight')||'[]');
+  const el=document.getElementById('weight-list');
+  if(!entries.length){el.innerHTML='<div class="no-mp">Zatím žádné záznamy váhy.</div>';return;}
+  el.innerHTML=entries.slice(0,30).map((e,i)=>{
+    const prev=entries[i+1];
+    let diffHtml='';
+    if(prev){const d=(e.val-prev.val);const cls=d>0?'weight-diff-pos':'weight-diff-neg';diffHtml=`<span class="${cls}">${d>0?'+':''}${d.toFixed(1)} kg</span>`;}
+    const d=new Date(e.date);
+    return `<div class="weight-entry glass"><div><div class="weight-val">${e.val} kg</div><div class="weight-date">${d.toLocaleDateString('cs-CZ',{weekday:'short',day:'numeric',month:'short'})}</div></div>${diffHtml}</div>`;
+  }).join('');
+}
+
+// ── STATS ──
+function renderStats(){
+  const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
+  const today=td();
+  const todayEntry=hist.find(d=>d.date===today);
+  const todayMeals=todayEntry?todayEntry.meals:meals;
+  const todayKcal=todayMeals.reduce((a,m)=>a+m.kcal,0);
+
+  // last 30 days
+  const last30=hist.slice(0,30);
+  const daysTracked=last30.length;
+  const avgKcal=daysTracked?Math.round(last30.reduce((a,d)=>a+d.meals.reduce((b,m)=>b+m.kcal,0),0)/daysTracked):0;
+  const daysInDeficit=last30.filter(d=>d.meals.reduce((a,m)=>a+m.kcal,0)<cfg.kcal).length;
+  const pctDeficit=daysTracked?Math.round(daysInDeficit/daysTracked*100):0;
+
+  // macro hits today
+  const todayP=todayMeals.reduce((a,m)=>a+m.protein,0);
+  const todayC=todayMeals.reduce((a,m)=>a+m.carbs,0);
+  const todayF=todayMeals.reduce((a,m)=>a+m.fat,0);
+
+  const grid=document.getElementById('stat-grid');
+  grid.innerHTML=`
+    <div class="stat-card glass">
+      <div class="stat-val">${daysTracked}</div>
+      <div class="stat-lbl">Dní trackováno</div>
+      <div class="stat-sub">posledních 30 dní</div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-val">${avgKcal}</div>
+      <div class="stat-lbl">Průměr kcal/den</div>
+      <div class="stat-sub">cíl: ${cfg.kcal} kcal</div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-val">${daysInDeficit}/${daysTracked}</div>
+      <div class="stat-lbl">Dní v cíli</div>
+      <div class="stat-sub">${pctDeficit}% dní pod cílem</div>
+      <div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${pctDeficit}%;background:var(--bar1)"></div></div></div>
+    </div>
+    <div class="stat-card glass">
+      <div class="stat-val">${Math.round(todayKcal)}</div>
+      <div class="stat-lbl">Dnes kcal</div>
+      <div class="stat-sub">${todayKcal>=cfg.kcal?'Cíl splněn ✓':'zbývá '+(cfg.kcal-Math.round(todayKcal))}</div>
+    </div>
+    ${cfg.trackMacros?`
+    <div class="stat-card glass" style="grid-column:span 2">
+      <div class="stat-lbl" style="margin-bottom:8px">Dnešní makra</div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayP)}g</div><div class="stat-lbl">B (cíl ${cfg.protein}g)</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayP/cfg.protein*100).toFixed(0)}%;background:var(--bar1)"></div></div></div></div>
+        <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayC)}g</div><div class="stat-lbl">S (cíl ${cfg.carbs}g)</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayC/cfg.carbs*100).toFixed(0)}%;background:var(--bar2)"></div></div></div></div>
+        <div style="flex:1;text-align:center"><div class="stat-val" style="font-size:16px">${Math.round(todayF)}g</div><div class="stat-lbl">T (cíl ${cfg.fat}g)</div><div class="stat-bar-wrap"><div class="stat-bar-bg"><div class="stat-bar-fill" style="width:${Math.min(100,todayF/cfg.fat*100).toFixed(0)}%;background:var(--bar3)"></div></div></div></div>
+      </div>
+    </div>`:''}
+  `;
+
+  // week chart
+  const days7=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().split('T')[0]);}
+  const barData=days7.map(date=>{
+    const entry=hist.find(d=>d.date===date);
+    const kcal=entry?Math.round(entry.meals.reduce((a,m)=>a+m.kcal,0)):(date===today?Math.round(meals.reduce((a,m)=>a+m.kcal,0)):0);
+    const dayNames=['Ne','Po','Út','St','Čt','Pá','So'];
+    const d=new Date(date);
+    return {label:dayNames[d.getDay()],kcal,isToday:date===today};
+  });
+  const maxKcal=Math.max(...barData.map(b=>b.kcal),cfg.kcal,1);
+  const barsEl=document.getElementById('week-bars');
+  barsEl.innerHTML=barData.map(b=>{
+    const h=Math.max(Math.round((b.kcal/maxKcal)*70),b.kcal>0?4:0);
+    const col=b.kcal>cfg.kcal?'var(--ring-over)':b.isToday?'var(--accent)':'var(--bar1)';
+    return `<div class="week-bar-wrap">
+      <div class="week-bar-bg" style="height:70px">
+        <div class="week-bar-fill" style="height:${h}px;background:${col}"></div>
+      </div>
+      <div class="week-day">${b.label}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── HISTORY ──
 function loadH(){
   const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
   const el=document.getElementById('a-hist');
@@ -854,15 +925,36 @@ function loadH(){
     return `<div class="hday glass"><div class="hday-header"><span class="hday-date">${lbl}</span><span class="hday-kcal">${Math.round(tot.kcal)} kcal</span></div>${day.meals.map(m=>`<div class="hmeal"><span class="hmeal-name">${m.name}</span><span class="hmeal-kcal">${Math.round(m.kcal)}</span></div>`).join('')}</div>`;
   }).join('');
 }
+
+function setHistTab(t){
+  ['hist','stats','weight'].forEach(s=>{
+    document.getElementById('hsub-'+s).style.display=s===t?'block':'none';
+    document.getElementById('ht-'+s).classList.toggle('on',s===t);
+  });
+  if(t==='hist')loadH();
+  if(t==='stats')renderStats();
+  if(t==='weight')renderWeight();
+}
+
+function setSubtab(t){
+  ['manual','mealprep','favs'].forEach(s=>{
+    document.getElementById('sub-'+s).style.display=s===t?'block':'none';
+    document.getElementById('st-'+s).classList.toggle('on',s===t);
+  });
+  if(t==='mealprep')renderMealpreps();
+  if(t==='favs')renderFavs();
+}
+
 function go(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   document.getElementById('s-'+name).classList.add('on');
   document.getElementById('n-'+name).classList.add('on');
-  if(name==='history')loadH();
+  if(name==='history'){setHistTab('hist');}
   if(name==='settings')loadS();
   document.getElementById('s-'+name).scrollTop=0;
 }
+
 function toast(msg){const t=document.getElementById('a-toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2400);}
 init();
 </script>
