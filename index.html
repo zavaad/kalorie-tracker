@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
@@ -247,7 +246,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 <div id="app">
 
 <!-- TODAY -->
-
 <div id="s-today" class="screen on">
   <div class="topbar"><h1>Dnes</h1><div class="sub" id="a-date"></div></div>
   <div class="ring-wrap">
@@ -281,7 +279,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 </div>
 
 <!-- ADD -->
-
 <div id="s-add" class="screen">
   <div class="topbar"><h1>Přidat jídlo</h1></div>
   <div class="subtabs">
@@ -359,7 +356,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 </div>
 
 <!-- HISTORY + STATS -->
-
 <div id="s-history" class="screen">
   <div class="topbar"><h1>Historie</h1></div>
   <div class="subtabs">
@@ -387,7 +383,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 </div>
 
 <!-- SETTINGS -->
-
 <div id="s-settings" class="screen">
   <div class="topbar"><h1>Nastavení</h1></div>
   <div class="sform">
@@ -470,7 +465,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 </div>
 
 <!-- EDIT MEAL MODAL -->
-
 <div class="modal-overlay" id="edit-modal" onclick="closeEditOutside(event)">
   <div class="modal-box glass-md">
     <div class="modal-handle"></div>
@@ -524,37 +518,52 @@ function effectiveKcal(){
 }
 
 function init(){
-  const s=localStorage.getItem('nai_cfg');if(s)cfg={...DEF,...JSON.parse(s)};
-  const d=localStorage.getItem('nai_'+td());if(d)meals=JSON.parse(d);
-  const mp=localStorage.getItem('nai_mealpreps');if(mp)mealpreps=JSON.parse(mp);
-  const fv=localStorage.getItem('nai_favs');if(fv)favs=JSON.parse(fv);
-  render();loadS();updateMacroUI();
-  document.getElementById('a-date').textContent=new Date().toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long'});
-  checkNotifStatus();
+  try{
+    const s=localStorage.getItem('nai_cfg');
+    if(s){try{cfg={...DEF,...JSON.parse(s)};}catch(e){cfg={...DEF};}}
+    const d=localStorage.getItem('nai_'+td());
+    if(d){try{meals=JSON.parse(d);}catch(e){meals=[];}}
+    const mp=localStorage.getItem('nai_mealpreps');
+    if(mp){try{mealpreps=JSON.parse(mp);}catch(e){mealpreps=[];}}
+    const fv=localStorage.getItem('nai_favs');
+    if(fv){try{favs=JSON.parse(fv);}catch(e){favs=[];}}
+  }catch(e){console.error('init load error',e);}
+  try{render();}catch(e){console.error('render error',e);}
+  try{loadS();}catch(e){console.error('loadS error',e);}
+  try{updateMacroUI();}catch(e){console.error('macroUI error',e);}
+  const dateEl=document.getElementById('a-date');
+  if(dateEl)dateEl.textContent=new Date().toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long'});
+  try{checkNotifStatus();}catch(e){}
 }
 
-document.addEventListener('dblclick',e=>e.preventDefault());
-document.addEventListener('touchstart',e=>{if(e.touches.length>1)e.preventDefault();},{passive:false});
-let lastT=0;
-document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastT<300)e.preventDefault();lastT=n;},{passive:false});
+try{document.addEventListener('dblclick',function(e){e.preventDefault();});}catch(ex){}
+try{document.addEventListener('touchstart',function(e){if(e.touches&&e.touches.length>1)e.preventDefault();},{passive:false});}catch(ex){}
+var lastT=0;
+try{document.addEventListener('touchend',function(e){var n=Date.now();if(n-lastT<300)e.preventDefault();lastT=n;},{passive:false});}catch(ex){}
 
 // ── GOAL MODE ──
 function setGoalMode(mode){
   cfg.goalMode=mode;
   ['fixed','range','deficit'].forEach(m=>{
-    document.getElementById('gm-'+m).classList.toggle('on',m===mode);
-    document.getElementById('gm-'+m+'-inputs').style.display=m===mode?'block':'none';
+    const btn=document.getElementById('gm-'+m);
+    const inp=document.getElementById('gm-'+m+'-inputs');
+    if(btn)btn.classList.toggle('on',m===mode);
+    if(inp)inp.style.display=m===mode?'block':'none';
   });
   if(mode==='deficit')updateDeficitCalc();
 }
 function updateDeficitCalc(){
-  const tdee=parseInt(document.getElementById('s-tdee').value)||cfg.tdee||2200;
-  const def=parseInt(document.getElementById('s-deficit').value)||cfg.deficit||500;
+  const tEl=document.getElementById('s-tdee');
+  const dEl=document.getElementById('s-deficit');
+  const tdee=parseInt(tEl?tEl.value:cfg.tdee)||cfg.tdee||2200;
+  const def=parseInt(dEl?dEl.value:cfg.deficit)||cfg.deficit||500;
   const target=Math.max(0,tdee-def);
   const el=document.getElementById('deficit-calc-info');
   if(el)el.textContent=`Cílový příjem: ${target} kcal/den (${tdee} TDEE − ${def} deficit)`;
 }
-document.addEventListener('input',e=>{if(e.target.id==='s-tdee'||e.target.id==='s-deficit')updateDeficitCalc();});
+document.addEventListener('input',function(e){
+  try{if(e.target&&(e.target.id==='s-tdee'||e.target.id==='s-deficit'))updateDeficitCalc();}catch(ex){}
+});
 
 // ── BURNED TODAY ──
 function saveBurned(){
@@ -610,8 +619,9 @@ function loadS(){
   document.getElementById('s-f').value=cfg.fat;
   document.getElementById('s-w').value=cfg.weight||'';
   document.getElementById('s-g').value=cfg.goal||'maintain';
-  setGoalMode(cfg.goalMode||'fixed');
-  if(cfg.burnedToday){document.getElementById('s-burned').value=cfg.burnedToday;}
+  try{setGoalMode(cfg.goalMode||'fixed');}catch(e){}
+  const burnedEl=document.getElementById('s-burned');
+  if(burnedEl&&cfg.burnedToday)burnedEl.value=cfg.burnedToday;
   const nf=localStorage.getItem('nai_notif_freq')||'0';
   const nt=localStorage.getItem('nai_notif_time')||'08:00';
   document.getElementById('s-notif-freq').value=nf;
@@ -747,7 +757,8 @@ function saveEditMeal(){
 }
 
 // ── PHOTO ──
-document.getElementById('a-photo').addEventListener('change',function(e){
+var photoEl=document.getElementById('a-photo');
+if(photoEl)photoEl.addEventListener('change',function(e){
   const f=e.target.files[0];if(!f)return;
   pbMime=f.type||'image/jpeg';
   const reader=new FileReader();
@@ -816,14 +827,12 @@ function closeSummary(){
   document.getElementById('summary-text').textContent='';
 }
 function renderMarkdown(text){
-  return text
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/
-
-/g,'</p><p>')
-    .replace(/
-/g,'<br>')
-    .replace(/^(.+)$/,'<p>$1</p>');
+  if(!text)return '';
+  var t=text;
+  t=t.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  t=t.split('\n\n').join('</p><p>');
+  t=t.split('\n').join('<br>');
+  return '<p>'+t+'</p>';
 }
 async function getDailySummary(){
   if(!cfg.apikey){toast('Nastav API klíč v nastavení');go('settings');return;}
@@ -1066,6 +1075,5 @@ function go(name){
 function toast(msg){const t=document.getElementById('a-toast');t.textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2400);}
 init();
 </script>
-
 </body>
 </html>
