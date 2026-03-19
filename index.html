@@ -392,6 +392,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 .fav-macros{font-size:11px;color:var(--text-muted);margin-top:1px;}
 .fav-kcal{font-size:15px;font-weight:800;color:var(--meal-kcal);flex-shrink:0;margin-right:4px;}
 .fav-del{background:var(--meal-del-bg);border:none;color:var(--meal-del-col);width:26px;height:26px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fav-edit{background:var(--btn-ai-bg);border:1px solid var(--btn-ai-bdr);color:var(--btn-ai-col);width:26px;height:26px;border-radius:50%;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:2px;}
 
 </style>
 </head>
@@ -484,18 +485,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
       <div class="sec-title">Oblíbená jídla</div>
       <div class="fav-list" id="fav-list"><div class="no-mp">Zatím žádná oblíbená jídla.</div></div>
       <div class="mp-form glass-md" id="fav-form" style="display:none">
-        <div class="mp-form-title">Nové jídlo</div>
+        <div class="mp-form-title" id="fav-form-title">Nové jídlo</div>
         <div class="mp-input-full"><div class="mp-label">Název</div><input class="mp-input" type="text" id="fav-name" placeholder="Např. Vejce na tvrdo 2ks"></div>
         <div class="mp-input-row">
-          <div><div class="mp-label">Kcal</div><input class="mp-input" type="number" id="fav-kcal" placeholder="150"></div>
-          <div><div class="mp-label">B (g)</div><input class="mp-input" type="number" id="fav-p" placeholder="12"></div>
+          <div><div class="mp-label">Kcal</div><input class="mp-input" type="text" inputmode="decimal" id="fav-kcal" placeholder="150"></div>
+          <div><div class="mp-label">B (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-p" placeholder="12"></div>
         </div>
         <div class="mp-input-row">
-          <div><div class="mp-label">S (g)</div><input class="mp-input" type="number" id="fav-c" placeholder="1"></div>
-          <div><div class="mp-label">T (g)</div><input class="mp-input" type="number" id="fav-f" placeholder="10"></div>
+          <div><div class="mp-label">S (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-c" placeholder="1"></div>
+          <div><div class="mp-label">T (g)</div><input class="mp-input" type="text" inputmode="decimal" id="fav-f" placeholder="10"></div>
         </div>
         <div style="display:flex;gap:8px;margin-top:4px">
-          <button class="mp-save-btn" style="flex:1" onclick="saveFav()">Uložit jídlo</button>
+          <button class="mp-save-btn" style="flex:1" onclick="saveFav()"><span id="fav-save-lbl">Uložit jídlo</span></button>
           <button onclick="document.getElementById('fav-form').style.display='none'" style="background:var(--mp-del-bg);color:var(--mp-del-col);border:1px solid var(--mp-del-bdr);border-radius:12px;padding:13px 16px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;">Zrušit</button>
         </div>
       </div>
@@ -750,6 +751,11 @@ function renderMealpreps(){
 }
 // ── OBLÍBENÁ ──────────────────────────────────────────
 let favs = [];
+let editingFavId = null;
+function parseDecimal(str){
+  if(!str&&str!==0)return 0;
+  return parseFloat(String(str).replace(',','.').trim())||0;
+}
 function loadFavs(){
   const f=localStorage.getItem('nai_favs');
   favs=f?JSON.parse(f):[];
@@ -759,18 +765,40 @@ function saveFavStorage(){
 }
 function saveFav(){
   const name=document.getElementById('fav-name').value.trim();
-  const kcal=parseFloat(document.getElementById('fav-kcal').value)||0;
-  const p=parseFloat(document.getElementById('fav-p').value)||0;
-  const c=parseFloat(document.getElementById('fav-c').value)||0;
-  const f=parseFloat(document.getElementById('fav-f').value)||0;
+  const kcal=parseDecimal(document.getElementById('fav-kcal').value);
+  const p=parseDecimal(document.getElementById('fav-p').value);
+  const c=parseDecimal(document.getElementById('fav-c').value);
+  const f=parseDecimal(document.getElementById('fav-f').value);
   if(!name||!kcal){toast('Vyplň název a kcal');return;}
-  favs.push({id:Date.now(),name,kcal,protein:p,carbs:c,fat:f});
+  if(editingFavId){
+    const idx=favs.findIndex(fv=>fv.id===editingFavId);
+    if(idx>=0)favs[idx]={id:editingFavId,name,kcal,protein:p,carbs:c,fat:f};
+    editingFavId=null;
+    document.getElementById('fav-form-title').textContent='Nové jídlo';
+    document.getElementById('fav-save-lbl').textContent='Uložit jídlo';
+  } else {
+    favs.push({id:Date.now(),name,kcal,protein:p,carbs:c,fat:f});
+  }
   saveFavStorage();
   ['fav-name','fav-kcal','fav-p','fav-c','fav-f'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('fav-form').style.display='none';
   document.getElementById('fav-add-btn').style.display='block';
   renderFavs();
   toast('Jídlo uloženo ✓');
+}
+function editFav(id){
+  const fav=favs.find(f=>f.id===id);if(!fav)return;
+  editingFavId=id;
+  document.getElementById('fav-name').value=fav.name;
+  document.getElementById('fav-kcal').value=fav.kcal;
+  document.getElementById('fav-p').value=fav.protein;
+  document.getElementById('fav-c').value=fav.carbs;
+  document.getElementById('fav-f').value=fav.fat;
+  document.getElementById('fav-form-title').textContent='Upravit jídlo';
+  document.getElementById('fav-save-lbl').textContent='Uložit změny';
+  document.getElementById('fav-form').style.display='block';
+  document.getElementById('fav-add-btn').style.display='none';
+  document.getElementById('fav-form').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function logFav(id){
   const fav=favs.find(f=>f.id===id);if(!fav)return;
@@ -799,7 +827,7 @@ function renderFavs(){
         <div class="fav-name">${fav.name}</div>
         <div class="fav-macros">${Math.round(fav.kcal)} kcal${macroStr}</div>
       </div>
-      <div class="fav-kcal">${Math.round(fav.kcal)}</div>
+      <button class="fav-edit" onclick="event.stopPropagation();editFav(${fav.id})" title="Upravit">✎</button>
       <button class="fav-del" onclick="event.stopPropagation();deleteFav(${fav.id})">×</button>
     </div>`;
   }).join('');
