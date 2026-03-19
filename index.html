@@ -384,6 +384,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
 .toast{position:fixed;top:calc(14px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-80px);background:var(--toast-bg);backdrop-filter:blur(16px);color:var(--toast-col);padding:9px 20px;border-radius:18px;font-size:13px;font-weight:700;border:1px solid var(--toast-bdr);transition:transform 0.28s;z-index:99;white-space:nowrap;box-shadow:var(--toast-sh);}
 .toast.on{transform:translateX(-50%) translateY(0);}
 .empty-h{text-align:center;padding:36px 20px;color:var(--no-col);font-size:14px;}
+.fav-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.fav-item{border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:opacity 0.15s;}
+.fav-item:active{opacity:0.7;}
+.fav-info{flex:1;min-width:0;}
+.fav-name{font-size:14px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fav-macros{font-size:11px;color:var(--text-muted);margin-top:1px;}
+.fav-kcal{font-size:15px;font-weight:800;color:var(--meal-kcal);flex-shrink:0;margin-right:4px;}
+.fav-del{background:var(--meal-del-bg);border:none;color:var(--meal-del-col);width:26px;height:26px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
 </style>
 </head>
@@ -422,6 +430,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
     <div class="subtabs">
       <button class="stab on" id="st-manual" onclick="setSubtab('manual')">AI zápis</button>
       <button class="stab" id="st-mealprep" onclick="setSubtab('mealprep')">Mealprep</button>
+      <button class="stab" id="st-favs" onclick="setSubtab('favs')">Oblíbená</button>
     </div>
     <div id="sub-manual">
       <div class="input-wrap">
@@ -468,6 +477,29 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
         </div>
         <button class="mp-save-btn" onclick="saveMealprep()">+ Přidat krabičku</button>
       </div>
+    </div>
+
+    <!-- OBLÍBENÁ -->
+    <div id="sub-favs" style="display:none">
+      <div class="sec-title">Oblíbená jídla</div>
+      <div class="fav-list" id="fav-list"><div class="no-mp">Zatím žádná oblíbená jídla.</div></div>
+      <div class="mp-form glass-md" id="fav-form" style="display:none">
+        <div class="mp-form-title">Nové jídlo</div>
+        <div class="mp-input-full"><div class="mp-label">Název</div><input class="mp-input" type="text" id="fav-name" placeholder="Např. Vejce na tvrdo 2ks"></div>
+        <div class="mp-input-row">
+          <div><div class="mp-label">Kcal</div><input class="mp-input" type="number" id="fav-kcal" placeholder="150"></div>
+          <div><div class="mp-label">B (g)</div><input class="mp-input" type="number" id="fav-p" placeholder="12"></div>
+        </div>
+        <div class="mp-input-row">
+          <div><div class="mp-label">S (g)</div><input class="mp-input" type="number" id="fav-c" placeholder="1"></div>
+          <div><div class="mp-label">T (g)</div><input class="mp-input" type="number" id="fav-f" placeholder="10"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="mp-save-btn" style="flex:1" onclick="saveFav()">Uložit jídlo</button>
+          <button onclick="document.getElementById('fav-form').style.display='none'" style="background:var(--mp-del-bg);color:var(--mp-del-col);border:1px solid var(--mp-del-bdr);border-radius:12px;padding:13px 16px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;">Zrušit</button>
+        </div>
+      </div>
+      <button id="fav-add-btn" class="ai-btn" style="width:100%;margin:0 0 14px" onclick="document.getElementById('fav-form').style.display='block';document.getElementById('fav-add-btn').style.display='none'">+ Přidat jídlo</button>
     </div>
   </div>
 
@@ -538,7 +570,7 @@ function init(){
   const s=localStorage.getItem('nai_cfg');if(s)cfg={...DEF,...JSON.parse(s)};
   const d=localStorage.getItem('nai_'+td());if(d)meals=JSON.parse(d);
   const mp=localStorage.getItem('nai_mealpreps');if(mp)mealpreps=JSON.parse(mp);
-  render();loadS();
+  loadFavs();render();loadS();
   document.getElementById('a-date').textContent=new Date().toLocaleDateString('cs-CZ',{weekday:'long',day:'numeric',month:'long'});
   updateMacroUI();
 }
@@ -716,12 +748,72 @@ function renderMealpreps(){
     return `<div class="mp-item glass"><div class="mp-top"><div class="mp-name">${mp.name}</div><div class="mp-badge">${mp.remaining}/${mp.portions} porcí</div></div><div class="mp-macros">${Math.round(mp.kcal)} kcal · ${Math.round(mp.protein)}B · ${Math.round(mp.carbs)}S · ${Math.round(mp.fat)}T</div><div class="mp-portions"><div class="mp-bar-bg"><div class="mp-bar-fill" style="width:${pct}%"></div></div><div class="mp-count">${pct}%</div></div><div class="mp-actions"><button class="mp-eat-btn" onclick="eatMealprep(${mp.id})">✓ Sním porci</button><button class="mp-del-btn" onclick="deleteMealprep(${mp.id})">Smazat</button></div></div>`;
   }).join('');
 }
+// ── OBLÍBENÁ ──────────────────────────────────────────
+let favs = [];
+function loadFavs(){
+  const f=localStorage.getItem('nai_favs');
+  favs=f?JSON.parse(f):[];
+}
+function saveFavStorage(){
+  localStorage.setItem('nai_favs',JSON.stringify(favs));
+}
+function saveFav(){
+  const name=document.getElementById('fav-name').value.trim();
+  const kcal=parseFloat(document.getElementById('fav-kcal').value)||0;
+  const p=parseFloat(document.getElementById('fav-p').value)||0;
+  const c=parseFloat(document.getElementById('fav-c').value)||0;
+  const f=parseFloat(document.getElementById('fav-f').value)||0;
+  if(!name||!kcal){toast('Vyplň název a kcal');return;}
+  favs.push({id:Date.now(),name,kcal,protein:p,carbs:c,fat:f});
+  saveFavStorage();
+  ['fav-name','fav-kcal','fav-p','fav-c','fav-f'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fav-form').style.display='none';
+  document.getElementById('fav-add-btn').style.display='block';
+  renderFavs();
+  toast('Jídlo uloženo ✓');
+}
+function logFav(id){
+  const fav=favs.find(f=>f.id===id);if(!fav)return;
+  const now=new Date();
+  const meal={name:fav.name,kcal:fav.kcal,protein:fav.protein,carbs:fav.carbs,fat:fav.fat,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
+  meals.push(meal);
+  localStorage.setItem('nai_'+td(),JSON.stringify(meals));
+  const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
+  const today=td();const idx=hist.findIndex(d=>d.date===today);
+  if(idx>=0)hist[idx].meals=meals;else hist.unshift({date:today,meals:[...meals]});
+  localStorage.setItem('nai_hist',JSON.stringify(hist));
+  render();go('today');toast(fav.name+' zapsáno ✓');
+}
+function deleteFav(id){
+  favs=favs.filter(f=>f.id!==id);
+  saveFavStorage();renderFavs();
+}
+function renderFavs(){
+  loadFavs();
+  const el=document.getElementById('fav-list');
+  if(!favs.length){el.innerHTML='<div class="no-mp">Zatím žádná oblíbená jídla.</div>';return;}
+  el.innerHTML=favs.map(fav=>{
+    const macroStr=cfg.trackMacros?` · ${Math.round(fav.protein)}B · ${Math.round(fav.carbs)}S · ${Math.round(fav.fat)}T`:'';
+    return `<div class="fav-item glass" onclick="logFav(${fav.id})">
+      <div class="fav-info">
+        <div class="fav-name">${fav.name}</div>
+        <div class="fav-macros">${Math.round(fav.kcal)} kcal${macroStr}</div>
+      </div>
+      <div class="fav-kcal">${Math.round(fav.kcal)}</div>
+      <button class="fav-del" onclick="event.stopPropagation();deleteFav(${fav.id})">×</button>
+    </div>`;
+  }).join('');
+}
+
 function setSubtab(t){
   document.getElementById('sub-manual').style.display=t==='manual'?'block':'none';
   document.getElementById('sub-mealprep').style.display=t==='mealprep'?'block':'none';
+  document.getElementById('sub-favs').style.display=t==='favs'?'block':'none';
   document.getElementById('st-manual').classList.toggle('on',t==='manual');
   document.getElementById('st-mealprep').classList.toggle('on',t==='mealprep');
+  document.getElementById('st-favs').classList.toggle('on',t==='favs');
   if(t==='mealprep')renderMealpreps();
+  if(t==='favs')renderFavs();
 }
 function loadH(){
   const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
