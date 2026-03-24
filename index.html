@@ -260,6 +260,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
     </svg>
     <div class="ring-center"><div class="ring-num" id="a-kcal">0</div><div class="ring-lbl" id="ring-lbl-el">kcal</div><div class="ring-rem" id="a-rem"></div></div>
   </div>
+  <div id="workout-today-bar" style="display:none;border-radius:14px;padding:10px 14px;margin-bottom:14px;background:var(--mp-eat-bg);border:1px solid var(--mp-eat-bdr);display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:13px;font-weight:700;color:var(--mp-eat-col)" id="workout-today-text"></div>
+    <div style="font-size:11px;color:var(--mp-eat-col);opacity:0.7" id="workout-today-sub"></div>
+  </div>
   <div class="macro-row" id="macro-row-el">
     <div class="mc glass"><div class="lbl">Bílkoviny</div><div class="val" id="a-p">0g</div><div class="goal" id="ag-p"></div><div class="bar-bg"><div class="bar-fill" id="ab-p" style="background:var(--bar1)"></div></div></div>
     <div class="mc glass"><div class="lbl">Sacharidy</div><div class="val" id="a-c">0g</div><div class="goal" id="ag-c"></div><div class="bar-bg"><div class="bar-fill" id="ab-c" style="background:var(--bar2)"></div></div></div>
@@ -285,6 +289,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
     <button class="stab on" id="st-manual" onclick="setSubtab('manual')">AI zápis</button>
     <button class="stab" id="st-mealprep" onclick="setSubtab('mealprep')">Mealprep</button>
     <button class="stab" id="st-favs" onclick="setSubtab('favs')">Oblíbená</button>
+    <button class="stab" id="st-workout" onclick="setSubtab('workout')">Pohyb</button>
   </div>
   <div id="sub-manual">
     <div class="input-wrap">
@@ -352,6 +357,37 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
       </div>
     </div>
     <button id="fav-add-btn" class="ai-btn" style="width:100%;margin:0 0 14px" onclick="document.getElementById('fav-form').style.display='block';document.getElementById('fav-add-btn').style.display='none'">+ Přidat jídlo</button>
+  </div>
+
+  <!-- POHYB / WORKOUT -->
+  <div id="sub-workout" style="display:none">
+    <div class="sec-title">Dnešní pohyb</div>
+    <div id="workout-banner" style="display:none;border-radius:14px;padding:12px 14px;margin-bottom:12px;background:var(--mp-eat-bg);border:1px solid var(--mp-eat-bdr)">
+      <div style="font-size:12px;font-weight:700;color:var(--mp-eat-col)" id="workout-banner-text"></div>
+    </div>
+    <div class="fav-list" id="workout-list"><div class="no-mp">Dnes žádný pohyb.</div></div>
+    <div class="mp-form glass-md" id="workout-form" style="display:none">
+      <div class="mp-form-title" id="workout-form-title">Přidat pohyb</div>
+      <div class="mp-input-full"><div class="mp-label">Název aktivity</div><input class="mp-input" type="text" id="w-name" placeholder="Např. Běh 5km, Cyklistika, Spinning…"></div>
+      <div class="mp-input-row">
+        <div><div class="mp-label">Trvání (min)</div><input class="mp-input" type="number" id="w-dur" placeholder="45"></div>
+        <div><div class="mp-label">Spálené kcal</div><input class="mp-input" type="text" inputmode="decimal" id="w-kcal" placeholder="300"></div>
+      </div>
+      <div class="mp-input-full">
+        <div class="mp-label">Intenzita</div>
+        <select class="mp-input" id="w-intensity">
+          <option value="low">Nízká (chůze, jóga, protahování)</option>
+          <option value="medium" selected>Střední (kolo, plavání, silový trénink)</option>
+          <option value="high">Vysoká (běh, HIIT, spinning)</option>
+        </select>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;line-height:1.5" id="workout-kcal-hint">Zadej spálené kcal z hodinek nebo nech pole prázdné — odhadneme podle intenzity.</div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="mp-save-btn" style="flex:1" onclick="saveWorkout()"><span id="workout-save-lbl">Přidat pohyb</span></button>
+        <button onclick="cancelWorkout()" style="background:var(--mp-del-bg);color:var(--mp-del-col);border:1px solid var(--mp-del-bdr);border-radius:12px;padding:13px 16px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;">Zrušit</button>
+      </div>
+    </div>
+    <button id="workout-add-btn" class="ai-btn" style="width:100%;margin:0 0 14px" onclick="openWorkoutForm()">+ Přidat pohyb</button>
   </div>
 </div>
 
@@ -1051,6 +1087,124 @@ function setHistTab(t){
   if(t==='hist')loadH();
   if(t==='stats')renderStats();
   if(t==='weight')renderWeight();
+}
+
+// ── WORKOUT ──────────────────────────────────────────
+var editingWorkoutId=null;
+var intensityKcalMap={low:200,medium:350,high:500};
+
+function openWorkoutForm(){
+  document.getElementById('workout-form').style.display='block';
+  document.getElementById('workout-add-btn').style.display='none';
+}
+function cancelWorkout(){
+  editingWorkoutId=null;
+  document.getElementById('workout-form-title').textContent='Přidat pohyb';
+  document.getElementById('workout-save-lbl').textContent='Přidat pohyb';
+  ['w-name','w-dur','w-kcal'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('w-intensity').value='medium';
+  document.getElementById('workout-form').style.display='none';
+  document.getElementById('workout-add-btn').style.display='block';
+}
+function getTodayWorkouts(){
+  var all=JSON.parse(localStorage.getItem('nai_workouts')||'{}');
+  return all[td()]||[];
+}
+function saveTodayWorkouts(workouts){
+  var all=JSON.parse(localStorage.getItem('nai_workouts')||'{}');
+  all[td()]=workouts;
+  localStorage.setItem('nai_workouts',JSON.stringify(all));
+}
+function getTotalBurnedWorkout(){
+  return getTodayWorkouts().reduce(function(a,w){return a+w.kcal;},0);
+}
+function saveWorkout(){
+  var name=document.getElementById('w-name').value.trim();
+  var dur=parseInt(document.getElementById('w-dur').value)||0;
+  var kcalInput=parseD(document.getElementById('w-kcal').value);
+  var intensity=document.getElementById('w-intensity').value;
+  if(!name){toast('Zadej název aktivity');return;}
+  // estimate kcal if not provided
+  var kcal=kcalInput>0?kcalInput:Math.round((intensityKcalMap[intensity]||350)*(dur||45)/45);
+  var workouts=getTodayWorkouts();
+  if(editingWorkoutId){
+    var idx=workouts.findIndex(function(w){return w.id===editingWorkoutId;});
+    if(idx>=0)workouts[idx]={id:editingWorkoutId,name:name,dur:dur,kcal:kcal,intensity:intensity};
+    editingWorkoutId=null;
+    document.getElementById('workout-form-title').textContent='Přidat pohyb';
+    document.getElementById('workout-save-lbl').textContent='Přidat pohyb';
+  } else {
+    workouts.push({id:Date.now(),name:name,dur:dur,kcal:kcal,intensity:intensity});
+  }
+  saveTodayWorkouts(workouts);
+  cancelWorkout();
+  renderWorkouts();
+  render(); // re-render ring with new effective limit
+  toast(name+' přidáno ✓');
+}
+function editWorkout(id){
+  var workouts=getTodayWorkouts();
+  var w=workouts.find(function(x){return x.id===id;});
+  if(!w)return;
+  editingWorkoutId=id;
+  document.getElementById('w-name').value=w.name;
+  document.getElementById('w-dur').value=w.dur||'';
+  document.getElementById('w-kcal').value=w.kcal;
+  document.getElementById('w-intensity').value=w.intensity||'medium';
+  document.getElementById('workout-form-title').textContent='Upravit pohyb';
+  document.getElementById('workout-save-lbl').textContent='Uložit změny';
+  document.getElementById('workout-form').style.display='block';
+  document.getElementById('workout-add-btn').style.display='none';
+}
+function deleteWorkout(id){
+  var workouts=getTodayWorkouts().filter(function(w){return w.id!==id;});
+  saveTodayWorkouts(workouts);
+  renderWorkouts();
+  render();
+}
+function renderWorkouts(){
+  var workouts=getTodayWorkouts();
+  var total=getTotalBurnedWorkout();
+  var el=document.getElementById('workout-list');
+  var banner=document.getElementById('workout-banner');
+  var bannerText=document.getElementById('workout-banner-text');
+  if(!workouts.length){
+    el.innerHTML='<div class="no-mp">Dnes žádný pohyb.</div>';
+    if(banner)banner.style.display='none';
+  } else {
+    if(banner&&bannerText){
+      banner.style.display='block';
+      bannerText.textContent='Celkem spáleno pohybem: +'+Math.round(total)+' kcal → denní limit posunut na '+Math.round(effectiveKcalWithWorkout())+' kcal';
+    }
+    el.innerHTML=workouts.map(function(w){
+      var intLabel={low:'Nízká',medium:'Střední',high:'Vysoká'}[w.intensity]||'';
+      return '<div class="fav-item glass">'+
+        '<div class="fav-info">'+
+          '<div class="fav-name">'+w.name+'</div>'+
+          '<div class="fav-sub">'+(w.dur?w.dur+' min · ':'')+Math.round(w.kcal)+' kcal · '+intLabel+'</div>'+
+        '</div>'+
+        '<button class="fav-edit" onclick="event.stopPropagation();editWorkout('+w.id+')">✎</button>'+
+        '<button class="fav-del" onclick="event.stopPropagation();deleteWorkout('+w.id+')">×</button>'+
+      '</div>';
+    }).join('');
+  }
+  updateWorkoutTodayBar();
+}
+function updateWorkoutTodayBar(){
+  var bar=document.getElementById('workout-today-bar');
+  var text=document.getElementById('workout-today-text');
+  var sub=document.getElementById('workout-today-sub');
+  var workouts=getTodayWorkouts();
+  var total=getTotalBurnedWorkout();
+  if(!bar||!text||!sub)return;
+  if(!workouts.length||total<=0){bar.style.display='none';return;}
+  bar.style.display='flex';
+  text.textContent='🏃 Pohyb: +'+Math.round(total)+' kcal';
+  var newLimit=Math.round(effectiveKcalWithWorkout());
+  sub.textContent='Limit dnes: '+newLimit+' kcal';
+}
+function effectiveKcalWithWorkout(){
+  return effectiveKcal()+getTotalBurnedWorkout();
 }
 
 function setSubtab(t){
