@@ -373,15 +373,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--body-bg);}
         <div><div class="mp-label">Trvání (min)</div><input class="mp-input" type="number" id="w-dur" placeholder="45"></div>
         <div><div class="mp-label">Spálené kcal</div><input class="mp-input" type="text" inputmode="decimal" id="w-kcal" placeholder="300"></div>
       </div>
-      <div class="mp-input-full">
-        <div class="mp-label">Intenzita</div>
-        <select class="mp-input" id="w-intensity">
-          <option value="low">Nízká (chůze, jóga, protahování)</option>
-          <option value="medium" selected>Střední (kolo, plavání, silový trénink)</option>
-          <option value="high">Vysoká (běh, HIIT, spinning)</option>
-        </select>
-      </div>
-      <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;line-height:1.5" id="workout-kcal-hint">Zadej spálené kcal z hodinek nebo nech pole prázdné — odhadneme podle intenzity.</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;line-height:1.5">Spálené kcal zjistíš v Apple Watch nebo Stravě. Nech prázdné pro odhad (4 kcal/min).</div>
       <div style="display:flex;gap:8px;margin-top:4px">
         <button class="mp-save-btn" style="flex:1" onclick="saveWorkout()"><span id="workout-save-lbl">Přidat pohyb</span></button>
         <button onclick="cancelWorkout()" style="background:var(--mp-del-bg);color:var(--mp-del-col);border:1px solid var(--mp-del-bdr);border-radius:12px;padding:13px 16px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;">Zrušit</button>
@@ -1091,8 +1083,6 @@ function setHistTab(t){
 
 // ── WORKOUT ──────────────────────────────────────────
 var editingWorkoutId=null;
-var intensityKcalMap={low:200,medium:350,high:500};
-
 function openWorkoutForm(){
   document.getElementById('workout-form').style.display='block';
   document.getElementById('workout-add-btn').style.display='none';
@@ -1102,7 +1092,6 @@ function cancelWorkout(){
   document.getElementById('workout-form-title').textContent='Přidat pohyb';
   document.getElementById('workout-save-lbl').textContent='Přidat pohyb';
   ['w-name','w-dur','w-kcal'].forEach(function(id){document.getElementById(id).value='';});
-  document.getElementById('w-intensity').value='medium';
   document.getElementById('workout-form').style.display='none';
   document.getElementById('workout-add-btn').style.display='block';
 }
@@ -1122,19 +1111,17 @@ function saveWorkout(){
   var name=document.getElementById('w-name').value.trim();
   var dur=parseInt(document.getElementById('w-dur').value)||0;
   var kcalInput=parseD(document.getElementById('w-kcal').value);
-  var intensity=document.getElementById('w-intensity').value;
   if(!name){toast('Zadej název aktivity');return;}
-  // estimate kcal if not provided
-  var kcal=kcalInput>0?kcalInput:Math.round((intensityKcalMap[intensity]||350)*(dur||45)/45);
+  var kcal=kcalInput>0?kcalInput:Math.round(4*(dur||45));
   var workouts=getTodayWorkouts();
   if(editingWorkoutId){
     var idx=workouts.findIndex(function(w){return w.id===editingWorkoutId;});
-    if(idx>=0)workouts[idx]={id:editingWorkoutId,name:name,dur:dur,kcal:kcal,intensity:intensity};
+    if(idx>=0)workouts[idx]={id:editingWorkoutId,name:name,dur:dur,kcal:kcal};
     editingWorkoutId=null;
     document.getElementById('workout-form-title').textContent='Přidat pohyb';
     document.getElementById('workout-save-lbl').textContent='Přidat pohyb';
   } else {
-    workouts.push({id:Date.now(),name:name,dur:dur,kcal:kcal,intensity:intensity});
+    workouts.push({id:Date.now(),name:name,dur:dur,kcal:kcal});
   }
   saveTodayWorkouts(workouts);
   cancelWorkout();
@@ -1177,11 +1164,10 @@ function renderWorkouts(){
       bannerText.textContent='Celkem spáleno pohybem: +'+Math.round(total)+' kcal → denní limit posunut na '+Math.round(effectiveKcalWithWorkout())+' kcal';
     }
     el.innerHTML=workouts.map(function(w){
-      var intLabel={low:'Nízká',medium:'Střední',high:'Vysoká'}[w.intensity]||'';
       return '<div class="fav-item glass">'+
         '<div class="fav-info">'+
           '<div class="fav-name">'+w.name+'</div>'+
-          '<div class="fav-sub">'+(w.dur?w.dur+' min · ':'')+Math.round(w.kcal)+' kcal · '+intLabel+'</div>'+
+          '<div class="fav-sub">'+(w.dur?w.dur+' min · ':'')+Math.round(w.kcal)+' kcal</div>'+
         '</div>'+
         '<button class="fav-edit" onclick="event.stopPropagation();editWorkout('+w.id+')">✎</button>'+
         '<button class="fav-del" onclick="event.stopPropagation();deleteWorkout('+w.id+')">×</button>'+
@@ -1208,12 +1194,15 @@ function effectiveKcalWithWorkout(){
 }
 
 function setSubtab(t){
-  ['manual','mealprep','favs'].forEach(s=>{
-    document.getElementById('sub-'+s).style.display=s===t?'block':'none';
-    document.getElementById('st-'+s).classList.toggle('on',s===t);
+  ['manual','mealprep','favs','workout'].forEach(function(s){
+    var el=document.getElementById('sub-'+s);
+    var btn=document.getElementById('st-'+s);
+    if(el)el.style.display=s===t?'block':'none';
+    if(btn)btn.classList.toggle('on',s===t);
   });
   if(t==='mealprep')renderMealpreps();
   if(t==='favs')renderFavs();
+  if(t==='workout')renderWorkouts();
 }
 
 function go(name){
