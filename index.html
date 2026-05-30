@@ -67,6 +67,10 @@ html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); font
   -webkit-overflow-scrolling:touch; display:none; background:var(--bg); }
 .screen.on { display:block; }
 .screen-content { padding:0 20px calc(110px + env(safe-area-inset-bottom)); }
+/* Today screen needs white bg so card extends seamlessly to bottom */
+#s-today { background:var(--card); }
+#s-today.on { display:flex; flex-direction:column; }
+#s-today .content-card { flex:1; min-height:0; }
 
 /* ── HERO (blue gradient, today screen only) ── */
 .hero { background:var(--hero); padding:calc(20px + env(safe-area-inset-top)) 20px 90px;
@@ -91,8 +95,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); font
 
 /* ── WHITE CARD (overlap hero) ── */
 .content-card { background:var(--card); border-radius:32px 32px 0 0;
-  margin-top:-40px; padding:28px 20px 30px;
-  position:relative; min-height:60vh;
+  margin-top:-40px; padding:28px 20px calc(110px + env(safe-area-inset-bottom));
+  position:relative;
   box-shadow:0 -8px 30px rgba(20,20,28,0.06); }
 @media (prefers-color-scheme: dark) {
   .content-card { box-shadow:0 -8px 30px rgba(0,0,0,0.3); }
