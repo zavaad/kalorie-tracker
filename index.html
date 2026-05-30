@@ -6,474 +6,359 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NutriAI">
-<meta name="theme-color" content="#a3c9a8">
+<meta name="theme-color" content="#4d5fe8">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="manifest" href="/manifest.json">
 <title>NutriAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
 :root {
-  /* Light pastel sage palette */
-  --bg: #f4f5f0;
-  --bg2: #ffffff;
-  --bg3: #fafaf6;
-  --bg4: #efefe8;
-  --bg5: #e5e5dd;
-  --sage: #8db89a;
-  --sage2: #a3c9a8;
-  --sage-soft: #c8e0cc;
-  --sage-dim: rgba(141,184,154,0.12);
-  --sage-glow: rgba(141,184,154,0.18);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --card2: #fafafc;
+  --bg4: #eceef3;
+  --hero: linear-gradient(165deg, #5868eb 0%, #3e4dd0 100%);
+  --accent: #4d5fe8;
+  --text: #15151a;
+  --text2: #6e6e76;
+  --text3: #a5a5af;
+  --border: rgba(20,20,28,0.06);
+  --hero-text: #ffffff;
+  --hero-text2: rgba(255,255,255,0.68);
+  --hero-track: rgba(255,255,255,0.18);
+  --red: #e8674a;
+  --green: #4ad88a;
+  --shadow: 0 1px 3px rgba(20,20,28,0.05);
+  --shadow-lg: 0 8px 30px rgba(20,20,28,0.08);
+  --radius: 28px;
+  --radius-md: 20px;
+  --radius-sm: 14px;
   --yellow: #e8d878;
-  --yellow-soft: #f0e8a8;
-  --grad-card: linear-gradient(135deg, #c8e0cc 0%, #e0e0b8 50%, #f0e0a8 100%);
-  --grad-ring: linear-gradient(135deg, #a3c9a8, #c8d8a8);
-  --text: #1a2118;
-  --text2: rgba(26,33,24,0.55);
-  --text3: rgba(26,33,24,0.35);
-  --text-on-grad: #1a2118;
-  --red: #c45c5c;
-  --orange: #d88a4a;
-  --blue: #6a9bc4;
-  --border: rgba(26,33,24,0.08);
-  --border2: rgba(26,33,24,0.05);
-  --radius: 22px;
-  --radius-sm: 16px;
-  --radius-xs: 12px;
-  --font: 'Plus Jakarta Sans', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #18181a;
-    --bg2: #222225;
-    --bg3: #1d1d20;
-    --bg4: #2a2a2e;
-    --bg5: #34343a;
-    --sage: #8db89a;
-    --sage2: #a3c9a8;
-    --sage-soft: #6da080;
-    --sage-dim: rgba(163,201,168,0.12);
-    --sage-glow: rgba(163,201,168,0.15);
-    --yellow: #d8c87a;
-    --yellow-soft: #b8a868;
-    --grad-card: linear-gradient(135deg, rgba(168,210,184,0.5) 0%, rgba(220,210,160,0.42) 50%, rgba(232,200,140,0.36) 100%), linear-gradient(135deg, #4a5550 0%, #5a5535 50%, #5a4830 100%);
-    --grad-ring: linear-gradient(135deg, #a3c9a8, #c8d8a8);
-    --text: #f0f3ed;
-    --text2: rgba(240,243,237,0.55);
-    --text3: rgba(240,243,237,0.30);
-    --text-on-grad: #1a2118;
-    --red: #e0807a;
-    --orange: #e0a06a;
-    --blue: #7ab0d8;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.04);
+    --bg: #1c1c1e;
+    --card: #2a2a2c;
+    --card2: #232325;
+    --bg4: #3a3a3c;
+    --text: #f5f5f7;
+    --text2: #a0a0a4;
+    --text3: #6e6e76;
+    --border: rgba(255,255,255,0.08);
+    --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
   }
 }
 
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
-html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); font-family:var(--font); color:var(--text); }
+html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); font-family:var(--font); color:var(--text); font-feature-settings:"cv02","cv03","cv04","cv11"; }
 
 #app { position:fixed; inset:0; overflow:hidden; }
+.bg-decor { display:none; }
 
-/* Subtle background gradient */
-.bg-decor { position:fixed; inset:0; z-index:0; pointer-events:none;
-  background:
-    radial-gradient(circle at 80% 10%, rgba(200,224,204,0.4) 0%, transparent 40%),
-    radial-gradient(circle at 10% 90%, rgba(240,232,168,0.25) 0%, transparent 45%); }
+/* SCREEN BASE */
+.screen { position:absolute; inset:0; z-index:2; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch; display:none; background:var(--bg); }
+.screen.on { display:block; }
+.screen-content { padding:0 20px calc(110px + env(safe-area-inset-bottom)); }
+
+/* ── HERO (blue gradient, today screen only) ── */
+.hero { background:var(--hero); padding:calc(20px + env(safe-area-inset-top)) 20px 90px;
+  position:relative; }
+.hero-topbar { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:18px; }
+.hero-greeting { color:var(--hero-text); font-size:28px; font-weight:500; letter-spacing:-0.5px; line-height:1.15; }
+.hero-date { color:var(--hero-text2); font-size:13px; font-weight:400; margin-top:5px; }
+.hero-icon { width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.18);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  transition:transform 0.15s; flex-shrink:0; }
+.hero-icon:active { transform:scale(0.94); }
+.hero-icon svg { width:18px; height:18px; stroke:var(--hero-text); }
+
+/* ── GAUGE inside hero ── */
+.gauge-area { width:100%; display:flex; justify-content:center; margin-top:8px; }
+.ring-svg { display:block; width:88%; max-width:340px; height:auto; overflow:visible; }
+.ring-track { stroke:var(--hero-track); }
+.ring-arc { stroke:var(--hero-text); }
+.gauge-target-line { text-align:center; font-size:13px; color:rgba(255,255,255,0.55);
+  font-weight:500; margin-top:-8px; letter-spacing:0.02em; font-variant-numeric:tabular-nums; }
+
+/* ── WHITE CARD (overlap hero) ── */
+.content-card { background:var(--card); border-radius:32px 32px 0 0;
+  margin-top:-40px; padding:28px 20px 30px;
+  position:relative; min-height:60vh;
+  box-shadow:0 -8px 30px rgba(20,20,28,0.06); }
 @media (prefers-color-scheme: dark) {
-  .bg-decor {
-    background:
-      radial-gradient(circle at 80% 10%, rgba(141,184,154,0.08) 0%, transparent 40%),
-      radial-gradient(circle at 10% 90%, rgba(216,200,122,0.05) 0%, transparent 45%); }
+  .content-card { box-shadow:0 -8px 30px rgba(0,0,0,0.3); }
 }
 
-.screen { position:absolute; inset:0; z-index:2; overflow-y:auto; overflow-x:hidden;
-  -webkit-overflow-scrolling:touch; padding:0 18px calc(100px + env(safe-area-inset-bottom)); display:none; }
-.screen.on { display:block; }
+/* Big kcal in white card */
+.big-kcal { text-align:left; margin-bottom:6px; }
+.big-kcal-val { font-size:68px; font-weight:600; color:var(--text); letter-spacing:-2.5px; line-height:1;
+  font-variation-settings:"opsz" 32; }
+.big-kcal-label { font-size:14px; color:var(--text2); font-weight:500; margin-top:8px; letter-spacing:0.01em; }
 
-/* ── TOPBAR ── */
-.topbar { padding:calc(48px + env(safe-area-inset-top)) 0 14px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+/* 3 macro inline stats — first column aligns with big number left edge, spread evenly */
+.macro-stats { display:flex; gap:0; margin:22px 0 26px; padding:0; }
+.macro-stat { flex:1; text-align:left; }
+.macro-stat-val { font-size:22px; font-weight:600; color:var(--text); letter-spacing:-0.4px; line-height:1; }
+.macro-stat-label { font-size:12px; color:var(--text2); font-weight:500; margin-top:6px; }
+.macro-stat-sub { font-size:10px; color:var(--text3); font-weight:400; margin-top:3px; }
+
+/* Section row */
+.section-row { display:flex; align-items:center; justify-content:space-between; margin:0 0 14px; }
+.section-title { font-size:17px; font-weight:600; color:var(--text); letter-spacing:-0.3px; }
+.section-action { background:none; border:none; color:var(--accent); font-size:14px; font-weight:500;
+  font-family:var(--font); cursor:pointer; padding:6px 4px; display:flex; align-items:center; gap:5px; }
+.section-action:active { opacity:0.6; }
+
+/* Meals list */
+.meal { background:var(--card2); border-radius:16px; padding:14px 14px;
+  display:flex; align-items:center; gap:12px; margin-bottom:8px; transition:transform 0.15s; }
+.meal:active { transform:scale(0.99); }
+.meal-icon { width:36px; height:36px; border-radius:50%; background:var(--bg4);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:16px; }
+.meal-info { flex:1; min-width:0; }
+.meal-name { font-size:14px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.meal-time { font-size:12px; color:var(--text3); margin-top:3px; font-weight:400; }
+.meal-right { text-align:right; flex-shrink:0; }
+.meal-kcal { font-size:14px; font-weight:600; color:var(--text); }
+.meal-edit, .meal-del { background:none; border:none; color:var(--text3); width:28px; height:28px;
+  font-size:14px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.meal-edit:active, .meal-del:active { color:var(--text); }
+.no-meal { text-align:center; padding:32px 14px; font-size:13px; color:var(--text3); font-weight:500; }
+
+/* ── TOPBAR (non-hero screens) ── */
+.topbar { padding:calc(20px + env(safe-area-inset-top)) 0 18px;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
 .topbar-left { flex:1; }
-.topbar-eyebrow { font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:0.14em; margin-bottom:6px; }
-.greeting-main { font-size:26px; font-weight:600; color:var(--text); letter-spacing:-0.5px; line-height:1.15; }
-.greeting-date { font-size:13px; color:var(--text2); font-weight:500; margin-top:4px; }
-.topbar-icon { width:42px; height:42px; border-radius:50%; background:var(--bg2); border:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center; cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:transform 0.15s; }
+.topbar-eyebrow { font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:0.12em; margin-bottom:5px; }
+.page-title { font-size:26px; font-weight:600; color:var(--text); letter-spacing:-0.5px; line-height:1.1; }
+.topbar-icon { width:42px; height:42px; border-radius:50%; background:var(--card);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow);
+  transition:transform 0.15s; }
 .topbar-icon:active { transform:scale(0.94); }
 .topbar-icon svg { width:18px; height:18px; stroke:var(--text2); }
 
-/* ── HALF-CIRCLE GAUGE ── */
-.ring-section { position:relative; padding:0 0 6px; margin:6px -18px 4px;
-  background:radial-gradient(ellipse 80% 90% at 50% 65%, rgba(168,210,184,0.32) 0%, rgba(232,216,160,0.18) 50%, transparent 75%); }
-@media (prefers-color-scheme: dark) {
-  .ring-section { background:radial-gradient(ellipse 80% 90% at 50% 65%, rgba(141,184,154,0.14) 0%, rgba(216,200,122,0.06) 50%, transparent 75%); }
-}
-.gauge-wrap { position:relative; width:100%; max-width:420px; margin:0 auto; padding:14px 0 0; }
-.ring-svg { display:block; width:100%; height:auto; overflow:visible; }
-.ring-center { position:absolute; left:50%; top:62%; transform:translate(-50%,-50%); text-align:center; pointer-events:none; width:80%; }
-.ring-kcal { font-size:58px; font-weight:800; color:var(--text); line-height:1; letter-spacing:-2.2px; }
-.ring-target { font-size:14px; color:var(--text2); margin-top:6px; font-weight:600; }
-
-/* ── 3 MACRO CARDS (clean, glassmorphism) ── */
-.macro-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
-.macro-card { background:var(--bg2); border-radius:20px; padding:18px 14px;
-  text-align:center; position:relative; overflow:hidden;
-  box-shadow:0 1px 3px rgba(0,0,0,0.04); }
-@media (prefers-color-scheme: dark) {
-  .macro-card { box-shadow:0 1px 3px rgba(0,0,0,0.25); }
-}
-.macro-card-label { font-size:13px; color:var(--text2); font-weight:600; margin-bottom:8px; }
-.macro-card-val { font-size:24px; font-weight:800; color:var(--text); letter-spacing:-1px; line-height:1; }
-.macro-card-sub { font-size:11px; color:var(--text3); margin-top:5px; font-weight:500; }
-
-/* ── CTA STRIP BELOW GAUGE ── */
-.cta-strip { background:var(--grad-card); border-radius:20px; padding:14px 16px;
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  margin:8px 0 14px; box-shadow:0 10px 30px rgba(141,184,154,0.18); }
-@media (prefers-color-scheme: dark) {
-  .cta-strip { box-shadow:0 8px 30px rgba(0,0,0,0.35); }
-}
-.cta-text { flex:1; min-width:0; }
-.cta-label { font-size:10px; color:var(--text-on-grad); font-weight:600; opacity:0.6;
-  text-transform:uppercase; letter-spacing:0.08em; }
-.cta-value { font-size:16px; color:var(--text-on-grad); font-weight:700; margin-top:3px; line-height:1.1;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.cta-buttons { display:flex; gap:6px; flex-shrink:0; }
-.cta-action { background:#1a2118; color:#fff; border:none;
-  border-radius:12px; padding:11px 16px; font-size:13px; font-weight:600; font-family:var(--font);
-  cursor:pointer; transition:transform 0.15s; }
-.cta-action:active { transform:scale(0.96); }
-.cta-action-ai { background:rgba(26,33,24,0.12); color:#1a2118; border:none;
-  border-radius:12px; padding:11px 14px; font-size:14px; font-weight:700; font-family:var(--font);
-  cursor:pointer; transition:transform 0.15s; line-height:1; }
-.cta-action-ai:active { transform:scale(0.94); }
-
-/* ── MINI STATS ROW ── */
-.mini-stats { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm);
-  padding:6px 14px; margin-bottom:10px; }
-.mini-stat-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border2); }
-.mini-stat-row:last-child { border-bottom:none; }
-.mini-stat-label { font-size:13px; color:var(--text2); font-weight:500; }
-.mini-stat-value { font-size:14px; color:var(--text); font-weight:700; }
-
-/* ── MACROS CARD ── */
-.macros-card { background:var(--bg2); border-radius:20px; padding:18px; margin-bottom:10px;
-  box-shadow:0 1px 2px rgba(0,0,0,0.02); }
-@media (prefers-color-scheme: dark) {
-  .macros-card { box-shadow:0 1px 2px rgba(0,0,0,0.2); }
-}
-.macros-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:14px; }
-.macros-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-.macro-col { text-align:center; }
-.macro-pct { font-size:11px; font-weight:700; color:var(--text2); margin-bottom:8px; }
-.macro-bar-bg { width:100%; height:48px; background:var(--bg4); border-radius:8px 8px 4px 4px; position:relative; overflow:hidden; display:flex; align-items:flex-end; }
-.macro-bar-fill { width:100%; border-radius:8px 8px 4px 4px; transition:height 0.5s ease; min-height:4px; }
-.macro-name { font-size:11px; color:var(--text2); font-weight:600; margin-top:8px; }
-.macro-val { font-size:13px; color:var(--text); font-weight:700; margin-top:2px; }
-.macro-goal { font-size:10px; color:var(--text3); margin-top:1px; }
-
-/* ── QUICK ACTIONS ── */
-.quick-actions { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
-.qa-btn { background:var(--bg2); border-radius:var(--radius-sm);
-  padding:14px 8px; cursor:pointer; transition:transform 0.15s; }
-.qa-btn:active { transform:scale(0.97); }
-.qa-icon { width:30px; height:30px; border-radius:50%; background:var(--sage-dim); display:flex;
-  align-items:center; justify-content:center; margin:0 auto 8px; }
-.qa-icon svg { width:14px; height:14px; stroke:var(--sage); }
-.qa-label { font-size:11px; color:var(--text2); font-weight:600; }
-.qa-name { font-size:13px; color:var(--text); font-weight:700; margin-top:2px; }
-
-/* ── MEAL LIST ── */
-.section-row { display:flex; justify-content:space-between; align-items:center; margin:18px 0 10px; }
-.section-title { font-size:16px; font-weight:700; color:var(--text); letter-spacing:-0.3px; }
-.section-action { font-size:12px; color:var(--sage); font-weight:600; cursor:pointer; background:none; border:none; font-family:var(--font); }
-
-.meal { background:var(--bg2); border-radius:var(--radius-sm);
-  display:flex; align-items:center; gap:12px; padding:14px 14px 14px 16px; margin-bottom:8px; }
-.meal-dot { width:38px; height:38px; border-radius:50%; background:var(--sage-dim); flex-shrink:0;
-  display:flex; align-items:center; justify-content:center; font-size:14px; }
-.meal-info { flex:1; min-width:0; }
-.meal-name { font-size:15px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.meal-time { font-size:12px; color:var(--text3); margin-top:3px; }
-.meal-right { text-align:right; flex-shrink:0; }
-.meal-kcal { font-size:15px; font-weight:700; color:var(--text); }
-.meal-macros { font-size:10px; color:var(--text3); margin-top:2px; }
-.meal-edit { background:none; border:1px solid var(--border); color:var(--text2); width:28px; height:28px;
-  border-radius:50%; font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.meal-del { background:none; border:none; color:var(--text3); width:24px; height:24px;
-  font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-
-.no-meal { text-align:center; padding:30px 20px; color:var(--text3); font-size:13px; }
-.empty-h { text-align:center; padding:40px 20px; color:var(--text3); font-size:13px; }
-
-/* ── AI CHAT BOX ── */
-.chat-box { background:var(--bg2); border-radius:var(--radius); padding:16px; margin-bottom:12px; display:none; }
-.chat-box.on { display:block; }
-.chat-close { float:right; background:none; border:none; color:var(--text2); font-size:20px; cursor:pointer; margin:-4px -4px 0 0; }
-.chat-messages { max-height:none; overflow-y:visible; }
-.chat-msg { font-size:13px; color:var(--text2); line-height:1.55; margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--border2); }
-.chat-msg:last-of-type { border-bottom:none; padding-bottom:0; margin-bottom:0; }
-.chat-msg.user-msg { background:var(--sage-dim);  border-radius:12px;
-  padding:10px 12px; margin-bottom:14px; color:var(--text); border-bottom:1px solid rgba(141,184,154,0.2); }
-.chat-msg p { margin-bottom:6px; }
-.chat-msg strong { color:var(--text); font-weight:700; }
-.chat-followup { margin-top:14px; display:flex; gap:8px; }
-.chat-followup input { flex:1; background:var(--bg3); border:1px solid var(--border); color:var(--text);
-  border-radius:12px; padding:11px 14px; font-size:13px; font-family:var(--font); outline:none; }
-.chat-followup input:focus { border-color:rgba(141,184,154,0.4); }
-.chat-followup button { background:var(--sage); color:#fff; border:none; border-radius:12px;
-  padding:11px 16px; font-size:13px; font-weight:600; font-family:var(--font); cursor:pointer; white-space:nowrap; }
-.chat-followup button:disabled { opacity:0.4; }
-
-/* ── BUTTONS ── */
-.summary-btn { width:100%; background:var(--sage-dim); color:var(--sage); border:1px solid rgba(141,184,154,0.25);
-  border-radius:var(--radius-sm); padding:14px; font-size:14px; font-weight:700; font-family:var(--font);
-  cursor:pointer; margin-bottom:10px; letter-spacing:0.01em; transition:transform 0.15s; }
-.summary-btn:active { transform:scale(0.98); }
-
-/* ── FLOATING ICON NAV ── */
-.nav { position:fixed; bottom:max(env(safe-area-inset-bottom), 16px); left:50%; transform:translateX(-50%); z-index:10;
-  display:flex; align-items:center; padding:7px; gap:4px;
-  background:rgba(244,245,240,0.95); backdrop-filter:blur(40px) saturate(180%); -webkit-backdrop-filter:blur(40px) saturate(180%);
-  border-radius:32px;
-  box-shadow:0 14px 40px rgba(141,184,154,0.20), 0 2px 8px rgba(0,0,0,0.06); }
-@media (prefers-color-scheme: dark) {
-  .nav { background:rgba(34,34,38,0.92);
-    box-shadow:0 14px 40px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3); }
-}
-.nb { background:none; border:none; padding:13px 20px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  border-radius:24px; transition:all 0.2s; font-family:var(--font); }
-.nb svg { width:22px; height:22px; flex-shrink:0; stroke:var(--text2); transition:stroke 0.2s; }
-.nb.on { background:#1a2118; }
-.nb.on svg { stroke:#fff; }
-@media (prefers-color-scheme: dark) {
-  .nb.on { background:var(--sage2); }
-  .nb.on svg { stroke:#1a2118; }
-}
-.nb-text { display:none; }
-
-/* ── ADD SCREEN ── */
-.subtabs { display:flex; gap:6px; margin-bottom:18px; overflow-x:auto; padding-bottom:2px; }
-.subtabs::-webkit-scrollbar { display:none; }
-.stab { flex:1; padding:11px 12px; text-align:center; font-size:13px; font-weight:600;
-  color:var(--text2); cursor:pointer; background:var(--bg2); border:none;
-  border-radius:14px; font-family:var(--font); transition:all 0.2s; white-space:nowrap;
-  box-shadow:0 1px 2px rgba(0,0,0,0.03); }
-@media (prefers-color-scheme: dark) {
-  .stab { box-shadow:0 1px 2px rgba(0,0,0,0.2); }
-}
-.stab.on { color:#1a2118; background:var(--sage-soft); }
-@media (prefers-color-scheme: dark) {
-  .stab.on { color:#1a2118; background:var(--sage2); }
-}
-
-/* ── INPUTS ── */
+/* ── FORM ELEMENTS ── */
+.section-block { margin-bottom:28px; }
 .inp-group { margin-bottom:14px; }
-.inp-label { font-size:13px; color:var(--text2); font-weight:600; margin-bottom:7px; letter-spacing:0.02em; }
+.inp-label { font-size:13px; color:var(--text2); font-weight:500; margin-bottom:8px; }
 textarea, input[type=text], input[type=number], input[type=password], select, input[type=time] {
-  width:100%; background:var(--bg2); border:1px solid var(--border); color:var(--text);
-  border-radius:var(--radius-sm); padding:13px 14px; font-size:14px; font-family:var(--font);
-  outline:none; transition:border-color 0.2s; -webkit-appearance:none; appearance:none; }
-textarea { resize:none; }
-input:focus, textarea:focus, select:focus { border-color:rgba(141,184,154,0.4); }
-select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat:no-repeat; background-position:right 12px center; padding-right:36px; }
+  width:100%; background:var(--card); color:var(--text); border:none;
+  border-radius:14px; padding:14px 16px; font-size:15px; font-family:var(--font);
+  outline:none; font-weight:400; box-shadow:var(--shadow); }
+@media (prefers-color-scheme: dark) {
+  textarea, input[type=text], input[type=number], input[type=password], select, input[type=time] {
+    box-shadow:none; background:var(--card); }
+}
+textarea { resize:vertical; min-height:90px; line-height:1.4; }
 ::placeholder { color:var(--text3); }
+input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); }
 
-.input-hint { font-size:11px; color:var(--text3); margin-top:5px; }
-
-/* ── PHOTO AREA ── */
-.add-area { position:relative; }
-.photo-icon-btn { position:absolute; right:12px; bottom:12px; width:36px; height:36px; border-radius:50%;
-  background:var(--bg4); border:1px solid var(--border); cursor:pointer;
-  display:flex; align-items:center; justify-content:center; padding:0; overflow:hidden; }
-.photo-icon-btn input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; font-size:0; }
-.photo-icon-btn svg { width:16px; height:16px; stroke:var(--text2); pointer-events:none; }
-.preview-wrap { display:none; margin-bottom:10px; border-radius:var(--radius-sm); overflow:hidden; position:relative; }
-.preview-wrap img { width:100%; max-height:200px; object-fit:cover; display:block; }
-.remove-photo { position:absolute; top:8px; right:8px; width:28px; height:28px; background:rgba(0,0,0,0.6);
-  border:none; border-radius:50%; color:#fff; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-
-/* ── ACTION BUTTONS ── */
-.ai-btn { width:100%; background:var(--sage-dim); color:var(--sage); border:none;
-  border-radius:var(--radius-sm); padding:14px; font-size:14px; font-weight:700; font-family:var(--font);
-  cursor:pointer; transition:transform 0.15s; margin-bottom:10px; }
-.ai-btn:disabled { opacity:0.4; cursor:default; }
-.ai-btn:active { transform:scale(0.98); }
-
-.confirm-btn { width:100%; background:#1a2118; color:#fff; border:none;
-  border-radius:var(--radius-sm); padding:14px; font-size:14px; font-weight:600; font-family:var(--font);
-  cursor:pointer; margin-top:12px; transition:transform 0.15s; }
-@media (prefers-color-scheme: dark) {
-  .confirm-btn { background:var(--sage2); color:#1a2118; }
-}
-.confirm-btn:active { transform:scale(0.98); }
-
-.save-btn { width:100%; background:#1a2118; color:#fff; border:none;
-  border-radius:var(--radius-sm); padding:15px; font-size:15px; font-weight:600; font-family:var(--font);
+/* Primary button */
+.btn-primary { width:100%; background:var(--accent); color:#fff; border:none;
+  border-radius:14px; padding:15px; font-size:15px; font-weight:600; font-family:var(--font);
   cursor:pointer; transition:transform 0.15s; }
-@media (prefers-color-scheme: dark) {
-  .save-btn { background:var(--sage2); color:#1a2118; }
-}
-.save-btn:active { transform:scale(0.98); }
+.btn-primary:active { transform:scale(0.99); }
+.btn-primary:disabled { opacity:0.4; cursor:not-allowed; }
 
-/* ── DOTS LOADER ── */
-.dots { display:none; text-align:center; padding:14px 0; }
-.dots.on { display:block; }
-.dots span { display:inline-block; width:6px; height:6px; background:var(--sage); border-radius:50%;
-  animation:pulse 1.2s ease-in-out infinite; margin:0 3px; }
-.dots span:nth-child(2) { animation-delay:0.2s; }
-.dots span:nth-child(3) { animation-delay:0.4s; }
-@keyframes pulse { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+.btn-ghost { width:100%; background:var(--card); color:var(--text); border:none;
+  border-radius:14px; padding:14px; font-size:14px; font-weight:500; font-family:var(--font);
+  cursor:pointer; box-shadow:var(--shadow); }
 
-/* ── AI RESULT (meal analysis) ── */
-.result-box { display:none; background:var(--bg2);  border-radius:var(--radius); padding:16px; margin-bottom:10px; }
+.btn-row { display:flex; gap:8px; }
+
+/* Photo */
+.photo-row { display:flex; gap:8px; margin-bottom:14px; }
+.photo-btn { flex:1; background:var(--card); color:var(--text2); border:none;
+  border-radius:14px; padding:12px; font-size:13px; font-weight:500; font-family:var(--font);
+  cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;
+  box-shadow:var(--shadow); }
+.preview-wrap { position:relative; margin-bottom:14px; border-radius:14px; overflow:hidden; display:none; }
+.preview-wrap.on { display:block; }
+.preview-img { width:100%; max-height:300px; object-fit:cover; }
+.preview-close { position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.6); color:#fff;
+  border:none; width:28px; height:28px; border-radius:50%; font-size:18px; cursor:pointer; }
+
+/* Result box */
+.result-box { display:none; background:var(--card2); border-radius:18px; padding:18px; margin:14px 0; box-shadow:var(--shadow); }
 .result-box.on { display:block; }
-.result-name { font-size:16px; font-weight:700; color:var(--text); margin-bottom:12px; }
-.result-macros { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:12px; }
-.rm { background:var(--bg3); border-radius:12px; padding:11px 8px; text-align:center; }
-.rm .rv { font-size:16px; font-weight:700; color:var(--text); }
-.rm .rl { font-size:10px; color:var(--text3); margin-top:2px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; }
-.feedback { font-size:13px; color:var(--text2); line-height:1.55; border-top:1px solid var(--border2); padding-top:12px; margin-top:4px; }
+.result-name { font-size:17px; font-weight:600; color:var(--text); margin-bottom:6px; letter-spacing:-0.2px; }
+.result-stats { display:flex; gap:14px; margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.result-stat { font-size:13px; color:var(--text2); }
+.result-stat strong { color:var(--text); font-weight:600; }
+.result-actions { display:flex; gap:8px; }
+.result-actions .btn-primary { flex:2; }
+.result-actions .btn-ghost { flex:1; }
 
-/* ── MEALPREP ── */
-.mp-item { background:var(--bg2); border-radius:var(--radius-sm); padding:14px; margin-bottom:8px; }
-.mp-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-.mp-name { font-size:14px; font-weight:600; color:var(--text); }
-.mp-badge { font-size:11px; color:var(--sage); background:var(--sage-dim); border-radius:8px; padding:4px 10px; font-weight:600; }
+/* Chat box */
+.chat-box { display:none; background:var(--card2); border-radius:18px; padding:14px; margin-bottom:10px; box-shadow:var(--shadow); }
+.chat-box.on { display:block; }
+.chat-messages { max-height:240px; overflow-y:auto; padding:4px; }
+.chat-msg { padding:10px 12px; border-radius:14px; margin-bottom:8px; font-size:13px; line-height:1.5; }
+.chat-msg.user { background:var(--accent); color:#fff; margin-left:20%; }
+.chat-msg.ai { background:var(--card); color:var(--text); margin-right:20%; box-shadow:var(--shadow); }
+.chat-input-row { display:flex; gap:8px; margin-top:10px; }
+.chat-input-row input { flex:1; }
+.chat-send-btn { background:var(--accent); color:#fff; border:none; border-radius:14px; padding:0 18px;
+  font-family:var(--font); cursor:pointer; font-weight:600; }
+
+/* Favorites grid 2x2 */
+#fav-list { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.fav-item { background:var(--card); border-radius:16px; padding:14px; min-height:88px;
+  display:flex; flex-direction:column; cursor:pointer; transition:transform 0.15s;
+  box-shadow:var(--shadow); }
+.fav-item:active { transform:scale(0.97); }
+.fav-info { flex:1; margin-bottom:10px; }
+.fav-name { font-size:14px; font-weight:600; color:var(--text); line-height:1.25; }
+.fav-sub { font-size:11px; color:var(--text3); margin-top:4px; font-weight:500; line-height:1.4; }
+.fav-actions { display:flex; gap:6px; justify-content:flex-end; margin-top:auto; }
+.fav-edit, .fav-del { background:none; border:none; color:var(--text3); width:24px; height:24px;
+  font-size:13px; cursor:pointer; }
+
+/* Mealpreps */
+.mp-item { background:var(--card); border-radius:16px; padding:16px; margin-bottom:10px; box-shadow:var(--shadow); }
+.mp-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.mp-name { font-size:15px; font-weight:600; color:var(--text); }
+.mp-badge { font-size:11px; padding:4px 9px; border-radius:9px; background:var(--bg4); color:var(--text2); font-weight:500; }
 .mp-macros { display:flex; justify-content:space-between; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
 .mp-macro-item { font-size:11px; color:var(--text3); display:flex; flex-direction:column; gap:2px; align-items:flex-start; }
-.mp-macro-item strong { color:var(--text); font-weight:700; font-size:13px; }
-.mp-bar-bg { height:4px; background:var(--bg4); border-radius:2px; flex:1; overflow:hidden; }
-.mp-bar-fill { height:100%; background:var(--sage); border-radius:2px; transition:width 0.3s; }
+.mp-macro-item strong { color:var(--text); font-weight:600; font-size:13px; }
 .mp-portions { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-.mp-count { font-size:11px; color:var(--text3); font-weight:600; }
+.mp-bar-bg { height:4px; background:var(--bg4); border-radius:2px; flex:1; overflow:hidden; }
+.mp-bar-fill { height:100%; background:var(--accent); border-radius:2px; transition:width 0.3s; }
+.mp-count { font-size:11px; color:var(--text3); font-weight:500; }
 .mp-actions { display:flex; gap:8px; }
-.mp-eat-btn { flex:1; background:var(--sage); color:#fff; border:none; border-radius:12px; padding:11px; font-size:13px; font-weight:700; font-family:var(--font); cursor:pointer; transition:transform 0.15s; }
+.mp-eat-btn { flex:1; background:var(--accent); color:#fff; border:none; border-radius:12px; padding:11px;
+  font-size:13px; font-weight:600; font-family:var(--font); cursor:pointer; transition:transform 0.15s; }
 .mp-eat-btn:active { transform:scale(0.98); }
-.mp-del-btn { background:rgba(196,92,92,0.1); color:var(--red); border:none; border-radius:12px; padding:11px 14px; font-size:13px; font-weight:600; font-family:var(--font); cursor:pointer; }
-.mp-save-btn { width:100%; background:#1a2118; color:#fff; border:none; border-radius:var(--radius-sm); padding:13px; font-size:14px; font-weight:600; font-family:var(--font); cursor:pointer; margin-top:4px; }
+.mp-del-btn { background:rgba(232,103,74,0.1); color:var(--red); border:none; border-radius:12px; padding:11px 14px;
+  font-size:13px; font-weight:500; font-family:var(--font); cursor:pointer; }
+.no-mp { text-align:center; padding:24px 14px; font-size:13px; color:var(--text3); font-weight:500; }
+
+/* Mini form */
+.mini-form { display:none; background:var(--card2); border-radius:16px; padding:16px; margin-bottom:14px; box-shadow:var(--shadow); }
+.mini-form.on { display:block; }
+.mini-form-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+.mini-form-row.three { grid-template-columns:1fr 1fr 1fr; }
+.mini-form-row.four { grid-template-columns:1fr 1fr 1fr 1fr; }
+
+/* History */
+.hday { background:var(--card); border-radius:16px; padding:14px; margin-bottom:8px; box-shadow:var(--shadow); }
+.hday-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.hday-date { font-size:14px; font-weight:600; color:var(--text); }
+.hday-kcal { font-size:14px; font-weight:600; color:var(--accent); }
+.hday-meals { display:flex; flex-direction:column; gap:4px; }
+.hmeal { display:flex; gap:8px; padding:3px 0; font-size:12px; }
+.hmeal-time { color:var(--text3); width:46px; flex-shrink:0; }
+.hmeal-name { color:var(--text2); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hmeal-kcal { color:var(--text3); }
+
+/* Stats grid */
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.stat-card { background:var(--card); border-radius:16px; padding:18px; box-shadow:var(--shadow); }
+.stat-label { font-size:11px; color:var(--text2); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+.stat-val { font-size:24px; font-weight:600; color:var(--text); letter-spacing:-0.5px; line-height:1; }
+.stat-sub { font-size:11px; color:var(--text3); margin-top:5px; font-weight:500; }
+
+/* Week chart */
+.week-chart { background:var(--card); border-radius:18px; padding:18px 16px; margin-bottom:16px; box-shadow:var(--shadow); }
+.wc-title { font-size:14px; color:var(--text2); font-weight:600; margin-bottom:14px; }
+.wc-bars { display:flex; gap:6px; align-items:flex-end; height:120px; }
+.wc-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.wc-bar { width:100%; background:var(--bg4); border-radius:8px; min-height:6px; position:relative; }
+.wc-bar-fill { position:absolute; bottom:0; left:0; right:0; background:var(--accent); border-radius:8px;
+  transition:height 0.3s; }
+.wc-day { font-size:10px; color:var(--text3); font-weight:500; }
+
+/* Weight tracker */
+.weight-entry { background:var(--card); border-radius:14px; padding:12px 14px; margin-bottom:6px;
+  display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow); }
+.weight-date { font-size:12px; color:var(--text3); }
+.weight-val { font-size:14px; font-weight:600; color:var(--text); }
+.weight-del { background:none; border:none; color:var(--text3); width:24px; height:24px; font-size:13px; cursor:pointer; }
+
+/* Settings */
+.toggle-row { display:flex; align-items:center; justify-content:space-between; gap:12px;
+  background:var(--card); border-radius:14px; padding:14px 16px; margin-bottom:10px; box-shadow:var(--shadow); }
+.toggle-row-label { flex:1; }
+.toggle-row-label-main { font-size:14px; font-weight:500; color:var(--text); }
+.toggle-row-label-sub { font-size:12px; color:var(--text3); margin-top:3px; font-weight:400; }
+.toggle-track { width:44px; height:26px; background:var(--bg4); border-radius:14px; cursor:pointer;
+  position:relative; transition:background 0.2s; flex-shrink:0; }
+.toggle-track.on { background:var(--accent); }
+.toggle-track::after { content:''; position:absolute; left:2px; top:2px; width:22px; height:22px;
+  background:#fff; border-radius:50%; transition:transform 0.2s; }
+.toggle-track.on::after { transform:translateX(18px); }
+
+.goal-mode-tabs { display:flex; gap:6px; margin-bottom:12px; }
+.gm-btn { flex:1; background:var(--card); border:none; padding:11px; border-radius:12px;
+  font-size:13px; font-weight:500; color:var(--text2); cursor:pointer; font-family:var(--font); box-shadow:var(--shadow); }
+.gm-btn.on { background:var(--accent); color:#fff; }
+
+/* ── FLOATING NAV ── */
+.nav { position:fixed; bottom:max(env(safe-area-inset-bottom), 18px); left:50%; transform:translateX(-50%); z-index:10;
+  display:flex; align-items:center; padding:7px; gap:4px;
+  background:rgba(255,255,255,0.92); backdrop-filter:blur(40px) saturate(180%); -webkit-backdrop-filter:blur(40px) saturate(180%);
+  border-radius:36px;
+  box-shadow:0 16px 40px rgba(20,20,28,0.12), 0 2px 8px rgba(0,0,0,0.04); }
 @media (prefers-color-scheme: dark) {
-  .mp-save-btn { background:var(--sage2); color:#1a2118; }
+  .nav { background:rgba(44,44,46,0.92);
+    box-shadow:0 16px 40px rgba(0,0,0,0.5); }
 }
-.no-mp { text-align:center; padding:30px; color:var(--text3); font-size:13px; }
+.nb { background:none; border:none; padding:14px 20px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:28px; transition:all 0.2s; font-family:var(--font); }
+.nb svg { width:22px; height:22px; flex-shrink:0; stroke:var(--text2); transition:stroke 0.2s; }
+.nb.on { background:var(--accent); }
+.nb.on svg { stroke:#fff; }
+.nb-text { display:none; }
 
-/* ── FAVS ── */
-.fav-item { background:var(--bg2); border-radius:var(--radius-sm); padding:14px; min-height:90px;
-  display:flex; flex-direction:column; cursor:pointer; transition:transform 0.15s; }
-.fav-item:active { transform:scale(0.97); }
-.fav-info { flex:1; min-width:0; margin-bottom:10px; }
-.fav-name { font-size:13px; font-weight:700; color:var(--text); line-height:1.25; overflow:hidden; }
-.fav-sub { font-size:11px; color:var(--text3); margin-top:4px; font-weight:500; }
-.fav-actions { display:flex; gap:6px; justify-content:flex-end; margin-top:auto; }
-.fav-edit { background:none; border:1px solid var(--border); color:var(--text2); width:26px; height:26px; border-radius:50%; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.fav-del { background:none; border:none; color:var(--text3); width:24px; height:24px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-#fav-list { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
+/* ── EDIT MEAL MODAL ── */
+.modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:50;
+  display:none; align-items:flex-end; }
+.modal-backdrop.on { display:flex; }
+.modal-sheet { width:100%; max-height:92vh; background:var(--bg); border-radius:24px 24px 0 0;
+  padding:18px 20px 24px; overflow-y:auto; position:relative;
+  padding-bottom:calc(24px + env(safe-area-inset-bottom)); }
+.modal-handle { width:36px; height:4px; background:var(--bg4); border-radius:2px; margin:0 auto 14px; }
+.modal-title { font-size:18px; font-weight:600; color:var(--text); margin-bottom:14px; }
+.modal-actions { display:flex; gap:8px; padding-top:16px; position:sticky; bottom:0;
+  background:linear-gradient(to top, var(--bg) 60%, transparent); padding-bottom:8px; }
+.modal-save { flex:1; }
+.modal-cancel { background:var(--card); color:var(--text2); border:none;
+  border-radius:14px; padding:14px 20px; font-size:14px; font-weight:500; font-family:var(--font); cursor:pointer; box-shadow:var(--shadow); }
 
-/* ── HISTORY ── */
-.hday { background:var(--bg2); border-radius:var(--radius-sm); padding:14px; margin-bottom:8px; }
-.hday-header { display:flex; justify-content:space-between; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid var(--border2); }
-.hday-date { font-size:13px; font-weight:600; color:var(--text); }
-.hday-kcal { font-size:14px; font-weight:700; color:var(--sage); }
-.hmeal { display:flex; justify-content:space-between; padding:4px 0; }
-.hmeal-name { font-size:12px; color:var(--text2); flex:1; }
-.hmeal-kcal { font-size:12px; color:var(--text3); }
+/* Toast */
+.toast { position:fixed; bottom:120px; left:50%; transform:translateX(-50%);
+  background:var(--text); color:var(--bg); padding:10px 18px;
+  border-radius:12px; font-size:13px; font-weight:500; opacity:0; z-index:100;
+  transition:opacity 0.3s, transform 0.3s; pointer-events:none; }
+.toast.on { opacity:1; transform:translateX(-50%) translateY(-4px); }
 
-/* ── STATS ── */
-.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
-.stat-card { background:var(--bg2); border-radius:var(--radius-sm); padding:14px; }
-.stat-val { font-size:24px; font-weight:700; color:var(--text); letter-spacing:-0.5px; }
-.stat-lbl { font-size:11px; color:var(--text2); margin-top:2px; font-weight:600; }
-.stat-sub { font-size:11px; color:var(--text3); margin-top:2px; }
-.stat-bar-wrap { margin-top:8px; height:3px; background:var(--bg4); border-radius:2px; overflow:hidden; }
-.stat-bar-fill { height:100%; border-radius:2px; transition:width 0.4s; }
+/* AI button (used in summary) */
+.ai-btn { width:100%; background:rgba(77,95,232,0.1); color:var(--accent); border:none;
+  border-radius:14px; padding:14px; font-size:14px; font-weight:600; font-family:var(--font);
+  cursor:pointer; transition:transform 0.15s; margin-bottom:10px; }
+.ai-btn:active { transform:scale(0.99); }
 
-.week-chart { background:var(--bg2); border-radius:var(--radius); padding:16px; margin-bottom:14px; }
-.week-chart-label { font-size:12px; color:var(--text2); font-weight:600; margin-bottom:14px; }
-.week-bars { display:flex; gap:6px; align-items:flex-end; height:80px; }
-.week-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
-.week-bar-bg { width:100%; display:flex; flex-direction:column; justify-content:flex-end; }
-.week-bar-fill { width:100%; border-radius:4px 4px 0 0; transition:height 0.4s; min-height:0; }
-.week-day { font-size:10px; color:var(--text3); font-weight:600; }
+/* Utility */
+.row { display:flex; gap:8px; align-items:center; }
+.row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.row-4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; }
+.divider { height:1px; background:var(--border); margin:24px 0; }
+.spacer-sm { height:14px; }
+.spacer-md { height:22px; }
+.spacer-lg { height:32px; }
+.escape-html { display:none; }
 
-/* ── WEIGHT ── */
-.weight-entry { background:var(--bg2); border-radius:var(--radius-sm);
-  display:flex; justify-content:space-between; align-items:center; padding:13px 14px; margin-bottom:8px; }
-.weight-val { font-size:16px; font-weight:700; color:var(--text); }
-.weight-date { font-size:11px; color:var(--text3); margin-top:2px; }
-.weight-diff-neg { font-size:13px; color:var(--sage); font-weight:600; }
-.weight-diff-pos { font-size:13px; color:var(--red); font-weight:600; }
-
-/* ── SETTINGS ── */
-.setting-section { margin-bottom:20px; }
-.section-label { font-size:13px; color:var(--text2); font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px; }
-.toggle-row { display:flex; justify-content:space-between; align-items:center; background:var(--bg2);
-  border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:8px; }
-.toggle-label { font-size:14px; color:var(--text); font-weight:500; }
-.toggle { position:relative; width:44px; height:24px; cursor:pointer; flex-shrink:0; }
-.toggle-track { position:absolute; inset:0; background:var(--bg4); border-radius:12px; transition:background 0.2s; border:1px solid var(--border); }
-.toggle-thumb { position:absolute; top:3px; left:3px; width:16px; height:16px; background:#fff; border-radius:50%; transition:left 0.2s; }
-.toggle.on .toggle-track { background:var(--sage); border-color:var(--sage); }
-.toggle.on .toggle-thumb { left:23px; }
-
-/* ── MODAL ── */
-.modal-overlay { position:fixed; inset:0; z-index:20; background:rgba(0,0,0,0.5); backdrop-filter:blur(8px);
-  display:none; align-items:flex-end; padding:0; }
-.modal-overlay.on { display:flex; }
-.modal-sheet { width:100%; background:var(--bg2); border-radius:24px 24px 0 0;
-  max-height:92vh; display:flex; flex-direction:column; overflow:hidden; }
-.modal-handle { width:36px; height:4px; background:var(--bg5); border-radius:2px; margin:12px auto 8px; flex-shrink:0; }
-.modal-title { font-size:18px; font-weight:700; color:var(--text); padding:8px 18px 14px; letter-spacing:-0.3px; flex-shrink:0; }
-.modal-content { flex:1; overflow-y:auto; padding:0 18px 18px; -webkit-overflow-scrolling:touch; }
-.modal-actions { display:flex; gap:8px; padding:12px 18px calc(14px + env(safe-area-inset-bottom));
-  background:var(--bg2); border-top:1px solid var(--border); flex-shrink:0; }
-.modal-row { display:flex; gap:8px; margin-top:10px; }
-.modal-cancel { flex:1; background:var(--bg3); color:var(--text2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px; font-size:14px; font-weight:600; font-family:var(--font); cursor:pointer; }
-.modal-save { flex:1; background:#1a2118; color:#fff; border:none; border-radius:var(--radius-sm); padding:13px; font-size:14px; font-weight:600; font-family:var(--font); cursor:pointer; }
-@media (prefers-color-scheme: dark) {
-  .modal-save { background:var(--sage2); color:#1a2118; }
-}
-.ai-divider { margin-top:18px; padding-top:16px; border-top:1px solid var(--border2); }
-.ai-divider-label { font-size:11px; color:var(--text2); font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; }
-
-/* ── MINI FORM ── */
-.mini-form { background:var(--bg2); border-radius:var(--radius); padding:14px; margin-bottom:12px; }
-.mini-form-title { font-size:14px; font-weight:700; color:var(--text); margin-bottom:12px; }
-.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-
-/* ── TOAST ── */
-.toast { position:fixed; bottom:calc(95px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%) translateY(10px);
-  background:#1a2118; color:#fff; border:none;
-  border-radius:14px; padding:11px 18px; font-size:13px; font-weight:600;
-  white-space:nowrap; z-index:30; opacity:0; transition:all 0.25s; pointer-events:none;
-  box-shadow:0 8px 24px rgba(0,0,0,0.15); }
-.toast.on { opacity:1; transform:translateX(-50%) translateY(0); }
-
-/* ── API NOTE ── */
-.api-note { font-size:11px; color:var(--text3); text-align:center; margin-top:6px; }
-
-/* Helper */
-.spacer-md { height:18px; }
-
-/* ── CARD ELEVATION (no borders, just subtle shadow) ── */
-.meal, .mp-item, .fav-item, .hday, .stat-card, .week-chart, .weight-entry,
-.mini-form, .chat-box, .toggle-row, .qa-btn, .macros-card {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
-@media (prefers-color-scheme: dark) {
-  .meal, .mp-item, .fav-item, .hday, .stat-card, .week-chart, .weight-entry,
-  .mini-form, .chat-box, .toggle-row, .qa-btn, .macros-card {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-  }
-}
-.result-box { background:var(--bg2); border-radius:20px; }
 </style>
 </head>
 <body>
@@ -482,117 +367,96 @@ select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.or
 
 <!-- ═══ TODAY ═══ -->
 <div id="s-today" class="screen on">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="greeting-main" id="a-greeting">—</div>
-      <div class="greeting-date" id="a-date">—</div>
+  <!-- Hero blue gradient section -->
+  <div class="hero">
+    <div class="hero-topbar">
+      <div>
+        <div class="hero-greeting" id="a-greeting">—</div>
+        <div class="hero-date" id="a-date">—</div>
+      </div>
+      <div class="hero-icon" onclick="go('settings')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
     </div>
-    <div class="topbar-icon" onclick="go('settings')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <div class="gauge-area">
+      <svg class="ring-svg" viewBox="0 0 320 195" preserveAspectRatio="xMidYMid meet">
+        <path class="ring-track" d="M 30 160 A 130 130 0 0 1 290 160"
+          fill="none" stroke-width="30" stroke-linecap="round"/>
+        <path id="a-arc" class="ring-arc" d="M 30 160 A 130 130 0 0 1 290 160"
+          fill="none" stroke-width="30" stroke-linecap="round"
+          stroke-dasharray="408.41" stroke-dashoffset="408.41"
+          style="opacity:0;transition:stroke-dashoffset 0.6s ease, opacity 0.2s"/>
+      </svg>
     </div>
+    <div class="gauge-target-line" id="a-gauge-target">0 / 1800 kcal</div>
   </div>
 
-  <!-- Half-circle gauge -->
-  <div class="ring-section">
-    <div class="gauge-wrap">
-      <svg class="ring-svg" viewBox="0 0 320 195" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#a3c9a8"/>
-            <stop offset="100%" stop-color="#e0d8a0"/>
-          </linearGradient>
-          <linearGradient id="rg-over" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#d88a4a"/>
-            <stop offset="100%" stop-color="#c45c5c"/>
-          </linearGradient>
-        </defs>
-        <path d="M 30 160 A 130 130 0 0 1 290 160"
-          fill="none" stroke="var(--bg4)" stroke-width="34" stroke-linecap="round"/>
-        <path id="a-arc" d="M 30 160 A 130 130 0 0 1 290 160"
-          fill="none" stroke="url(#rg)" stroke-width="34" stroke-linecap="round"
-          stroke-dasharray="408.41" stroke-dashoffset="408.41"
-          style="opacity:0;transition:stroke-dashoffset 0.6s ease, stroke 0.3s, opacity 0.2s"/>
-      </svg>
-      <div class="ring-center">
-        <div class="ring-kcal" id="a-kcal">0</div>
-        <div class="ring-target" id="a-target">z 1800 kcal</div>
+  <!-- White card overlay -->
+  <div class="content-card">
+    <div class="big-kcal">
+      <div class="big-kcal-val" id="a-kcal">0</div>
+      <div class="big-kcal-label" id="a-target">z 1800 kcal · zbývá 1800</div>
+    </div>
+
+    <div class="macro-stats" id="macro-stats-row">
+      <div class="macro-stat">
+        <div class="macro-stat-val"><span id="mc-p-val">0</span>g</div>
+        <div class="macro-stat-label">Bílkoviny</div>
+        <div class="macro-stat-sub">z <span id="mc-p-goal">150</span>g</div>
+      </div>
+      <div class="macro-stat">
+        <div class="macro-stat-val"><span id="mc-c-val">0</span>g</div>
+        <div class="macro-stat-label">Sacharidy</div>
+        <div class="macro-stat-sub">z <span id="mc-c-goal">200</span>g</div>
+      </div>
+      <div class="macro-stat">
+        <div class="macro-stat-val"><span id="mc-f-val">0</span>g</div>
+        <div class="macro-stat-label">Tuky</div>
+        <div class="macro-stat-sub">z <span id="mc-f-goal">60</span>g</div>
+      </div>
+    </div>
+
+    <div class="section-row">
+      <div class="section-title">Dnešní jídla</div>
+      <button class="section-action" onclick="openSummary()">✦ AI hodnocení</button>
+    </div>
+    <div id="a-meals"></div>
+    <div class="chat-box" id="summary-box">
+      <div class="chat-messages" id="summary-messages"></div>
+      <div class="chat-input-row">
+        <input type="text" id="summary-input" placeholder="Zeptej se na detail..." onkeypress="if(event.key==='Enter')sendSummaryQuestion()">
+        <button class="chat-send-btn" onclick="sendSummaryQuestion()" id="summary-send-btn">Poslat</button>
       </div>
     </div>
   </div>
 
-  <!-- 3 macro cards (clean, percent only) -->
-  <div class="macro-cards" id="macro-cards-row">
-    <div class="macro-card">
-      <div class="macro-card-label">Bílkoviny</div>
-      <div class="macro-card-val"><span id="mc-p-pct">0</span>%</div>
-      <div class="macro-card-sub"><span id="mc-p-val">0</span>/<span id="mc-p-goal">150</span>g</div>
-    </div>
-    <div class="macro-card">
-      <div class="macro-card-label">Sacharidy</div>
-      <div class="macro-card-val"><span id="mc-c-pct">0</span>%</div>
-      <div class="macro-card-sub"><span id="mc-c-val">0</span>/<span id="mc-c-goal">200</span>g</div>
-    </div>
-    <div class="macro-card">
-      <div class="macro-card-label">Tuky</div>
-      <div class="macro-card-val"><span id="mc-f-pct">0</span>%</div>
-      <div class="macro-card-sub"><span id="mc-f-val">0</span>/<span id="mc-f-goal">60</span>g</div>
-    </div>
-  </div>
-
-  <!-- CTA strip -->
-  <div class="cta-strip">
-    <div class="cta-text">
-      <div class="cta-label" id="a-cta-label">Zbývá</div>
-      <div class="cta-value" id="a-cta-msg">1800 kcal</div>
-    </div>
-    <div class="cta-buttons">
-      <button class="cta-action" onclick="go('add')">+ Přidat</button>
-      <button class="cta-action-ai" onclick="openSummary()" title="AI hodnocení dne">✦</button>
-    </div>
-  </div>
-
-  <div class="chat-box" id="summary-box">
-    <button class="chat-close" onclick="closeSummary()">×</button>
-    <div class="dots" id="summary-dots"><span></span><span></span><span></span></div>
-    <div class="chat-messages" id="summary-messages"></div>
-    <div class="chat-followup" id="summary-followup" style="display:none">
-      <input type="text" id="summary-input" placeholder="Zeptej se na cokoliv..." onkeypress="if(event.key==='Enter')sendSummaryFollowup()">
-      <button onclick="sendSummaryFollowup()" id="summary-send-btn">Poslat</button>
-    </div>
-  </div>
-
-  <!-- Meals -->
-  <div class="section-row">
-    <div class="section-title">Dnešní jídla</div>
-  </div>
-  <div id="a-meals"></div>
-
   <!-- Edit meal modal -->
-  <div class="modal-overlay" id="edit-modal" onclick="closeEditOutside(event)">
+  <div class="modal-backdrop" id="edit-modal">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Upravit jídlo</div>
-      <div class="modal-content">
-        <div class="inp-group"><div class="inp-label">Název</div><input type="text" id="edit-name" placeholder="Název jídla"></div>
-        <div class="inp-group"><div class="inp-label">Kalorie (kcal)</div><input type="number" id="edit-kcal" placeholder="0"></div>
-        <div class="grid-4">
-          <div class="inp-group"><div class="inp-label">B</div><input type="number" id="edit-p" placeholder="0"></div>
-          <div class="inp-group"><div class="inp-label">S</div><input type="number" id="edit-c" placeholder="0"></div>
-          <div class="inp-group"><div class="inp-label">T</div><input type="number" id="edit-f" placeholder="0"></div>
-        </div>
-
-        <div class="ai-divider">
-          <div class="ai-divider-label">✦ Upravit pomocí AI</div>
-          <div class="chat-messages" id="edit-chat-messages"></div>
-          <div class="chat-followup">
-            <input type="text" id="edit-chat-input" placeholder="Přidal jsem sýr 30g..." onkeypress="if(event.key==='Enter')sendEditFollowup()">
-            <button onclick="sendEditFollowup()" id="edit-send-btn">Poslat</button>
-          </div>
+      <div class="inp-group">
+        <div class="inp-label">Název</div>
+        <input type="text" id="edit-name">
+      </div>
+      <div class="row-4">
+        <div class="inp-group"><div class="inp-label">Kcal</div><input type="number" id="edit-kcal"></div>
+        <div class="inp-group"><div class="inp-label">B (g)</div><input type="number" id="edit-protein"></div>
+        <div class="inp-group"><div class="inp-label">S (g)</div><input type="number" id="edit-carbs"></div>
+        <div class="inp-group"><div class="inp-label">T (g)</div><input type="number" id="edit-fat"></div>
+      </div>
+      <div class="spacer-sm"></div>
+      <div class="chat-box on" style="background:var(--card2)">
+        <div style="font-size:13px;color:var(--text2);font-weight:500;margin-bottom:10px">✦ Upravit pomocí AI</div>
+        <div class="chat-messages" id="edit-chat-messages"></div>
+        <div class="chat-input-row">
+          <input type="text" id="edit-chat-input" placeholder="Přidal jsem sýr 30g..." onkeypress="if(event.key==='Enter')sendEditFollowup()">
+          <button class="chat-send-btn" onclick="sendEditFollowup()" id="edit-send-btn">Poslat</button>
         </div>
       </div>
       <div class="modal-actions">
         <button class="modal-cancel" onclick="closeEdit()">Zrušit</button>
-        <button class="modal-save" onclick="saveEditMeal()">Uložit</button>
+        <button class="btn-primary modal-save" onclick="saveEditMeal()">Uložit</button>
       </div>
     </div>
   </div>
@@ -600,95 +464,105 @@ select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.or
 
 <!-- ═══ ADD ═══ -->
 <div id="s-add" class="screen">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-eyebrow">Přidat</div>
-      <div class="greeting-main">Nové jídlo</div>
-    </div>
-  </div>
-
-  <div class="subtabs">
-    <button class="stab on" id="st-manual" onclick="setSubtab('manual')">AI zápis</button>
-    <button class="stab" id="st-mealprep" onclick="setSubtab('mealprep')">Krabičky</button>
-    <button class="stab" id="st-favs" onclick="setSubtab('favs')">Oblíbená</button>
-  </div>
-
-  <!-- AI Manual -->
-  <div id="sub-manual">
-    <div id="preview-wrap" class="preview-wrap">
-      <img id="a-img" src="" alt="">
-      <button class="remove-photo" onclick="removePhoto()">×</button>
-    </div>
-    <div class="add-area inp-group">
-      <div class="inp-label">Popiš jídlo</div>
-      <textarea id="a-input" rows="3" placeholder="např. kuřecí prso 200g, rýže 100g..."></textarea>
-      <button class="photo-icon-btn" title="Foto jídla">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <input type="file" id="a-photo" accept="image/*">
-      </button>
-    </div>
-    <button class="ai-btn" id="a-analyze" onclick="analyze()">✦ Analyzovat pomocí AI</button>
-    <div class="dots" id="a-dots"><span></span><span></span><span></span></div>
-
-    <div class="result-box" id="a-result">
-      <div class="result-name" id="r-name"></div>
-      <div class="result-macros">
-        <div class="rm"><div class="rv" id="r-kcal">0</div><div class="rl">kcal</div></div>
-        <div class="rm"><div class="rv" id="r-p">0g</div><div class="rl">Bílk.</div></div>
-        <div class="rm"><div class="rv" id="r-c">0g</div><div class="rl">Sach.</div></div>
-        <div class="rm"><div class="rv" id="r-f">0g</div><div class="rl">Tuky</div></div>
+  <div class="screen-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-eyebrow">Přidat</div>
+        <div class="page-title">Nové jídlo</div>
       </div>
-      <div class="feedback" id="r-fb"></div>
-
-      <div class="chat-messages" id="meal-chat-messages" style="margin-top:12px"></div>
-      <div class="chat-followup" style="margin-top:12px">
-        <input type="text" id="meal-chat-input" placeholder="Upřesni nebo se zeptej..." onkeypress="if(event.key==='Enter')sendMealFollowup()">
-        <button onclick="sendMealFollowup()" id="meal-send-btn">Poslat</button>
-      </div>
-
-      <button class="confirm-btn" onclick="confirm_meal()">Přidat do deníku</button>
     </div>
 
-    <div class="api-note">Vyžaduje Claude API klíč · Nastav v ⚙️</div>
-  </div>
+    <!-- AI ZÁPIS -->
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">✦ AI zápis</div></div>
+      <div id="preview-wrap" class="preview-wrap">
+        <img id="a-img" class="preview-img" src="" alt="">
+        <button class="preview-close" onclick="removePhoto()">×</button>
+      </div>
+      <div class="inp-group">
+        <div class="inp-label">Popiš jídlo</div>
+        <textarea id="a-input" rows="3" placeholder="např. kuřecí prso 200g, rýže 100g..."></textarea>
+      </div>
+      <div class="photo-row">
+        <button class="photo-btn" onclick="document.getElementById('a-photo').click()">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          Foto jídla
+        </button>
+        <input type="file" id="a-photo" accept="image/*" style="display:none">
+      </div>
+      <button class="btn-primary" id="a-analyze" onclick="analyze()">✦ Analyzovat pomocí AI</button>
 
-  <!-- Mealprep -->
-  <div id="sub-mealprep" style="display:none">
-    <div id="mp-list"></div>
-    <div class="mini-form">
-      <div class="mini-form-title">Nová krabička</div>
-      <div class="inp-group"><div class="inp-label">Název</div><input type="text" id="mp-name" placeholder="Kuřecí s rýží"></div>
-      <div class="grid-2">
-        <div class="inp-group"><div class="inp-label">Počet porcí</div><input type="number" id="mp-portions" placeholder="5"></div>
-        <div class="inp-group"><div class="inp-label">kcal / porce</div><input type="number" id="mp-kcal" placeholder="450"></div>
+      <div class="result-box" id="a-result">
+        <div class="result-name" id="r-name"></div>
+        <div class="result-stats">
+          <div class="result-stat"><strong id="r-kcal">0</strong> kcal</div>
+          <div class="result-stat"><strong id="r-p">0g</strong> bílk.</div>
+          <div class="result-stat"><strong id="r-c">0g</strong> sach.</div>
+          <div class="result-stat"><strong id="r-f">0g</strong> tuky</div>
+        </div>
+
+        <div class="chat-messages" id="meal-chat-messages"></div>
+        <div class="chat-input-row">
+          <input type="text" id="meal-chat-input" placeholder="Upřesni nebo se zeptej..." onkeypress="if(event.key==='Enter')sendMealFollowup()">
+          <button class="chat-send-btn" onclick="sendMealFollowup()" id="meal-send-btn">Poslat</button>
+        </div>
+        <div class="spacer-sm"></div>
+        <div class="result-actions">
+          <button class="btn-primary" onclick="confirm_meal()">Přidat do deníku</button>
+        </div>
       </div>
-      <div class="grid-4">
-        <div class="inp-group"><div class="inp-label">B (g)</div><input type="number" id="mp-p" placeholder="40"></div>
-        <div class="inp-group"><div class="inp-label">S (g)</div><input type="number" id="mp-c" placeholder="50"></div>
-        <div class="inp-group"><div class="inp-label">T (g)</div><input type="number" id="mp-f" placeholder="10"></div>
-      </div>
-      <button class="mp-save-btn" onclick="saveMealprep()">+ Přidat krabičku</button>
     </div>
-  </div>
 
-  <!-- Favs -->
-  <div id="sub-favs" style="display:none">
-    <div id="fav-list"></div>
-    <button id="fav-add-btn" class="ai-btn" style="width:100%" onclick="document.getElementById('fav-form').style.display='block';document.getElementById('fav-add-btn').style.display='none'">+ Přidat jídlo</button>
-    <div id="fav-form" class="mini-form" style="display:none">
-      <div class="mini-form-title" id="fav-form-title">Nové jídlo</div>
-      <div class="inp-group"><div class="inp-label">Název</div><input type="text" id="fav-name" placeholder="Ovesná kaše"></div>
-      <div class="grid-2">
-        <div class="inp-group"><div class="inp-label">kcal</div><input type="number" id="fav-kcal" placeholder="350"></div>
-        <div class="inp-group"><div class="inp-label">Bílkoviny</div><input type="number" id="fav-p" placeholder="20"></div>
+    <div class="divider"></div>
+
+    <!-- OBLÍBENÁ -->
+    <div class="section-block">
+      <div class="section-row">
+        <div class="section-title">Oblíbená</div>
+        <button class="section-action" onclick="document.getElementById('fav-form').classList.add('on')">+ Přidat</button>
       </div>
-      <div class="grid-2">
-        <div class="inp-group"><div class="inp-label">Sacharidy</div><input type="number" id="fav-c" placeholder="50"></div>
-        <div class="inp-group"><div class="inp-label">Tuky</div><input type="number" id="fav-f" placeholder="8"></div>
+      <div id="fav-list"></div>
+      <div id="fav-form" class="mini-form">
+        <div class="inp-group"><div class="inp-label">Název</div><input type="text" id="fav-name" placeholder="Ovesná kaše"></div>
+        <div class="mini-form-row">
+          <div class="inp-group"><div class="inp-label">kcal</div><input type="number" id="fav-kcal" placeholder="350"></div>
+          <div class="inp-group"><div class="inp-label">B (g)</div><input type="number" id="fav-p" placeholder="20"></div>
+        </div>
+        <div class="mini-form-row">
+          <div class="inp-group"><div class="inp-label">S (g)</div><input type="number" id="fav-c" placeholder="50"></div>
+          <div class="inp-group"><div class="inp-label">T (g)</div><input type="number" id="fav-f" placeholder="8"></div>
+        </div>
+        <div class="btn-row">
+          <button class="modal-cancel" onclick="cancelFavEdit()">Zrušit</button>
+          <button class="btn-primary" onclick="saveFav()"><span id="fav-save-lbl">Uložit jídlo</span></button>
+        </div>
       </div>
-      <div class="modal-row">
-        <button class="modal-cancel" onclick="cancelFavEdit()">Zrušit</button>
-        <button class="modal-save" onclick="saveFav()"><span id="fav-save-lbl">Uložit jídlo</span></button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- KRABIČKY -->
+    <div class="section-block">
+      <div class="section-row">
+        <div class="section-title">Krabičky</div>
+        <button class="section-action" onclick="document.getElementById('mp-form').classList.add('on')">+ Nová</button>
+      </div>
+      <div id="mp-list"></div>
+      <div id="mp-form" class="mini-form">
+        <div class="inp-group"><div class="inp-label">Název</div><input type="text" id="mp-name" placeholder="Kuřecí s rýží"></div>
+        <div class="mini-form-row">
+          <div class="inp-group"><div class="inp-label">Počet porcí</div><input type="number" id="mp-portions" placeholder="5"></div>
+          <div class="inp-group"><div class="inp-label">kcal / porce</div><input type="number" id="mp-kcal" placeholder="450"></div>
+        </div>
+        <div class="mini-form-row three">
+          <div class="inp-group"><div class="inp-label">B (g)</div><input type="number" id="mp-p" placeholder="40"></div>
+          <div class="inp-group"><div class="inp-label">S (g)</div><input type="number" id="mp-c" placeholder="50"></div>
+          <div class="inp-group"><div class="inp-label">T (g)</div><input type="number" id="mp-f" placeholder="10"></div>
+        </div>
+        <div class="btn-row">
+          <button class="modal-cancel" onclick="document.getElementById('mp-form').classList.remove('on')">Zrušit</button>
+          <button class="btn-primary" onclick="saveMealprep()">+ Přidat krabičku</button>
+        </div>
       </div>
     </div>
   </div>
@@ -696,112 +570,117 @@ select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.or
 
 <!-- ═══ HISTORY ═══ -->
 <div id="s-history" class="screen">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-eyebrow">Historie</div>
-      <div class="greeting-main" id="hist-page-title">Záznamy</div>
-    </div>
-  </div>
-
-  <div class="subtabs">
-    <button class="stab on" id="ht-hist" onclick="setHistTab('hist')">Záznamy</button>
-    <button class="stab" id="ht-stats" onclick="setHistTab('stats')">Statistiky</button>
-    <button class="stab" id="ht-weight" onclick="setHistTab('weight')">Váha</button>
-  </div>
-
-  <div id="hsub-hist">
-    <div id="a-hist"></div>
-  </div>
-
-  <div id="hsub-stats" style="display:none">
-    <div class="week-chart">
-      <div class="week-chart-label">Posledních 7 dní</div>
-      <div class="week-bars" id="week-bars"></div>
-    </div>
-    <div class="stat-grid" id="stat-grid"></div>
-  </div>
-
-  <div id="hsub-weight" style="display:none">
-    <div class="mini-form" style="margin-bottom:14px">
-      <div class="mini-form-title">Zapsat váhu</div>
-      <div style="display:flex;gap:8px;align-items:flex-end">
-        <div style="flex:1">
-          <div class="inp-label">Váha (kg)</div>
-          <input type="number" id="w-val" placeholder="75.5" step="0.1">
-        </div>
-        <button class="modal-save" style="padding:13px 20px;border-radius:var(--radius-sm);max-width:120px" onclick="logWeight()">Zapsat</button>
+  <div class="screen-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-eyebrow">Historie</div>
+        <div class="page-title">Záznamy</div>
       </div>
     </div>
-    <div id="weight-list"></div>
+
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">Posledních 7 dní</div></div>
+      <div class="week-chart">
+        <div class="wc-bars" id="week-bars"></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">Statistiky · 30 dní</div></div>
+      <div class="stats-grid" id="stat-grid"></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">Váha</div></div>
+      <div class="mini-form on" style="background:var(--card)">
+        <div class="row" style="align-items:flex-end">
+          <div class="inp-group" style="flex:1;margin-bottom:0">
+            <div class="inp-label">Zapsat dnešní</div>
+            <input type="number" id="w-val" placeholder="75.5" step="0.1">
+          </div>
+          <button class="btn-primary" style="max-width:120px" onclick="logWeight()">Zapsat</button>
+        </div>
+      </div>
+      <div id="weight-list"></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">Záznamy podle dní</div></div>
+      <div id="a-hist"></div>
+    </div>
   </div>
 </div>
 
 <!-- ═══ SETTINGS ═══ -->
 <div id="s-settings" class="screen">
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-eyebrow">Konfigurace</div>
-      <div class="greeting-main">Nastavení</div>
-    </div>
-  </div>
-
-  <div class="setting-section">
-    <div class="section-label">API klíč</div>
-    <div class="inp-group">
-      <input type="password" id="s-key" placeholder="sk-ant-api...">
-      <div class="input-hint">Claude API klíč pro AI analýzu jídel</div>
-    </div>
-  </div>
-
-  <div class="setting-section">
-    <div class="section-label">Cíl kalorií</div>
-    <div class="subtabs" style="margin-bottom:14px">
-      <button class="stab on" id="gm-fixed" onclick="setGoalMode('fixed')">Pevný cíl</button>
-      <button class="stab" id="gm-range" onclick="setGoalMode('range')">Rozmezí</button>
-    </div>
-    <div id="gm-fixed-inputs">
-      <div class="inp-group"><div class="inp-label">Denní cíl (kcal)</div><input type="number" id="s-kcal" placeholder="1800"></div>
-    </div>
-    <div id="gm-range-inputs" style="display:none">
-      <div class="grid-2">
-        <div class="inp-group"><div class="inp-label">Min (kcal)</div><input type="number" id="s-kcal-min" placeholder="1200"></div>
-        <div class="inp-group"><div class="inp-label">Max (kcal)</div><input type="number" id="s-kcal-max" placeholder="1500"></div>
+  <div class="screen-content">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-eyebrow">Konfigurace</div>
+        <div class="page-title">Nastavení</div>
+      </div>
+      <div class="topbar-icon" onclick="go('today')" aria-label="Zavřít">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </div>
     </div>
-  </div>
 
-  <div class="setting-section">
-    <div class="section-label">Makra</div>
-    <div class="toggle-row">
-      <div class="toggle-label">Sledovat makra</div>
-      <div class="toggle" id="macro-toggle" onclick="toggleMacros()">
-        <div class="toggle-track"></div>
-        <div class="toggle-thumb"></div>
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">API klíč</div></div>
+      <div class="inp-group">
+        <input type="password" id="s-key" placeholder="sk-ant-api...">
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Claude API klíč pro AI analýzu jídel</div>
       </div>
     </div>
-    <div id="macro-inputs" class="grid-2" style="display:grid">
-      <div class="inp-group"><div class="inp-label">Bílkoviny (g)</div><input type="number" id="s-p" placeholder="150"></div>
-      <div class="inp-group"><div class="inp-label">Sacharidy (g)</div><input type="number" id="s-c" placeholder="200"></div>
-      <div class="inp-group"><div class="inp-label">Tuky (g)</div><input type="number" id="s-f" placeholder="60"></div>
-    </div>
-  </div>
 
-  <div class="setting-section">
-    <div class="section-label">Profil</div>
-    <div class="grid-2">
-      <div class="inp-group"><div class="inp-label">Váha (kg)</div><input type="text" id="s-w" placeholder="75"></div>
-      <div class="inp-group"><div class="inp-label">Cíl</div>
-        <select id="s-g">
-          <option value="maintain">Udržení</option>
-          <option value="lose">Hubnutí</option>
-          <option value="gain">Nabírání</option>
-        </select>
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">Cíl kalorií</div></div>
+      <div class="goal-mode-tabs">
+        <button class="gm-btn on" id="gm-fixed" onclick="setGoalMode('fixed')">Pevný cíl</button>
+        <button class="gm-btn" id="gm-range" onclick="setGoalMode('range')">Rozmezí</button>
+      </div>
+      <div id="gm-fixed-inputs">
+        <div class="inp-group"><div class="inp-label">Denní cíl (kcal)</div><input type="number" id="s-kcal" placeholder="1800"></div>
+      </div>
+      <div id="gm-range-inputs" style="display:none">
+        <div class="mini-form-row">
+          <div class="inp-group"><div class="inp-label">Min (kcal)</div><input type="number" id="s-kcal-min" placeholder="1200"></div>
+          <div class="inp-group"><div class="inp-label">Max (kcal)</div><input type="number" id="s-kcal-max" placeholder="1500"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <button class="save-btn" onclick="save()">Uložit nastavení</button>
-  <div style="height:16px"></div>
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">Makra</div></div>
+      <div class="toggle-row">
+        <div class="toggle-row-label">
+          <div class="toggle-row-label-main">Sledovat makra</div>
+          <div class="toggle-row-label-sub">Zobrazit bílkoviny, sacharidy a tuky</div>
+        </div>
+        <div class="toggle-track" id="macro-toggle" onclick="toggleMacros()"></div>
+      </div>
+      <div id="macro-inputs" class="mini-form-row three" style="margin-top:10px">
+        <div class="inp-group"><div class="inp-label">B (g)</div><input type="number" id="s-p" placeholder="150"></div>
+        <div class="inp-group"><div class="inp-label">S (g)</div><input type="number" id="s-c" placeholder="200"></div>
+        <div class="inp-group"><div class="inp-label">T (g)</div><input type="number" id="s-f" placeholder="60"></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-row"><div class="section-title">Profil</div></div>
+      <div class="mini-form-row">
+        <div class="inp-group"><div class="inp-label">Váha (kg)</div><input type="text" id="s-w" placeholder="75"></div>
+        <div class="inp-group"><div class="inp-label">Cíl</div>
+          <select id="s-g">
+            <option value="maintain">Udržení</option>
+            <option value="lose">Hubnutí</option>
+            <option value="gain">Nabírání</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="save()">Uložit nastavení</button>
+  </div>
 </div>
 
 <!-- NAV -->
@@ -894,10 +773,10 @@ function updateMacroUI(){
   const on=cfg.trackMacros;
   const tog=document.getElementById('macro-toggle');
   const inputs=document.getElementById('macro-inputs');
-  const row=document.getElementById('macro-row-el');
+  const row=document.getElementById('macro-stats-row');
   if(tog)tog.classList.toggle('on',on);
   if(inputs)inputs.style.display=on?'grid':'none';
-  if(row)row.style.display=on?'block':'none';
+  if(row)row.style.display=on?'flex':'none';
 }
 function save(){
   cfg.apikey=document.getElementById('s-key').value.trim();
@@ -936,41 +815,47 @@ function render(){
   const t=meals.reduce((a,m)=>({kcal:a.kcal+(+m.kcal||0),protein:a.protein+(+m.protein||0),carbs:a.carbs+(+m.carbs||0),fat:a.fat+(+m.fat||0)}),{kcal:0,protein:0,carbs:0,fat:0});
   const target=cfg.goalMode==='range'?(cfg.kcalMin||1200):(cfg.kcal||1800);
 
-  // Gauge text
+  // Big kcal value (in white card)
   setText('a-kcal',Math.round(t.kcal));
-  setText('a-target',cfg.goalMode==='range'?`z ${cfg.kcalMin}–${cfg.kcalMax} kcal`:`z ${target} kcal`);
 
-  // Gauge progress (half-circle arc)
+  // Subtitle below big number — just unit "kcal"
+  let subtitle='kcal';
+  if(cfg.goalMode==='range'){
+    const mn=cfg.kcalMin||1200,mx=cfg.kcalMax||1500;
+    if(t.kcal>mx) subtitle=`kcal · nad limit +${Math.round(t.kcal-mx)}`;
+    else if(t.kcal>=mn) subtitle='kcal · v rozmezí ✓';
+  } else {
+    if(t.kcal>target) subtitle=`kcal · přebytek +${Math.round(t.kcal-target)}`;
+    else if(t.kcal===target&&t.kcal>0) subtitle='kcal · cíl splněn ✓';
+  }
+  setText('a-target',subtitle);
+
+  // Gauge target line in hero (subtle "1301 / 1800 kcal")
+  if(cfg.goalMode==='range'){
+    setText('a-gauge-target',`${Math.round(t.kcal)} / ${cfg.kcalMin}–${cfg.kcalMax} kcal`);
+  } else {
+    setText('a-gauge-target',`${Math.round(t.kcal)} / ${target} kcal`);
+  }
+
+  // Gauge progress (half-circle arc on hero)
   const arcLen=408.41;
   const arc=$('a-arc');
   let pctFrac;
   if(cfg.goalMode==='range'){
-    const mn=cfg.kcalMin||1200,mx=cfg.kcalMax||1500;
+    const mx=cfg.kcalMax||1500;
     pctFrac=Math.min(t.kcal/mx,1);
-    if(arc){
-      arc.setAttribute('stroke-dashoffset',Math.round(arcLen*(1-pctFrac)));
-      arc.style.stroke=t.kcal>mx?'url(#rg-over)':'url(#rg)';
-      arc.style.opacity=pctFrac>0.005?'1':'0';
-    }
   } else {
     pctFrac=Math.min(t.kcal/target,1);
-    if(arc){
-      arc.setAttribute('stroke-dashoffset',Math.round(arcLen*(1-pctFrac)));
-      arc.style.stroke=t.kcal>target?'url(#rg-over)':'url(#rg)';
-      arc.style.opacity=pctFrac>0.005?'1':'0';
-    }
+  }
+  if(arc){
+    arc.setAttribute('stroke-dashoffset',Math.round(arcLen*(1-pctFrac)));
+    arc.style.opacity=pctFrac>0.005?'1':'0';
   }
 
-  // Toggle 3 macro cards based on trackMacros
-  setStyle('macro-cards-row','display',cfg.trackMacros?'grid':'none');
+  // Toggle 3 macro inline stats based on trackMacros
+  setStyle('macro-stats-row','display',cfg.trackMacros?'flex':'none');
 
-  // Macro cards values (clean: big %, with goal sub-line)
-  const pP=cfg.protein>0?Math.round(t.protein/cfg.protein*100):0;
-  const pC=cfg.carbs>0?Math.round(t.carbs/cfg.carbs*100):0;
-  const pF=cfg.fat>0?Math.round(t.fat/cfg.fat*100):0;
-  setText('mc-p-pct',pP);
-  setText('mc-c-pct',pC);
-  setText('mc-f-pct',pF);
+  // Macro values
   setText('mc-p-val',Math.round(t.protein));
   setText('mc-c-val',Math.round(t.carbs));
   setText('mc-f-val',Math.round(t.fat));
@@ -978,25 +863,13 @@ function render(){
   setText('mc-c-goal',cfg.carbs);
   setText('mc-f-goal',cfg.fat);
 
-  // CTA strip
-  if(!meals.length){setText('a-cta-label','Začni');setText('a-cta-msg','Přidej první jídlo');}
-  else if(cfg.goalMode==='range'){
-    if(t.kcal<cfg.kcalMin){setText('a-cta-label','Do minima');setText('a-cta-msg',`${Math.round(cfg.kcalMin-t.kcal)} kcal`);}
-    else if(t.kcal<=cfg.kcalMax){setText('a-cta-label','Stav');setText('a-cta-msg','V rozmezí ✓');}
-    else{setText('a-cta-label','Nad limit');setText('a-cta-msg',`+${Math.round(t.kcal-cfg.kcalMax)} kcal`);}
-  } else {
-    if(t.kcal<target){setText('a-cta-label','Zbývá');setText('a-cta-msg',`${Math.round(target-t.kcal)} kcal`);}
-    else if(t.kcal===target){setText('a-cta-label','Stav');setText('a-cta-msg','Cíl splněn ✓');}
-    else{setText('a-cta-label','Přebytek');setText('a-cta-msg',`+${Math.round(t.kcal-target)} kcal`);}
-  }
-
-  // Meals list — CRITICAL: must run even if earlier sections fail
+  // Meals list
   const el=$('a-meals');
   if(el){
     if(!meals.length){el.innerHTML='<div class="no-meal">Zatím nic. Přidej první jídlo ↓</div>';}
     else{
       el.innerHTML=meals.map((m,i)=>`<div class="meal">
-        <div class="meal-dot">🍽️</div>
+        <div class="meal-icon">🍽️</div>
         <div class="meal-info"><div class="meal-name">${escapeHtml(m.name||'')}</div><div class="meal-time">${m.time||''}${cfg.trackMacros?' · '+Math.round(m.protein||0)+'B · '+Math.round(m.carbs||0)+'S · '+Math.round(m.fat||0)+'T':''}</div></div>
         <div class="meal-right"><div class="meal-kcal">${Math.round(m.kcal||0)} kcal</div></div>
         <button class="meal-edit" onclick="openEditMeal(${i})">✎</button>
@@ -1007,11 +880,10 @@ function render(){
 
   }catch(e){
     console.error('render error:',e);
-    // Even if render fails, ensure meals list at least shows
     const el=$('a-meals');
     if(el && meals.length){
       el.innerHTML=meals.map((m,i)=>`<div class="meal">
-        <div class="meal-dot">🍽️</div>
+        <div class="meal-icon">🍽️</div>
         <div class="meal-info"><div class="meal-name">${(m.name||'')}</div><div class="meal-time">${m.time||''}</div></div>
         <div class="meal-right"><div class="meal-kcal">${Math.round(m.kcal||0)} kcal</div></div>
         <button class="meal-edit" onclick="openEditMeal(${i})">✎</button>
@@ -1496,27 +1368,18 @@ function loadH(){
 }
 
 const histTabLabels={hist:'Záznamy',stats:'Statistiky',weight:'Váha'};
-function setHistTab(t){
-  ['hist','stats','weight'].forEach(s=>{
-    document.getElementById('hsub-'+s).style.display=s===t?'block':'none';
-    document.getElementById('ht-'+s).classList.toggle('on',s===t);
-  });
-  const lbl=document.getElementById('hist-page-title');
-  if(lbl)lbl.textContent=histTabLabels[t];
-  if(t==='hist')loadH();
-  if(t==='stats')renderStats();
-  if(t==='weight')renderWeight();
+function setHistTab(t){ /* legacy no-op */ }
+function setSubtab(t){ /* legacy no-op */ }
+
+function loadHistoryAll(){
+  loadH();
+  renderStats();
+  renderWeight();
 }
 
-function setSubtab(t){
-  ['manual','mealprep','favs'].forEach(function(s){
-    var el=document.getElementById('sub-'+s);
-    var btn=document.getElementById('st-'+s);
-    if(el)el.style.display=s===t?'block':'none';
-    if(btn)btn.classList.toggle('on',s===t);
-  });
-  if(t==='mealprep')renderMealpreps();
-  if(t==='favs')renderFavs();
+function loadAddAll(){
+  renderMealpreps();
+  renderFavs();
 }
 
 function go(name){
@@ -1525,7 +1388,8 @@ function go(name){
   document.getElementById('s-'+name).classList.add('on');
   const navBtn=document.getElementById('n-'+name);
   if(navBtn)navBtn.classList.add('on');
-  if(name==='history')setHistTab('hist');
+  if(name==='history')loadHistoryAll();
+  if(name==='add')loadAddAll();
   if(name==='settings')loadS();
   document.getElementById('s-'+name).scrollTop=0;
 }
