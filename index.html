@@ -57,20 +57,32 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
-html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); font-family:var(--font); color:var(--text); font-feature-settings:"cv02","cv03","cv04","cv11"; }
+html,body { width:100%; height:100vh; overflow:hidden; background:var(--card); font-family:var(--font); color:var(--text); font-feature-settings:"cv02","cv03","cv04","cv11"; }
+@supports (height:100dvh) {
+  html,body { height:100dvh; }
+}
+@media (prefers-color-scheme: dark) {
+  html,body { background:var(--bg); }
+}
 
-#app { position:fixed; inset:0; overflow:hidden; }
+#app { position:fixed; top:0; left:0; right:0; bottom:0; overflow:hidden; background:var(--card); }
+@media (prefers-color-scheme: dark) {
+  #app { background:var(--bg); }
+}
 .bg-decor { display:none; }
 
 /* SCREEN BASE */
-.screen { position:absolute; inset:0; z-index:2; overflow-y:auto; overflow-x:hidden;
-  -webkit-overflow-scrolling:touch; display:none; background:var(--bg); }
+.screen { position:absolute; top:0; left:0; right:0; bottom:0; z-index:2; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch; display:none; }
 .screen.on { display:block; }
-.screen-content { padding:0 20px calc(110px + env(safe-area-inset-bottom)); }
-/* Today screen needs white bg so card extends seamlessly to bottom */
+.screen-content { padding:0 20px calc(120px + env(safe-area-inset-bottom)); min-height:100%; }
+/* Today: white bg, flex column for content fill */
 #s-today { background:var(--card); }
 #s-today.on { display:flex; flex-direction:column; }
-#s-today .content-card { flex:1; min-height:0; }
+#s-today .hero { flex-shrink:0; }
+#s-today .content-card { flex:1 1 auto; min-height:auto; }
+/* Add/History/Settings have light gray bg */
+#s-add, #s-history, #s-settings { background:var(--bg); }
 
 /* ── HERO (blue gradient, today screen only) ── */
 .hero { background:var(--hero); padding:calc(20px + env(safe-area-inset-top)) 20px 90px;
@@ -1019,10 +1031,12 @@ async function analyze(){
   if(!cfg.apikey){toast('Nastav API klíč v nastavení');go('settings');return;}
   const txt=document.getElementById('a-input').value.trim();
   if(!txt&&!pb64){toast('Napiš jídlo nebo přidej fotku');return;}
-  document.getElementById('a-dots').classList.add('on');
-  document.getElementById('a-result').classList.remove('on');
-  document.getElementById('a-analyze').disabled=true;
-  document.getElementById('meal-chat-messages').innerHTML='';
+  const btn=document.getElementById('a-analyze');
+  if(btn){btn.disabled=true;btn.textContent='✦ Analyzuji…';}
+  const resultBox=document.getElementById('a-result');
+  if(resultBox)resultBox.classList.remove('on');
+  const chatMsgs=document.getElementById('meal-chat-messages');
+  if(chatMsgs)chatMsgs.innerHTML='';
 
   // Init conversation
   mealChatHistory=[];
@@ -1037,20 +1051,19 @@ async function analyze(){
     mealChatHistory.push({role:'assistant',content:replyText});
     const parsed=JSON.parse(replyText.replace(/```json|```/g,'').trim());
     updateMealResult(parsed);
-    document.getElementById('a-result').classList.add('on');
-  }catch(e){toast('Chyba: '+e.message);}
-  document.getElementById('a-dots').classList.remove('on');
-  document.getElementById('a-analyze').disabled=false;
+    if(resultBox)resultBox.classList.add('on');
+  }catch(e){console.error('analyze error:',e);toast('Chyba: '+e.message);}
+  if(btn){btn.disabled=false;btn.textContent='✦ Analyzovat pomocí AI';}
 }
 
 function updateMealResult(parsed){
   pending=parsed;
-  document.getElementById('r-name').textContent=parsed.name;
-  document.getElementById('r-kcal').textContent=Math.round(parsed.kcal);
-  document.getElementById('r-p').textContent=Math.round(parsed.protein)+'g';
-  document.getElementById('r-c').textContent=Math.round(parsed.carbs)+'g';
-  document.getElementById('r-f').textContent=Math.round(parsed.fat)+'g';
-  document.getElementById('r-fb').textContent=parsed.feedback||'';
+  const setT=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  setT('r-name',parsed.name||'');
+  setT('r-kcal',Math.round(parsed.kcal||0));
+  setT('r-p',Math.round(parsed.protein||0)+'g');
+  setT('r-c',Math.round(parsed.carbs||0)+'g');
+  setT('r-f',Math.round(parsed.fat||0)+'g');
 }
 
 async function sendMealFollowup(){
