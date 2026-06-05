@@ -722,6 +722,11 @@ let editingMealIdx=-1,editingFavId=null;
 let mealChatHistory=[]; // {role, content} array for meal AI chat
 let summaryChatHistory=[]; // for daily summary chat
 let editChatHistory=[]; // for edit modal AI chat
+let mealUsedPhoto=false; // true když aktuální meal konverzace začala fotkou
+// Model routing: fotky jdou na Sonnet (lepší vision), text na Haiku (levnější)
+const MODEL_VISION='claude-sonnet-4-6';
+const MODEL_TEXT='claude-haiku-4-5-20251001';
+function mealModel(){return mealUsedPhoto?MODEL_VISION:MODEL_TEXT;}
 
 function td(){return new Date().toISOString().split('T')[0];}
 function parseD(s){return parseFloat(String(s||0).replace(',','.').trim())||0;}
@@ -966,7 +971,7 @@ async function sendEditFollowup(){
   }
 
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:500,system:getMealSystemPrompt(),messages:editChatHistory})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,system:getMealSystemBlocks(),messages:editChatHistory})});
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
     const replyText=data.content[0].text;
@@ -1017,14 +1022,20 @@ function removePhoto(){pb64=null;document.getElementById('preview-wrap').style.d
 function getMealSystemPrompt(){
   const gm={maintain:'udržení váhy',lose:'hubnutí',gain:'nabírání svalů'};
   const macroGoals=cfg.trackMacros?`, ${cfg.protein}g bílkovin, ${cfg.carbs}g sacharidů, ${cfg.fat}g tuků`:'';
-  return `Jsi nutriční asistent. Analyzuješ jídla a vracíš kalorie + makra.
+  return `Jsi nutriční asistent. Analyzuješ POUZE jídla, nápoje a otázky o výživě, kaloriích a makrech.
 Uživatel: ${cfg.weight?'váha '+cfg.weight+'kg, ':''}cíl: ${gm[cfg.goal]||'udržení váhy'}.
 Denní cíle: ${effectiveKcal()} kcal${macroGoals}.
+
+DŮLEŽITÉ: Pokud se uživatel zeptá na cokoliv, co nesouvisí s jídlem, výživou nebo kaloriemi (např. programování, obecné znalosti, psaní textů, matematika mimo počítání kalorií), zdvořile odmítni a vrať ho zpět k jídlu. V takovém případě vrať JSON s name:"", kcal:0 a ostatními nulami, a do feedback napiš krátké česky: že umíš pomáhat jen s jídlem a výživou.
 
 VŽDY vrať odpověď ve formátu JSON bez markdown:
 {"name":"název jídla","kcal":0,"protein":0,"carbs":0,"fat":0,"feedback":"krátké hodnocení/odpověď česky"}
 
-Když uživatel upřesní nebo se zeptá (např. "co když přidám sýr", "je to moc tuku?"), aktualizuj hodnoty a v feedback odpověz česky. Stručně, výstižně.`;
+Když uživatel upřesní nebo se zeptá na jídlo (např. "co když přidám sýr", "je to moc tuku?"), aktualizuj hodnoty a v feedback odpověz česky. Stručně, výstižně.`;
+}
+// Vrací system prompt jako pole bloků s prompt caching (šetří náklady na opakovaný system prompt)
+function getMealSystemBlocks(){
+  return [{type:'text',text:getMealSystemPrompt(),cache_control:{type:'ephemeral'}}];
 }
 
 async function analyze(){
@@ -1040,11 +1051,12 @@ async function analyze(){
 
   // Init conversation
   mealChatHistory=[];
+  mealUsedPhoto=!!pb64; // fotka přítomna → celá konverzace pojede na vision modelu
   let content=pb64?[{type:'image',source:{type:'base64',media_type:pbMime,data:pb64}},{type:'text',text:txt?`Foto jídla. Poznámka: ${txt}. Odhadni kalorie a makra.`:'Analyzuj jídlo na fotce.'}]:txt;
   mealChatHistory.push({role:'user',content});
 
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:600,system:getMealSystemPrompt(),messages:mealChatHistory})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:mealModel(),max_tokens:600,system:getMealSystemBlocks(),messages:mealChatHistory})});
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
     const replyText=data.content[0].text;
@@ -1082,7 +1094,7 @@ async function sendMealFollowup(){
   mealChatHistory.push({role:'user',content:txt});
 
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:600,system:getMealSystemPrompt(),messages:mealChatHistory})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:mealModel(),max_tokens:600,system:getMealSystemBlocks(),messages:mealChatHistory})});
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
     const replyText=data.content[0].text;
@@ -1135,7 +1147,11 @@ function renderMarkdown(text){
 }
 
 function getSummarySystemPrompt(){
-  return `Jsi nutriční poradce. Diskutuješ s uživatelem o jeho dnešním jídelníčku. První odpověď je krátké zhodnocení (4-5 vět). Pak odpovídáš na další otázky uživatele. Formátuj odpovědi s odstavci. Používej **tučný text** pro klíčové hodnoty. Buď stručný, konkrétní, česky.`;
+  return `Jsi nutriční poradce. Diskutuješ s uživatelem POUZE o jeho jídelníčku, výživě a kaloriích. První odpověď je krátké zhodnocení (4-5 vět). Pak odpovídáš na další otázky uživatele o jídle a výživě. Pokud se zeptá na něco nesouvisejícího (programování, obecné znalosti, psaní textů apod.), zdvořile odmítni a vrať ho k tématu výživy. Formátuj odpovědi s odstavci. Používej **tučný text** pro klíčové hodnoty. Buď stručný, konkrétní, česky.`;
+}
+// Vrací system prompt jako pole bloků s prompt caching
+function getSummarySystemBlocks(){
+  return [{type:'text',text:getSummarySystemPrompt(),cache_control:{type:'ephemeral'}}];
 }
 
 function getInitialSummaryMessage(){
@@ -1164,7 +1180,7 @@ async function openSummary(){
   summaryChatHistory.push({role:'user',content:initMsg});
 
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:400,system:getSummarySystemPrompt(),messages:summaryChatHistory})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,system:getSummarySystemBlocks(),messages:summaryChatHistory})});
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
     const reply=data.content[0].text;
@@ -1189,7 +1205,7 @@ async function sendSummaryFollowup(){
 
   summaryChatHistory.push({role:'user',content:txt});
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-opus-4-5',max_tokens:400,system:getSummarySystemPrompt(),messages:summaryChatHistory})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:400,system:getSummarySystemBlocks(),messages:summaryChatHistory})});
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
     const reply=data.content[0].text;
