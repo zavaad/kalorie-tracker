@@ -977,16 +977,17 @@ async function sendEditFollowup(){
     const replyText=data.content[0].text;
     editChatHistory.push({role:'assistant',content:replyText});
     document.getElementById('edit-chat-dots')?.remove();
-    try{
-      const parsed=JSON.parse(replyText.replace(/```json|```/g,'').trim());
+    const parsed=parseMealJSON(replyText);
+    document.getElementById('edit-chat-dots')?.remove();
+    if(parsed){
       // Update form fields
-      document.getElementById('edit-name').value=parsed.name;
-      document.getElementById('edit-kcal').value=Math.round(parsed.kcal);
-      document.getElementById('edit-p').value=Math.round(parsed.protein);
-      document.getElementById('edit-c').value=Math.round(parsed.carbs);
-      document.getElementById('edit-f').value=Math.round(parsed.fat);
-      msgs.innerHTML+=`<div class="chat-msg"><strong>${escapeHtml(parsed.name)}</strong> · ${Math.round(parsed.kcal)} kcal · aktualizováno ✓<br><br>${escapeHtml(parsed.feedback||'')}</div>`;
-    }catch(e){
+      document.getElementById('edit-name').value=parsed.name||'';
+      document.getElementById('edit-kcal').value=Math.round(parsed.kcal||0);
+      document.getElementById('edit-p').value=Math.round(parsed.protein||0);
+      document.getElementById('edit-c').value=Math.round(parsed.carbs||0);
+      document.getElementById('edit-f').value=Math.round(parsed.fat||0);
+      msgs.innerHTML+=`<div class="chat-msg"><strong>${escapeHtml(parsed.name||'')}</strong> · ${Math.round(parsed.kcal||0)} kcal · aktualizováno ✓<br><br>${escapeHtml(parsed.feedback||'')}</div>`;
+    }else{
       msgs.innerHTML+=`<div class="chat-msg">${escapeHtml(replyText)}</div>`;
     }
   }catch(e){
@@ -1026,9 +1027,11 @@ function getMealSystemPrompt(){
 Uživatel: ${cfg.weight?'váha '+cfg.weight+'kg, ':''}cíl: ${gm[cfg.goal]||'udržení váhy'}.
 Denní cíle: ${effectiveKcal()} kcal${macroGoals}.
 
-DŮLEŽITÉ: Pokud se uživatel zeptá na cokoliv, co nesouvisí s jídlem, výživou nebo kaloriemi (např. programování, obecné znalosti, psaní textů, matematika mimo počítání kalorií), zdvořile odmítni a vrať ho zpět k jídlu. V takovém případě vrať JSON s name:"", kcal:0 a ostatními nulami, a do feedback napiš krátké česky: že umíš pomáhat jen s jídlem a výživou.
+DŮLEŽITÉ: Odpovídej VŽDY a POUZE platným JSON objektem v daném formátu, nikdy ne čistým textem.
+- Pokud je vstup jídlo nebo nápoj (i nejednoznačný, např. "200g"), odhadni co nejlépe. Když nevíš o jaké jídlo jde, vrať rozumný odhad a v feedback se zeptej na upřesnění.
+- Pokud vstup zjevně NESOUVISÍ s jídlem ani výživou (např. programování, obecné znalosti, psaní textů), vrať JSON s name:"", kcal:0 a nulami, a do feedback napiš česky, že umíš pomáhat jen s jídlem a výživou.
 
-VŽDY vrať odpověď ve formátu JSON bez markdown:
+Formát odpovědi (POUZE tento JSON, bez markdown, bez textu okolo):
 {"name":"název jídla","kcal":0,"protein":0,"carbs":0,"fat":0,"feedback":"krátké hodnocení/odpověď česky"}
 
 Když uživatel upřesní nebo se zeptá na jídlo (např. "co když přidám sýr", "je to moc tuku?"), aktualizuj hodnoty a v feedback odpověz česky. Stručně, výstižně.`;
@@ -1061,11 +1064,23 @@ async function analyze(){
     if(data.error)throw new Error(data.error.message);
     const replyText=data.content[0].text;
     mealChatHistory.push({role:'assistant',content:replyText});
-    const parsed=JSON.parse(replyText.replace(/```json|```/g,'').trim());
-    updateMealResult(parsed);
-    if(resultBox)resultBox.classList.add('on');
+    const parsed=parseMealJSON(replyText);
+    if(!parsed){toast('AI vrátila neočekávanou odpověď, zkus to prosím znovu nebo upřesni jídlo');}
+    else{updateMealResult(parsed);if(resultBox)resultBox.classList.add('on');}
   }catch(e){console.error('analyze error:',e);toast('Chyba: '+e.message);}
   if(btn){btn.disabled=false;btn.textContent='✦ Analyzovat pomocí AI';}
+}
+
+// Robustně vytáhne JSON z odpovědi modelu, i když přidá text okolo nebo markdown
+function parseMealJSON(text){
+  if(!text)return null;
+  let t=text.replace(/```json|```/g,'').trim();
+  // zkus přímý parse
+  try{return JSON.parse(t);}catch(e){}
+  // jinak najdi první {...} blok v textu
+  const m=t.match(/\{[\s\S]*\}/);
+  if(m){try{return JSON.parse(m[0]);}catch(e){}}
+  return null;
 }
 
 function updateMealResult(parsed){
@@ -1100,11 +1115,11 @@ async function sendMealFollowup(){
     const replyText=data.content[0].text;
     mealChatHistory.push({role:'assistant',content:replyText});
     document.getElementById('meal-chat-dots')?.remove();
-    try{
-      const parsed=JSON.parse(replyText.replace(/```json|```/g,'').trim());
+    const parsed=parseMealJSON(replyText);
+    if(parsed){
       updateMealResult(parsed);
-      msgs.innerHTML+=`<div class="chat-msg"><strong>${escapeHtml(parsed.name)}</strong> · ${Math.round(parsed.kcal)} kcal · aktualizováno ✓<br><br>${escapeHtml(parsed.feedback||'')}</div>`;
-    }catch(e){
+      msgs.innerHTML+=`<div class="chat-msg"><strong>${escapeHtml(parsed.name||'')}</strong> · ${Math.round(parsed.kcal||0)} kcal · aktualizováno ✓<br><br>${escapeHtml(parsed.feedback||'')}</div>`;
+    }else{
       msgs.innerHTML+=`<div class="chat-msg">${escapeHtml(replyText)}</div>`;
     }
   }catch(e){
