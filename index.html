@@ -75,12 +75,12 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--card); f
 .screen { position:absolute; top:0; left:0; right:0; bottom:0; z-index:2; overflow-y:auto; overflow-x:hidden;
   -webkit-overflow-scrolling:touch; display:none; }
 .screen.on { display:block; }
-.screen-content { padding:0 20px calc(96px + env(safe-area-inset-bottom)); min-height:100%; }
+.screen-content { padding:0 20px calc(120px + env(safe-area-inset-bottom)); min-height:100%; }
 /* Today: white bg, flex column for content fill */
 #s-today { background:var(--card); }
 #s-today.on { display:flex; flex-direction:column; }
 #s-today .hero { flex-shrink:0; }
-#s-today .content-card { flex:1 1 auto; min-height:auto; }
+#s-today .content-card { flex:1 0 auto; min-height:auto; }
 /* Add/History/Settings have light gray bg */
 #s-add, #s-history, #s-settings { background:var(--bg); }
 
@@ -107,7 +107,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--card); f
 
 /* ── WHITE CARD (overlap hero) ── */
 .content-card { background:var(--card); border-radius:32px 32px 0 0;
-  margin-top:-40px; padding:28px 20px calc(96px + env(safe-area-inset-bottom));
+  margin-top:-40px; padding:28px 20px calc(120px + env(safe-area-inset-bottom));
   position:relative;
   box-shadow:0 -8px 30px rgba(20,20,28,0.06); }
 @media (prefers-color-scheme: dark) {
@@ -339,10 +339,11 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
 
 /* ── EDIT MEAL MODAL ── */
 .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:50;
-  display:none; align-items:flex-end; }
+  display:none; align-items:flex-end; overflow:hidden; touch-action:none; }
 .modal-backdrop.on { display:flex; }
-.modal-sheet { width:100%; max-height:92vh; background:var(--bg); border-radius:24px 24px 0 0;
-  padding:18px 20px 24px; overflow-y:auto; position:relative;
+.modal-sheet { width:100%; max-width:100%; max-height:92vh; background:var(--bg); border-radius:24px 24px 0 0;
+  padding:18px 20px 24px; overflow-y:auto; overflow-x:hidden; position:relative;
+  overscroll-behavior:contain; -webkit-overflow-scrolling:touch; touch-action:pan-y;
   padding-bottom:calc(24px + env(safe-area-inset-bottom)); }
 .modal-handle { width:36px; height:4px; background:var(--bg4); border-radius:2px; margin:0 auto 14px; }
 .modal-title { font-size:18px; font-weight:600; color:var(--text); margin-bottom:14px; }
@@ -351,6 +352,10 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
 .modal-save { flex:1; }
 .modal-cancel { background:var(--card); color:var(--text2); border:none;
   border-radius:14px; padding:14px 20px; font-size:14px; font-weight:500; font-family:var(--font); cursor:pointer; box-shadow:var(--shadow); }
+
+/* Zamčení scrollu pozadí při otevřeném modalu (iOS bug fix) */
+body.modal-open .screen { overflow:hidden !important; touch-action:none; }
+body.modal-open .nav { display:none; }
 
 /* Toast */
 .toast { position:fixed; bottom:120px; left:50%; transform:translateX(-50%);
@@ -412,20 +417,19 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
 .caff-src-name { font-size:13.5px; font-weight:600; color:var(--text); line-height:1.2; }
 .caff-src-mg { font-size:11px; color:var(--text3); margin-top:3px; font-weight:500; }
 
-/* Caffeine AI estimate (chat in modal) */
+/* Caffeine AI estimate (single-shot analýza) */
 .caff-ai-divider { display:flex; align-items:center; gap:10px; margin:4px 0 14px; }
 .caff-ai-divider::before, .caff-ai-divider::after { content:''; flex:1; height:1px; background:var(--border); }
 .caff-ai-divider span { font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:0.08em; }
-.caff-ai-messages { display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
-.caff-ai-messages:empty { display:none; }
-.caff-ai-msg { padding:10px 12px; border-radius:14px; font-size:13px; line-height:1.5; }
-.caff-ai-msg.user { background:var(--accent); color:#fff; margin-left:18%; align-self:flex-end; }
-.caff-ai-msg.ai { background:var(--card); color:var(--text); margin-right:18%; box-shadow:var(--shadow); }
 .caff-ai-row { display:flex; gap:8px; margin-bottom:14px; }
-.caff-ai-row input { flex:1; }
-.caff-ai-send { background:var(--accent); color:#fff; border:none; border-radius:14px; padding:0 18px;
+.caff-ai-row input { flex:1; min-width:0; }
+.caff-ai-send { background:var(--accent); color:#fff; border:none; border-radius:14px; padding:0 18px; flex-shrink:0;
   font-family:var(--font); cursor:pointer; font-weight:600; }
 .caff-ai-send:disabled { opacity:0.4; }
+.caff-ai-result { font-size:13px; line-height:1.5; color:var(--text2); margin-bottom:14px; }
+.caff-ai-result:empty { display:none; }
+.caff-ai-result .caff-ai-headline { font-size:14px; font-weight:600; color:var(--text); margin-bottom:4px; }
+.caff-ai-result.err { color:var(--red); }
 </style>
 </head>
 <body>
@@ -557,12 +561,12 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
       <div class="modal-handle"></div>
       <div class="modal-title">Zapsat kofein</div>
       <div class="caff-sources" id="caff-sources"></div>
-      <div class="caff-ai-divider"><span>nebo se zeptej AI</span></div>
-      <div class="caff-ai-messages" id="caff-ai-messages"></div>
+      <div class="caff-ai-divider"><span>nebo napiš co jsi měl</span></div>
       <div class="caff-ai-row">
         <input type="text" id="caff-ai-input" placeholder="velké latte z automatu, monster 0,5l..." onkeypress="if(event.key==='Enter')askCaffAI()">
         <button class="caff-ai-send" id="caff-ai-send" onclick="askCaffAI()">✦</button>
       </div>
+      <div class="caff-ai-result" id="caff-ai-result"></div>
       <div class="inp-group">
         <div class="inp-label">Množství (mg)</div>
         <input type="number" id="caff-mg" placeholder="80" inputmode="numeric">
@@ -845,7 +849,6 @@ let caffeine=[]; // dnešní záznamy: {id, mg, time(ISO), name, kcal, linkId}
 let caffSelectedSrc=null;
 let caffAiName=''; // název z AI odhadu (nebo z chipu)
 let caffAiKcal=0; // kcal z AI odhadu (nebo z chipu)
-let caffAiHistory=[]; // chat historie AI odhadu kofeinu
 let caffTimer=null;
 // Předvyplněné zdroje (mg kofeinu) — typické hodnoty
 const CAFF_SOURCES=[
@@ -1166,17 +1169,18 @@ function openCaffModal(){
   caffSelectedSrc=null;
   caffAiName='';
   caffAiKcal=0;
-  caffAiHistory=[];
   $('caff-mg').value='';
   $('caff-ai-input').value='';
-  $('caff-ai-messages').innerHTML='';
+  $('caff-ai-result').innerHTML='';
+  $('caff-ai-result').classList.remove('err');
   // přednastav aktuální čas
   const now=new Date();
   $('caff-time').value=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
   document.querySelectorAll('#caff-sources .caff-src').forEach(b=>b.classList.remove('on'));
   $('caff-modal').classList.add('on');
+  document.body.classList.add('modal-open');
 }
-function closeCaffModal(){$('caff-modal').classList.remove('on');}
+function closeCaffModal(){$('caff-modal').classList.remove('on');document.body.classList.remove('modal-open');}
 function closeCaffOutside(e){if(e.target===$('caff-modal'))closeCaffModal();}
 
 function getCaffSystemPrompt(){
@@ -1199,24 +1203,19 @@ async function askCaffAI(){
   const txt=input.value.trim();
   if(!txt)return;
   if(!cfg.apikey){toast('Nastav API klíč v nastavení');return;}
-  const msgs=$('caff-ai-messages');
-  msgs.innerHTML+=`<div class="caff-ai-msg user">${escapeHtml(txt)}</div>`;
-  input.value='';
+  const res=$('caff-ai-result');
   $('caff-ai-send').disabled=true;
-  msgs.innerHTML+='<div class="dots on" id="caff-ai-dots" style="padding:6px 4px"><span></span><span></span><span></span></div>';
-  msgs.scrollTop=msgs.scrollHeight;
+  res.classList.remove('err');
+  res.innerHTML='<div class="dots on" style="padding:2px 0"><span></span><span></span><span></span></div>';
   // odznač chip — teď řídí AI
   caffSelectedSrc=null;
   document.querySelectorAll('#caff-sources .caff-src').forEach(b=>b.classList.remove('on'));
 
-  caffAiHistory.push({role:'user',content:txt});
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MODEL_TEXT,max_tokens:400,system:getCaffSystemBlocks(),messages:caffAiHistory})});
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MODEL_TEXT,max_tokens:400,system:getCaffSystemBlocks(),messages:[{role:'user',content:txt}]})});
     const data=await resp.json();
     if(data.error)throw new Error(data.error.message);
     const replyText=data.content[0].text;
-    caffAiHistory.push({role:'assistant',content:replyText});
-    $('caff-ai-dots')?.remove();
     const parsed=parseMealJSON(replyText);
     if(parsed&&typeof parsed.mg!=='undefined'){
       const mg=Math.round(parsed.mg||0);
@@ -1225,19 +1224,18 @@ async function askCaffAI(){
         caffAiName=parsed.name||'Kofein';
         caffAiKcal=Math.round(parsed.kcal||0);
         const kcalStr=caffAiKcal>0?` · ${caffAiKcal} kcal`:'';
-        msgs.innerHTML+=`<div class="caff-ai-msg ai"><strong>${escapeHtml(parsed.name||'')}</strong> · ~${mg} mg${kcalStr} ✓<br><br>${escapeHtml(parsed.feedback||'')}</div>`;
+        res.innerHTML=`<div class="caff-ai-headline">${escapeHtml(parsed.name||'')} · ~${mg} mg${kcalStr}</div>${escapeHtml(parsed.feedback||'')}`;
       }else{
-        msgs.innerHTML+=`<div class="caff-ai-msg ai">${escapeHtml(parsed.feedback||'Tahle položka kofein neobsahuje.')}</div>`;
+        res.innerHTML=escapeHtml(parsed.feedback||'Tahle položka kofein neobsahuje.');
       }
     }else{
-      msgs.innerHTML+=`<div class="caff-ai-msg ai">${escapeHtml(replyText)}</div>`;
+      res.innerHTML=escapeHtml(replyText);
     }
   }catch(e){
-    $('caff-ai-dots')?.remove();
-    msgs.innerHTML+=`<div class="caff-ai-msg ai" style="color:var(--red)">Chyba: ${e.message}</div>`;
+    res.classList.add('err');
+    res.textContent='Chyba: '+e.message;
   }
   $('caff-ai-send').disabled=false;
-  msgs.scrollTop=msgs.scrollHeight;
 }
 
 function saveCaffLog(){
@@ -1311,8 +1309,9 @@ function openEditMeal(i){
   document.getElementById('edit-chat-messages').innerHTML='';
   document.getElementById('edit-chat-input').value='';
   document.getElementById('edit-modal').classList.add('on');
+  document.body.classList.add('modal-open');
 }
-function closeEdit(){editingMealIdx=-1;document.getElementById('edit-modal').classList.remove('on');}
+function closeEdit(){editingMealIdx=-1;document.getElementById('edit-modal').classList.remove('on');document.body.classList.remove('modal-open');}
 function closeEditOutside(e){if(e.target===document.getElementById('edit-modal'))closeEdit();}
 function saveEditMeal(){
   if(editingMealIdx<0)return;
