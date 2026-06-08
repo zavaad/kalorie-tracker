@@ -75,7 +75,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--card); f
 .screen { position:absolute; top:0; left:0; right:0; bottom:0; z-index:2; overflow-y:auto; overflow-x:hidden;
   -webkit-overflow-scrolling:touch; display:none; }
 .screen.on { display:block; }
-.screen-content { padding:0 20px calc(120px + env(safe-area-inset-bottom)); min-height:100%; }
+.screen-content { padding:0 20px calc(96px + env(safe-area-inset-bottom)); min-height:100%; }
 /* Today: white bg, flex column for content fill */
 #s-today { background:var(--card); }
 #s-today.on { display:flex; flex-direction:column; }
@@ -107,7 +107,7 @@ html,body { width:100%; height:100vh; overflow:hidden; background:var(--card); f
 
 /* ── WHITE CARD (overlap hero) ── */
 .content-card { background:var(--card); border-radius:32px 32px 0 0;
-  margin-top:-40px; padding:28px 20px calc(110px + env(safe-area-inset-bottom));
+  margin-top:-40px; padding:28px 20px calc(96px + env(safe-area-inset-bottom));
   position:relative;
   box-shadow:0 -8px 30px rgba(20,20,28,0.06); }
 @media (prefers-color-scheme: dark) {
@@ -199,7 +199,7 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
   box-shadow:var(--shadow); }
 .preview-wrap { position:relative; margin-bottom:14px; border-radius:14px; overflow:hidden; display:none; }
 .preview-wrap.on { display:block; }
-.preview-img { width:100%; max-height:300px; object-fit:cover; }
+.preview-img { width:100%; max-height:160px; object-fit:cover; }
 .preview-close { position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.6); color:#fff;
   border:none; width:28px; height:28px; border-radius:50%; font-size:18px; cursor:pointer; }
 
@@ -287,10 +287,10 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
 /* Week chart */
 .week-chart { background:var(--card); border-radius:18px; padding:18px 16px; margin-bottom:16px; box-shadow:var(--shadow); }
 .wc-title { font-size:14px; color:var(--text2); font-weight:600; margin-bottom:14px; }
-.wc-bars { display:flex; gap:6px; align-items:flex-end; height:120px; }
+.wc-bars { display:flex; gap:6px; align-items:flex-end; }
 .wc-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
-.wc-bar { width:100%; background:var(--bg4); border-radius:8px; min-height:6px; position:relative; }
-.wc-bar-fill { position:absolute; bottom:0; left:0; right:0; background:var(--accent); border-radius:8px;
+.wc-bar { width:100%; background:var(--bg4); border-radius:8px; position:relative; display:flex; align-items:flex-end; }
+.wc-bar-fill { width:100%; background:var(--accent); border-radius:8px;
   transition:height 0.3s; }
 .wc-day { font-size:10px; color:var(--text3); font-weight:500; }
 
@@ -375,6 +375,57 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
 .spacer-lg { height:32px; }
 .escape-html { display:none; }
 
+/* ── CAFFEINE TRACKER (today screen, under macros) ── */
+.caff-card { background:var(--card2); border-radius:18px; padding:18px; margin-bottom:26px; box-shadow:var(--shadow); }
+.caff-top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:4px; }
+.caff-now { font-size:32px; font-weight:600; color:var(--text); letter-spacing:-1px; line-height:1;
+  font-variant-numeric:tabular-nums; }
+.caff-now-unit { font-size:16px; font-weight:500; color:var(--text2); margin-left:2px; }
+.caff-now-label { font-size:12px; color:var(--text2); font-weight:500; margin-top:6px; }
+.caff-ring { width:52px; height:52px; flex-shrink:0; }
+.caff-ring-track { stroke:var(--bg4); }
+.caff-ring-arc { stroke:var(--accent); transition:stroke-dashoffset 0.6s ease; }
+.caff-sleep { font-size:12.5px; line-height:1.45; color:var(--text2); font-weight:500;
+  margin-top:14px; padding-top:14px; border-top:1px solid var(--border); display:flex; gap:8px; align-items:flex-start; }
+.caff-sleep-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; background:var(--green); }
+.caff-sleep.warn .caff-sleep-dot { background:var(--yellow); }
+.caff-sleep.bad .caff-sleep-dot { background:var(--red); }
+.caff-sleep strong { color:var(--text); font-weight:600; }
+.caff-add-btn { width:100%; margin-top:14px; background:rgba(77,95,232,0.1); color:var(--accent); border:none;
+  border-radius:12px; padding:11px; font-size:13px; font-weight:600; font-family:var(--font); cursor:pointer;
+  transition:transform 0.15s; }
+.caff-add-btn:active { transform:scale(0.99); }
+.caff-logs { margin-top:12px; display:flex; flex-direction:column; gap:6px; }
+.caff-log { display:flex; align-items:center; gap:10px; font-size:12.5px; }
+.caff-log-time { color:var(--text3); width:42px; flex-shrink:0; font-variant-numeric:tabular-nums; }
+.caff-log-name { color:var(--text2); flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.caff-log-mg { color:var(--text); font-weight:600; }
+.caff-log-del { background:none; border:none; color:var(--text3); width:22px; height:22px; font-size:13px; cursor:pointer; flex-shrink:0; }
+.caff-log-del:active { color:var(--text); }
+
+/* Caffeine source picker (chips in modal) */
+.caff-sources { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px; }
+.caff-src { background:var(--card); border:none; border-radius:14px; padding:13px 14px; text-align:left;
+  cursor:pointer; font-family:var(--font); box-shadow:var(--shadow); transition:transform 0.15s, box-shadow 0.15s; }
+.caff-src:active { transform:scale(0.97); }
+.caff-src.on { box-shadow:0 0 0 2px var(--accent); }
+.caff-src-name { font-size:13.5px; font-weight:600; color:var(--text); line-height:1.2; }
+.caff-src-mg { font-size:11px; color:var(--text3); margin-top:3px; font-weight:500; }
+
+/* Caffeine AI estimate (chat in modal) */
+.caff-ai-divider { display:flex; align-items:center; gap:10px; margin:4px 0 14px; }
+.caff-ai-divider::before, .caff-ai-divider::after { content:''; flex:1; height:1px; background:var(--border); }
+.caff-ai-divider span { font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; letter-spacing:0.08em; }
+.caff-ai-messages { display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
+.caff-ai-messages:empty { display:none; }
+.caff-ai-msg { padding:10px 12px; border-radius:14px; font-size:13px; line-height:1.5; }
+.caff-ai-msg.user { background:var(--accent); color:#fff; margin-left:18%; align-self:flex-end; }
+.caff-ai-msg.ai { background:var(--card); color:var(--text); margin-right:18%; box-shadow:var(--shadow); }
+.caff-ai-row { display:flex; gap:8px; margin-bottom:14px; }
+.caff-ai-row input { flex:1; }
+.caff-ai-send { background:var(--accent); color:#fff; border:none; border-radius:14px; padding:0 18px;
+  font-family:var(--font); cursor:pointer; font-weight:600; }
+.caff-ai-send:disabled { opacity:0.4; }
 </style>
 </head>
 <body>
@@ -432,6 +483,29 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
       </div>
     </div>
 
+    <!-- Caffeine tracker (under macros) -->
+    <div class="caff-card" id="caff-card">
+      <div class="caff-top">
+        <div>
+          <div><span class="caff-now" id="caff-now">0</span><span class="caff-now-unit">mg</span></div>
+          <div class="caff-now-label">kofeinu v těle teď</div>
+        </div>
+        <svg class="caff-ring" viewBox="0 0 36 36">
+          <path class="caff-ring-track" fill="none" stroke-width="4"
+            d="M18 3 a 15 15 0 0 1 0 30 a 15 15 0 0 1 0 -30"/>
+          <path class="caff-ring-arc" id="caff-arc" fill="none" stroke-width="4" stroke-linecap="round"
+            stroke-dasharray="94.2" stroke-dashoffset="94.2"
+            d="M18 3 a 15 15 0 0 1 0 30 a 15 15 0 0 1 0 -30"/>
+        </svg>
+      </div>
+      <div class="caff-sleep" id="caff-sleep">
+        <span class="caff-sleep-dot"></span>
+        <span id="caff-sleep-text">—</span>
+      </div>
+      <div class="caff-logs" id="caff-logs"></div>
+      <button class="caff-add-btn" onclick="openCaffModal()">+ Zapsat kofein</button>
+    </div>
+
     <div class="section-row">
       <div class="section-title">Dnešní jídla</div>
       <button class="section-action" onclick="openSummary()">✦ AI hodnocení</button>
@@ -439,15 +513,15 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
     <div id="a-meals"></div>
     <div class="chat-box" id="summary-box">
       <div class="chat-messages" id="summary-messages"></div>
-      <div class="chat-input-row">
-        <input type="text" id="summary-input" placeholder="Zeptej se na detail..." onkeypress="if(event.key==='Enter')sendSummaryQuestion()">
-        <button class="chat-send-btn" onclick="sendSummaryQuestion()" id="summary-send-btn">Poslat</button>
+      <div class="chat-input-row" id="summary-followup" style="display:none">
+        <input type="text" id="summary-input" placeholder="Zeptej se na detail..." onkeypress="if(event.key==='Enter')sendSummaryFollowup()">
+        <button class="chat-send-btn" onclick="sendSummaryFollowup()" id="summary-send-btn">Poslat</button>
       </div>
     </div>
   </div>
 
   <!-- Edit meal modal -->
-  <div class="modal-backdrop" id="edit-modal">
+  <div class="modal-backdrop" id="edit-modal" onclick="closeEditOutside(event)">
     <div class="modal-sheet">
       <div class="modal-handle"></div>
       <div class="modal-title">Upravit jídlo</div>
@@ -457,9 +531,9 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
       </div>
       <div class="row-4">
         <div class="inp-group"><div class="inp-label">Kcal</div><input type="number" id="edit-kcal"></div>
-        <div class="inp-group"><div class="inp-label">B (g)</div><input type="number" id="edit-protein"></div>
-        <div class="inp-group"><div class="inp-label">S (g)</div><input type="number" id="edit-carbs"></div>
-        <div class="inp-group"><div class="inp-label">T (g)</div><input type="number" id="edit-fat"></div>
+        <div class="inp-group"><div class="inp-label">B (g)</div><input type="number" id="edit-p"></div>
+        <div class="inp-group"><div class="inp-label">S (g)</div><input type="number" id="edit-c"></div>
+        <div class="inp-group"><div class="inp-label">T (g)</div><input type="number" id="edit-f"></div>
       </div>
       <div class="spacer-sm"></div>
       <div class="chat-box on" style="background:var(--card2)">
@@ -473,6 +547,33 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
       <div class="modal-actions">
         <button class="modal-cancel" onclick="closeEdit()">Zrušit</button>
         <button class="btn-primary modal-save" onclick="saveEditMeal()">Uložit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Caffeine log modal -->
+  <div class="modal-backdrop" id="caff-modal" onclick="closeCaffOutside(event)">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Zapsat kofein</div>
+      <div class="caff-sources" id="caff-sources"></div>
+      <div class="caff-ai-divider"><span>nebo se zeptej AI</span></div>
+      <div class="caff-ai-messages" id="caff-ai-messages"></div>
+      <div class="caff-ai-row">
+        <input type="text" id="caff-ai-input" placeholder="velké latte z automatu, monster 0,5l..." onkeypress="if(event.key==='Enter')askCaffAI()">
+        <button class="caff-ai-send" id="caff-ai-send" onclick="askCaffAI()">✦</button>
+      </div>
+      <div class="inp-group">
+        <div class="inp-label">Množství (mg)</div>
+        <input type="number" id="caff-mg" placeholder="80" inputmode="numeric">
+      </div>
+      <div class="inp-group">
+        <div class="inp-label">Čas</div>
+        <input type="time" id="caff-time">
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeCaffModal()">Zrušit</button>
+        <button class="btn-primary modal-save" onclick="saveCaffLog()">Zapsat</button>
       </div>
     </div>
   </div>
@@ -515,6 +616,7 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
           <div class="result-stat"><strong id="r-p">0g</strong> bílk.</div>
           <div class="result-stat"><strong id="r-c">0g</strong> sach.</div>
           <div class="result-stat"><strong id="r-f">0g</strong> tuky</div>
+          <div class="result-stat" id="r-caff-wrap" style="display:none"><strong id="r-caff">0mg</strong> kofein</div>
         </div>
 
         <div class="chat-messages" id="meal-chat-messages"></div>
@@ -534,11 +636,11 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
     <!-- OBLÍBENÁ -->
     <div class="section-block">
       <div class="section-row">
-        <div class="section-title">Oblíbená</div>
-        <button class="section-action" onclick="document.getElementById('fav-form').classList.add('on')">+ Přidat</button>
+        <div class="section-title" id="fav-form-title">Oblíbená</div>
+        <button class="section-action" id="fav-add-btn" onclick="document.getElementById('fav-form').style.display='block';this.style.display='none'">+ Přidat</button>
       </div>
       <div id="fav-list"></div>
-      <div id="fav-form" class="mini-form">
+      <div id="fav-form" class="mini-form" style="display:none">
         <div class="inp-group"><div class="inp-label">Název</div><input type="text" id="fav-name" placeholder="Ovesná kaše"></div>
         <div class="mini-form-row">
           <div class="inp-group"><div class="inp-label">kcal</div><input type="number" id="fav-kcal" placeholder="350"></div>
@@ -682,6 +784,15 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
     </div>
 
     <div class="section-block">
+      <div class="section-row"><div class="section-title">Kofein &amp; spánek</div></div>
+      <div class="inp-group">
+        <div class="inp-label">Průměrný čas usínání</div>
+        <input type="time" id="s-bedtime">
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Pro doporučení vlivu kofeinu na spánek</div>
+      </div>
+    </div>
+
+    <div class="section-block">
       <div class="section-row"><div class="section-title">Profil</div></div>
       <div class="mini-form-row">
         <div class="inp-group"><div class="inp-label">Váha (kg)</div><input type="text" id="s-w" placeholder="75"></div>
@@ -716,7 +827,7 @@ input:focus, textarea:focus, select:focus { box-shadow:0 0 0 2px var(--accent); 
 </div>
 
 <script>
-const DEF={kcal:1800,kcalMin:1200,kcalMax:1500,protein:150,carbs:200,fat:60,weight:'',goal:'maintain',apikey:'',trackMacros:true,goalMode:'fixed'};
+const DEF={kcal:1800,kcalMin:1200,kcalMax:1500,protein:150,carbs:200,fat:60,weight:'',goal:'maintain',apikey:'',trackMacros:true,goalMode:'fixed',bedtime:''};
 let cfg={...DEF},meals=[],mealpreps=[],favs=[],pending=null,pb64=null,pbMime='image/jpeg';
 let editingMealIdx=-1,editingFavId=null;
 let mealChatHistory=[]; // {role, content} array for meal AI chat
@@ -727,6 +838,24 @@ let mealUsedPhoto=false; // true když aktuální meal konverzace začala fotkou
 const MODEL_VISION='claude-sonnet-4-6';
 const MODEL_TEXT='claude-haiku-4-5-20251001';
 function mealModel(){return mealUsedPhoto?MODEL_VISION:MODEL_TEXT;}
+
+// ── CAFFEINE ──
+const CAFF_HALFLIFE_H=5; // pevný poločas rozpadu 5h (zjednodušené)
+let caffeine=[]; // dnešní záznamy: {id, mg, time(ISO), name, kcal, linkId}
+let caffSelectedSrc=null;
+let caffAiName=''; // název z AI odhadu (nebo z chipu)
+let caffAiKcal=0; // kcal z AI odhadu (nebo z chipu)
+let caffAiHistory=[]; // chat historie AI odhadu kofeinu
+let caffTimer=null;
+// Předvyplněné zdroje (mg kofeinu) — typické hodnoty
+const CAFF_SOURCES=[
+  {name:'Espresso', mg:63, kcal:3},
+  {name:'Yerba maté', mg:85, kcal:0},
+  {name:'Red Bull', mg:80, kcal:110},
+  {name:'Zelený čaj', mg:28, kcal:0},
+  {name:'Matcha', mg:70, kcal:5},
+  {name:'Coca Cola', mg:32, kcal:139}
+];
 
 function td(){return new Date().toISOString().split('T')[0];}
 function parseD(s){return parseFloat(String(s||0).replace(',','.').trim())||0;}
@@ -757,9 +886,14 @@ function init(){
   try{const d=localStorage.getItem('nai_'+td());if(d){try{meals=JSON.parse(d);}catch(e){meals=[];}}}catch(e){}
   try{const mp=localStorage.getItem('nai_mealpreps');if(mp){try{mealpreps=JSON.parse(mp);}catch(e){mealpreps=[];}}}catch(e){}
   try{const fv=localStorage.getItem('nai_favs');if(fv){try{favs=JSON.parse(fv);}catch(e){favs=[];}}}catch(e){}
+  try{const cf=localStorage.getItem('nai_caffeine_'+td());if(cf){try{caffeine=JSON.parse(cf);}catch(e){caffeine=[];}}}catch(e){}
   try{render();}catch(e){}
   try{loadS();}catch(e){}
   try{updateMacroUI();}catch(e){}
+  try{renderCaffeine();}catch(e){}
+  try{renderCaffSources();}catch(e){}
+  // Auto-update caffeine každou minutu (rozpad v čase)
+  try{if(caffTimer)clearInterval(caffTimer);caffTimer=setInterval(()=>{try{renderCaffeine();}catch(e){}},60000);}catch(e){}
   const dateEl=document.getElementById('a-date');
   const greetEl=document.getElementById('a-greeting');
   if(dateEl&&greetEl){
@@ -808,10 +942,11 @@ function save(){
   cfg.protein=parseInt(document.getElementById('s-p').value)||150;
   cfg.carbs=parseInt(document.getElementById('s-c').value)||200;
   cfg.fat=parseInt(document.getElementById('s-f').value)||60;
+  cfg.bedtime=document.getElementById('s-bedtime').value||'';
   cfg.weight=document.getElementById('s-w').value;
   cfg.goal=document.getElementById('s-g').value;
   localStorage.setItem('nai_cfg',JSON.stringify(cfg));
-  updateMacroUI();toast('Nastavení uloženo ✓');render();
+  updateMacroUI();toast('Nastavení uloženo ✓');render();renderCaffeine();
 }
 function loadS(){
   document.getElementById('s-key').value=cfg.apikey||'';
@@ -821,6 +956,7 @@ function loadS(){
   document.getElementById('s-p').value=cfg.protein;
   document.getElementById('s-c').value=cfg.carbs;
   document.getElementById('s-f').value=cfg.fat;
+  document.getElementById('s-bedtime').value=cfg.bedtime||'';
   document.getElementById('s-w').value=cfg.weight||'';
   document.getElementById('s-g').value=cfg.goal||'maintain';
   try{setGoalMode(cfg.goalMode||'fixed');}catch(e){}
@@ -836,10 +972,8 @@ function render(){
   const t=meals.reduce((a,m)=>({kcal:a.kcal+(+m.kcal||0),protein:a.protein+(+m.protein||0),carbs:a.carbs+(+m.carbs||0),fat:a.fat+(+m.fat||0)}),{kcal:0,protein:0,carbs:0,fat:0});
   const target=cfg.goalMode==='range'?(cfg.kcalMin||1200):(cfg.kcal||1800);
 
-  // Big kcal value (in white card)
   setText('a-kcal',Math.round(t.kcal));
 
-  // Subtitle below big number — just unit "kcal"
   let subtitle='kcal';
   if(cfg.goalMode==='range'){
     const mn=cfg.kcalMin||1200,mx=cfg.kcalMax||1500;
@@ -851,14 +985,12 @@ function render(){
   }
   setText('a-target',subtitle);
 
-  // Gauge target line in hero (subtle "1301 / 1800 kcal")
   if(cfg.goalMode==='range'){
     setText('a-gauge-target',`${Math.round(t.kcal)} / ${cfg.kcalMin}–${cfg.kcalMax} kcal`);
   } else {
     setText('a-gauge-target',`${Math.round(t.kcal)} / ${target} kcal`);
   }
 
-  // Gauge progress (half-circle arc on hero)
   const arcLen=408.41;
   const arc=$('a-arc');
   let pctFrac;
@@ -873,10 +1005,8 @@ function render(){
     arc.style.opacity=pctFrac>0.005?'1':'0';
   }
 
-  // Toggle 3 macro inline stats based on trackMacros
   setStyle('macro-stats-row','display',cfg.trackMacros?'flex':'none');
 
-  // Macro values
   setText('mc-p-val',Math.round(t.protein));
   setText('mc-c-val',Math.round(t.carbs));
   setText('mc-f-val',Math.round(t.fat));
@@ -884,18 +1014,23 @@ function render(){
   setText('mc-c-goal',cfg.carbs);
   setText('mc-f-goal',cfg.fat);
 
-  // Meals list
   const el=$('a-meals');
   if(el){
     if(!meals.length){el.innerHTML='<div class="no-meal">Zatím nic. Přidej první jídlo ↓</div>';}
     else{
-      el.innerHTML=meals.map((m,i)=>`<div class="meal">
-        <div class="meal-icon">🍽️</div>
-        <div class="meal-info"><div class="meal-name">${escapeHtml(m.name||'')}</div><div class="meal-time">${m.time||''}${cfg.trackMacros?' · '+Math.round(m.protein||0)+'B · '+Math.round(m.carbs||0)+'S · '+Math.round(m.fat||0)+'T':''}</div></div>
+      el.innerHTML=meals.map((m,i)=>{
+        const caff=Math.round(m.caffeine_mg||0);
+        const macroStr=cfg.trackMacros?' · '+Math.round(m.protein||0)+'B · '+Math.round(m.carbs||0)+'S · '+Math.round(m.fat||0)+'T':'';
+        const caffStr=caff>0?' · ☕ '+caff+'mg':'';
+        const icon=caff>0?'☕':'🍽️';
+        return `<div class="meal">
+        <div class="meal-icon">${icon}</div>
+        <div class="meal-info"><div class="meal-name">${escapeHtml(m.name||'')}</div><div class="meal-time">${m.time||''}${macroStr}${caffStr}</div></div>
         <div class="meal-right"><div class="meal-kcal">${Math.round(m.kcal||0)} kcal</div></div>
         <button class="meal-edit" onclick="openEditMeal(${i})">✎</button>
         <button class="meal-del" onclick="del(${i})">×</button>
-      </div>`).join('');
+      </div>`;
+      }).join('');
     }
   }
 
@@ -914,6 +1049,235 @@ function render(){
   }
 }
 
+// ════════ CAFFEINE TRACKER ════════
+function saveCaffeine(){
+  localStorage.setItem('nai_caffeine_'+td(),JSON.stringify(caffeine));
+}
+// Zbývající kofein z jedné dávky v daném čase (exponenciální rozpad, poločas 5h)
+function caffRemainingAt(mg, takenISO, atDate){
+  const taken=new Date(takenISO).getTime();
+  const at=atDate.getTime();
+  const hours=(at-taken)/3600000;
+  if(hours<0)return mg; // budoucí dávka (manuální čas) — počítej plnou
+  return mg*Math.pow(0.5, hours/CAFF_HALFLIFE_H);
+}
+// Celkový kofein v těle teď
+function caffTotalNow(){
+  const now=new Date();
+  return caffeine.reduce((a,c)=>a+caffRemainingAt(c.mg,c.time,now),0);
+}
+// Kolik zbude v daný cílový čas (Date)
+function caffTotalAt(targetDate){
+  return caffeine.reduce((a,c)=>a+caffRemainingAt(c.mg,c.time,targetDate),0);
+}
+// Příští výskyt bedtime (HH:MM) jako Date — dnes nebo zítra podle toho, co je dřív v budoucnu
+function nextBedtimeDate(){
+  if(!cfg.bedtime)return null;
+  const [h,m]=cfg.bedtime.split(':').map(n=>parseInt(n,10));
+  if(isNaN(h)||isNaN(m))return null;
+  const now=new Date();
+  const bt=new Date();
+  bt.setHours(h,m,0,0);
+  // bedtime brzy ráno (např. 00:30) nebo už proběhl dnes → posuň na další výskyt
+  if(bt.getTime()<=now.getTime())bt.setDate(bt.getDate()+1);
+  return bt;
+}
+function fmtHM(d){return d.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});}
+
+function renderCaffeine(){
+  const now=new Date();
+  const total=caffTotalNow();
+  setText('caff-now',Math.round(total));
+
+  // Ring: škála 0–200mg jako "vizuální plnost"
+  const ringArc=$('caff-arc');
+  if(ringArc){
+    const circ=94.2;
+    const frac=Math.min(total/200,1);
+    ringArc.setAttribute('stroke-dashoffset',(circ*(1-frac)).toFixed(1));
+  }
+
+  // Spánkové doporučení
+  const sleepEl=$('caff-sleep');
+  const sleepText=$('caff-sleep-text');
+  if(sleepEl&&sleepText){
+    sleepEl.classList.remove('warn','bad');
+    if(!cfg.bedtime){
+      sleepText.innerHTML='Pro trackování vlivu na spánek zadej průměrný čas usínání v <strong>nastavení</strong>.';
+    } else if(!caffeine.length){
+      sleepText.innerHTML='Zatím žádný kofein. Spánek by neměl být ovlivněn.';
+    } else {
+      const bt=nextBedtimeDate();
+      const atBed=caffTotalAt(bt);
+      const r=Math.round(atBed);
+      const btStr=fmtHM(bt);
+      if(atBed<50){
+        sleepText.innerHTML=`V čase usínání (<strong>${btStr}</strong>) ti zbude ~<strong>${r} mg</strong>. To by spánek nemělo narušit. ✓`;
+      } else if(atBed<100){
+        sleepEl.classList.add('warn');
+        sleepText.innerHTML=`V čase usínání (<strong>${btStr}</strong>) ti zbude ~<strong>${r} mg</strong>. Může mírně zhoršit usínání nebo kvalitu spánku.`;
+      } else {
+        sleepEl.classList.add('bad');
+        sleepText.innerHTML=`V čase usínání (<strong>${btStr}</strong>) ti zbude ~<strong>${r} mg</strong>. To pravděpodobně naruší spánek — zvaž poslední dávku dřív.`;
+      }
+    }
+  }
+
+  // Seznam dnešních dávek
+  const logsEl=$('caff-logs');
+  if(logsEl){
+    if(!caffeine.length){
+      logsEl.innerHTML='';
+    } else {
+      const sorted=[...caffeine].sort((a,b)=>new Date(a.time)-new Date(b.time));
+      logsEl.innerHTML=sorted.map(c=>{
+        const rem=Math.round(caffRemainingAt(c.mg,c.time,now));
+        return `<div class="caff-log">
+          <span class="caff-log-time">${fmtHM(new Date(c.time))}</span>
+          <span class="caff-log-name">${escapeHtml(c.name||'Kofein')}</span>
+          <span class="caff-log-mg">${Math.round(c.mg)} mg <span style="color:var(--text3);font-weight:400">· zbývá ${rem}</span></span>
+          <button class="caff-log-del" onclick="delCaff(${c.id})">×</button>
+        </div>`;
+      }).join('');
+    }
+  }
+}
+
+function renderCaffSources(){
+  const el=$('caff-sources');
+  if(!el)return;
+  el.innerHTML=CAFF_SOURCES.map((s,i)=>{
+    return `<button class="caff-src" data-i="${i}" onclick="selectCaffSrc(${i})">
+      <div class="caff-src-name">${escapeHtml(s.name)}</div>
+      <div class="caff-src-mg">${s.mg} mg · ${s.kcal} kcal</div>
+    </button>`;
+  }).join('');
+}
+function selectCaffSrc(i){
+  caffSelectedSrc=i;
+  caffAiName=CAFF_SOURCES[i].name;
+  caffAiKcal=CAFF_SOURCES[i].kcal||0;
+  document.querySelectorAll('#caff-sources .caff-src').forEach(b=>{
+    b.classList.toggle('on', parseInt(b.dataset.i)===i);
+  });
+  $('caff-mg').value=CAFF_SOURCES[i].mg;
+}
+function openCaffModal(){
+  caffSelectedSrc=null;
+  caffAiName='';
+  caffAiKcal=0;
+  caffAiHistory=[];
+  $('caff-mg').value='';
+  $('caff-ai-input').value='';
+  $('caff-ai-messages').innerHTML='';
+  // přednastav aktuální čas
+  const now=new Date();
+  $('caff-time').value=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  document.querySelectorAll('#caff-sources .caff-src').forEach(b=>b.classList.remove('on'));
+  $('caff-modal').classList.add('on');
+}
+function closeCaffModal(){$('caff-modal').classList.remove('on');}
+function closeCaffOutside(e){if(e.target===$('caff-modal'))closeCaffModal();}
+
+function getCaffSystemPrompt(){
+  return `Jsi odborník na obsah kofeinu a kalorií v nápojích a potravinách. Uživatel napíše název nápoje/jídla (klidně neurčitě, např. "velké latte z automatu" nebo "monster 0,5l") a ty odhadneš obsah kofeinu v miligramech a kalorie.
+
+DŮLEŽITÉ: Odpovídej VŽDY a POUZE platným JSON objektem, nikdy ne čistým textem.
+- Pokud jde o nápoj/jídlo s kofeinem, odhadni mg i kcal co nejlépe podle typické porce a v krátkém feedback česky řekni z čeho vycházíš.
+- Pokud porce není jasná, předpokládej běžnou velikost a zmiň to ve feedback.
+- Pokud položka kofein neobsahuje nebo nesouvisí s nápoji/jídlem, vrať mg:0 a do feedback napiš česky vysvětlení.
+
+Formát (POUZE tento JSON, bez markdown, bez textu okolo):
+{"name":"krátký název nápoje","mg":0,"kcal":0,"feedback":"krátké vysvětlení česky"}`;
+}
+function getCaffSystemBlocks(){
+  return [{type:'text',text:getCaffSystemPrompt(),cache_control:{type:'ephemeral'}}];
+}
+
+async function askCaffAI(){
+  const input=$('caff-ai-input');
+  const txt=input.value.trim();
+  if(!txt)return;
+  if(!cfg.apikey){toast('Nastav API klíč v nastavení');return;}
+  const msgs=$('caff-ai-messages');
+  msgs.innerHTML+=`<div class="caff-ai-msg user">${escapeHtml(txt)}</div>`;
+  input.value='';
+  $('caff-ai-send').disabled=true;
+  msgs.innerHTML+='<div class="dots on" id="caff-ai-dots" style="padding:6px 4px"><span></span><span></span><span></span></div>';
+  msgs.scrollTop=msgs.scrollHeight;
+  // odznač chip — teď řídí AI
+  caffSelectedSrc=null;
+  document.querySelectorAll('#caff-sources .caff-src').forEach(b=>b.classList.remove('on'));
+
+  caffAiHistory.push({role:'user',content:txt});
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.apikey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MODEL_TEXT,max_tokens:400,system:getCaffSystemBlocks(),messages:caffAiHistory})});
+    const data=await resp.json();
+    if(data.error)throw new Error(data.error.message);
+    const replyText=data.content[0].text;
+    caffAiHistory.push({role:'assistant',content:replyText});
+    $('caff-ai-dots')?.remove();
+    const parsed=parseMealJSON(replyText);
+    if(parsed&&typeof parsed.mg!=='undefined'){
+      const mg=Math.round(parsed.mg||0);
+      if(mg>0){
+        $('caff-mg').value=mg;
+        caffAiName=parsed.name||'Kofein';
+        caffAiKcal=Math.round(parsed.kcal||0);
+        const kcalStr=caffAiKcal>0?` · ${caffAiKcal} kcal`:'';
+        msgs.innerHTML+=`<div class="caff-ai-msg ai"><strong>${escapeHtml(parsed.name||'')}</strong> · ~${mg} mg${kcalStr} ✓<br><br>${escapeHtml(parsed.feedback||'')}</div>`;
+      }else{
+        msgs.innerHTML+=`<div class="caff-ai-msg ai">${escapeHtml(parsed.feedback||'Tahle položka kofein neobsahuje.')}</div>`;
+      }
+    }else{
+      msgs.innerHTML+=`<div class="caff-ai-msg ai">${escapeHtml(replyText)}</div>`;
+    }
+  }catch(e){
+    $('caff-ai-dots')?.remove();
+    msgs.innerHTML+=`<div class="caff-ai-msg ai" style="color:var(--red)">Chyba: ${e.message}</div>`;
+  }
+  $('caff-ai-send').disabled=false;
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function saveCaffLog(){
+  const mg=Math.round(parseD($('caff-mg').value));
+  if(!mg||mg<=0){toast('Zadej množství kofeinu (mg)');return;}
+  const timeStr=$('caff-time').value;
+  let when=new Date();
+  if(timeStr){
+    const [h,m]=timeStr.split(':').map(n=>parseInt(n,10));
+    if(!isNaN(h)&&!isNaN(m)){when=new Date();when.setHours(h,m,0,0);}
+  }
+  const name=caffAiName||'Kofein';
+  const kcal=Math.max(0,Math.round(caffAiKcal||0));
+  const linkId=Date.now();
+  // Zápis kofeinu
+  caffeine.push({id:linkId,mg,time:when.toISOString(),name,kcal,linkId});
+  saveCaffeine();
+  // Provázaný zápis do jídel (kvůli kaloriím) — i s nulovými makry
+  if(kcal>0){
+    meals.push({name,kcal,protein:0,carbs:0,fat:0,caffeine_mg:mg,linkId,time:fmtHM(when)});
+    saveMeals();
+  }
+  closeCaffModal();
+  renderCaffeine();
+  render();
+  toast('Zapsáno ✓');
+}
+function delCaff(id){
+  const c=caffeine.find(x=>x.id===id);
+  caffeine=caffeine.filter(x=>x.id!==id);
+  saveCaffeine();
+  // smaž i provázané jídlo
+  if(c&&c.linkId){
+    const before=meals.length;
+    meals=meals.filter(m=>m.linkId!==c.linkId);
+    if(meals.length!==before){saveMeals();render();}
+  }
+  renderCaffeine();
+}
+
 function renderDateStrip(){/* removed */}
 function promptBurned(){/* removed */}
 
@@ -924,7 +1288,17 @@ function saveMeals(){
   if(idx>=0)hist[idx].meals=[...meals];else hist.unshift({date:today,meals:[...meals]});
   localStorage.setItem('nai_hist',JSON.stringify(hist));
 }
-function del(i){meals.splice(i,1);saveMeals();render();}
+function del(i){
+  const m=meals[i];
+  meals.splice(i,1);
+  saveMeals();
+  if(m&&m.linkId){
+    const before=caffeine.length;
+    caffeine=caffeine.filter(c=>c.linkId!==m.linkId);
+    if(caffeine.length!==before){saveCaffeine();renderCaffeine();}
+  }
+  render();
+}
 
 function openEditMeal(i){
   editingMealIdx=i;const m=meals[i];
@@ -958,7 +1332,6 @@ async function sendEditFollowup(){
   document.getElementById('edit-send-btn').disabled=true;
   msgs.innerHTML+='<div class="dots on" id="edit-chat-dots"><span></span><span></span><span></span></div>';
 
-  // Init context on first message with current values
   if(editChatHistory.length===0){
     const cn=document.getElementById('edit-name').value;
     const ck=parseD(document.getElementById('edit-kcal').value);
@@ -980,7 +1353,6 @@ async function sendEditFollowup(){
     const parsed=parseMealJSON(replyText);
     document.getElementById('edit-chat-dots')?.remove();
     if(parsed){
-      // Update form fields
       document.getElementById('edit-name').value=parsed.name||'';
       document.getElementById('edit-kcal').value=Math.round(parsed.kcal||0);
       document.getElementById('edit-p').value=Math.round(parsed.protein||0);
@@ -1029,14 +1401,14 @@ Denní cíle: ${effectiveKcal()} kcal${macroGoals}.
 
 DŮLEŽITÉ: Odpovídej VŽDY a POUZE platným JSON objektem v daném formátu, nikdy ne čistým textem.
 - Pokud je vstup jídlo nebo nápoj (i nejednoznačný, např. "200g"), odhadni co nejlépe. Když nevíš o jaké jídlo jde, vrať rozumný odhad a v feedback se zeptej na upřesnění.
+- Pole "caffeine_mg" = odhad obsahu kofeinu v mg. U jídel/nápojů bez kofeinu vrať 0. U kávy, čaje, energetických nápojů, koly, maté apod. odhadni mg podle typické porce.
 - Pokud vstup zjevně NESOUVISÍ s jídlem ani výživou (např. programování, obecné znalosti, psaní textů), vrať JSON s name:"", kcal:0 a nulami, a do feedback napiš česky, že umíš pomáhat jen s jídlem a výživou.
 
 Formát odpovědi (POUZE tento JSON, bez markdown, bez textu okolo):
-{"name":"název jídla","kcal":0,"protein":0,"carbs":0,"fat":0,"feedback":"krátké hodnocení/odpověď česky"}
+{"name":"název jídla","kcal":0,"protein":0,"carbs":0,"fat":0,"caffeine_mg":0,"feedback":"krátké hodnocení/odpověď česky"}
 
 Když uživatel upřesní nebo se zeptá na jídlo (např. "co když přidám sýr", "je to moc tuku?"), aktualizuj hodnoty a v feedback odpověz česky. Stručně, výstižně.`;
 }
-// Vrací system prompt jako pole bloků s prompt caching (šetří náklady na opakovaný system prompt)
 function getMealSystemBlocks(){
   return [{type:'text',text:getMealSystemPrompt(),cache_control:{type:'ephemeral'}}];
 }
@@ -1052,9 +1424,8 @@ async function analyze(){
   const chatMsgs=document.getElementById('meal-chat-messages');
   if(chatMsgs)chatMsgs.innerHTML='';
 
-  // Init conversation
   mealChatHistory=[];
-  mealUsedPhoto=!!pb64; // fotka přítomna → celá konverzace pojede na vision modelu
+  mealUsedPhoto=!!pb64;
   let content=pb64?[{type:'image',source:{type:'base64',media_type:pbMime,data:pb64}},{type:'text',text:txt?`Foto jídla. Poznámka: ${txt}. Odhadni kalorie a makra.`:'Analyzuj jídlo na fotce.'}]:txt;
   mealChatHistory.push({role:'user',content});
 
@@ -1071,13 +1442,10 @@ async function analyze(){
   if(btn){btn.disabled=false;btn.textContent='✦ Analyzovat pomocí AI';}
 }
 
-// Robustně vytáhne JSON z odpovědi modelu, i když přidá text okolo nebo markdown
 function parseMealJSON(text){
   if(!text)return null;
   let t=text.replace(/```json|```/g,'').trim();
-  // zkus přímý parse
   try{return JSON.parse(t);}catch(e){}
-  // jinak najdi první {...} blok v textu
   const m=t.match(/\{[\s\S]*\}/);
   if(m){try{return JSON.parse(m[0]);}catch(e){}}
   return null;
@@ -1091,6 +1459,12 @@ function updateMealResult(parsed){
   setT('r-p',Math.round(parsed.protein||0)+'g');
   setT('r-c',Math.round(parsed.carbs||0)+'g');
   setT('r-f',Math.round(parsed.fat||0)+'g');
+  const caffMg=Math.round(parsed.caffeine_mg||0);
+  const caffWrap=document.getElementById('r-caff-wrap');
+  if(caffWrap){
+    if(caffMg>0){setT('r-caff',caffMg+'mg');caffWrap.style.display='';}
+    else{caffWrap.style.display='none';}
+  }
 }
 
 async function sendMealFollowup(){
@@ -1099,7 +1473,6 @@ async function sendMealFollowup(){
   if(!txt)return;
   if(!cfg.apikey){toast('Nastav API klíč');return;}
 
-  // Add user msg to chat UI
   const msgs=document.getElementById('meal-chat-messages');
   msgs.innerHTML+=`<div class="chat-msg user-msg">${escapeHtml(txt)}</div>`;
   input.value='';
@@ -1135,13 +1508,21 @@ function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'
 function confirm_meal(){
   if(!pending)return;
   const now=new Date();
-  const meal={...pending,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
+  const caffMg=Math.round(pending.caffeine_mg||0);
+  const meal={...pending,caffeine_mg:caffMg,time:now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'})};
+  // provázání s kofeinem, pokud jídlo kofein obsahuje
+  if(caffMg>0){
+    const linkId=Date.now();
+    meal.linkId=linkId;
+    caffeine.push({id:linkId,mg:caffMg,time:now.toISOString(),name:meal.name||'Kofein',kcal:Math.round(meal.kcal||0),linkId});
+    saveCaffeine();
+  }
   meals.push(meal);saveMeals();pending=null;
   document.getElementById('a-result').classList.remove('on');
   document.getElementById('a-input').value='';
   document.getElementById('meal-chat-messages').innerHTML='';
   mealChatHistory=[];
-  removePhoto();render();go('today');toast('Jídlo přidáno ✓');
+  removePhoto();render();renderCaffeine();go('today');toast(caffMg>0?'Přidáno do jídel i kofeinu ✓':'Jídlo přidáno ✓');
 }
 
 // ── DAILY SUMMARY (with chat) ──
@@ -1164,7 +1545,6 @@ function renderMarkdown(text){
 function getSummarySystemPrompt(){
   return `Jsi nutriční poradce. Diskutuješ s uživatelem POUZE o jeho jídelníčku, výživě a kaloriích. První odpověď je krátké zhodnocení (4-5 vět). Pak odpovídáš na další otázky uživatele o jídle a výživě. Pokud se zeptá na něco nesouvisejícího (programování, obecné znalosti, psaní textů apod.), zdvořile odmítni a vrať ho k tématu výživy. Formátuj odpovědi s odstavci. Používej **tučný text** pro klíčové hodnoty. Buď stručný, konkrétní, česky.`;
 }
-// Vrací system prompt jako pole bloků s prompt caching
 function getSummarySystemBlocks(){
   return [{type:'text',text:getSummarySystemPrompt(),cache_control:{type:'ephemeral'}}];
 }
@@ -1185,10 +1565,9 @@ async function openSummary(){
   if(!cfg.apikey){toast('Nastav API klíč v nastavení');go('settings');return;}
   if(!meals.length){toast('Dnes ještě nemáš žádná jídla');return;}
   const box=document.getElementById('summary-box');
-  const dots=document.getElementById('summary-dots');
   const msgs=document.getElementById('summary-messages');
   const followup=document.getElementById('summary-followup');
-  box.classList.add('on');dots.classList.add('on');msgs.innerHTML='';followup.style.display='none';
+  box.classList.add('on');msgs.innerHTML='<div class="dots on" id="summary-dots" style="text-align:left;padding:8px 0"><span></span><span></span><span></span></div>';followup.style.display='none';
 
   summaryChatHistory=[];
   const initMsg=getInitialSummaryMessage();
@@ -1203,7 +1582,6 @@ async function openSummary(){
     msgs.innerHTML=`<div class="chat-msg">${renderMarkdown(reply)}</div>`;
     followup.style.display='flex';
   }catch(e){msgs.innerHTML=`<div class="chat-msg" style="color:var(--red)">Chyba: ${e.message}</div>`;}
-  dots.classList.remove('on');
 }
 
 async function sendSummaryFollowup(){
@@ -1247,6 +1625,7 @@ function saveMealprep(){
   mealpreps.push({id:Date.now(),name,portions,remaining:portions,kcal,protein:p,carbs:c,fat:f});
   localStorage.setItem('nai_mealpreps',JSON.stringify(mealpreps));
   ['mp-name','mp-portions','mp-kcal','mp-p','mp-c','mp-f'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('mp-form').classList.remove('on');
   renderMealpreps();toast('Krabička přidána ✓');
 }
 function eatMealprep(id){
@@ -1265,7 +1644,7 @@ function renderMealpreps(){
   if(!mealpreps.length){el.innerHTML='<div class="no-mp">Zatím žádné krabičky.</div>';return;}
   el.innerHTML=mealpreps.map(mp=>{
     const pct=Math.round((mp.remaining/mp.portions)*100);
-    return `<div class="mp-item"><div class="mp-top"><div class="mp-name">${mp.name}</div><div class="mp-badge">${mp.remaining}/${mp.portions} porcí</div></div>
+    return `<div class="mp-item"><div class="mp-top"><div class="mp-name">${escapeHtml(mp.name)}</div><div class="mp-badge">${mp.remaining}/${mp.portions} porcí</div></div>
     <div class="mp-macros">
       <div class="mp-macro-item"><strong>${Math.round(mp.kcal)}</strong>kcal</div>
       <div class="mp-macro-item"><strong>${Math.round(mp.protein)}g</strong>bílk.</div>
@@ -1289,7 +1668,6 @@ function saveFav(){
     const idx=favs.findIndex(fv=>fv.id===editingFavId);
     if(idx>=0)favs[idx]={id:editingFavId,name,kcal,protein:p,carbs:c,fat:f};
     editingFavId=null;
-    document.getElementById('fav-form-title').textContent='Nové jídlo';
     document.getElementById('fav-save-lbl').textContent='Uložit jídlo';
   } else {favs.push({id:Date.now(),name,kcal,protein:p,carbs:c,fat:f});}
   localStorage.setItem('nai_favs',JSON.stringify(favs));
@@ -1306,14 +1684,12 @@ function editFav(id){
   document.getElementById('fav-p').value=fav.protein;
   document.getElementById('fav-c').value=fav.carbs;
   document.getElementById('fav-f').value=fav.fat;
-  document.getElementById('fav-form-title').textContent='Upravit jídlo';
   document.getElementById('fav-save-lbl').textContent='Uložit změny';
   document.getElementById('fav-form').style.display='block';
   document.getElementById('fav-add-btn').style.display='none';
 }
 function cancelFavEdit(){
   editingFavId=null;
-  document.getElementById('fav-form-title').textContent='Nové jídlo';
   document.getElementById('fav-save-lbl').textContent='Uložit jídlo';
   ['fav-name','fav-kcal','fav-p','fav-c','fav-f'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('fav-form').style.display='none';
@@ -1333,7 +1709,7 @@ function renderFavs(){
     const macroStr=cfg.trackMacros?`${Math.round(fav.protein)}B · ${Math.round(fav.carbs)}S · ${Math.round(fav.fat)}T`:'';
     return `<div class="fav-item" onclick="logFav(${fav.id})">
       <div class="fav-info">
-        <div class="fav-name">${fav.name}</div>
+        <div class="fav-name">${escapeHtml(fav.name)}</div>
         <div class="fav-sub"><strong style="color:var(--text)">${Math.round(fav.kcal)}</strong> kcal${macroStr?'<br>'+macroStr:''}</div>
       </div>
       <div class="fav-actions">
@@ -1382,10 +1758,10 @@ function renderStats(){
   const pctGoal=daysTracked?Math.round(daysInGoal/daysTracked*100):0;
 
   document.getElementById('stat-grid').innerHTML=`
-    <div class="stat-card"><div class="stat-val">${daysTracked}</div><div class="stat-lbl">Dní trackováno</div><div class="stat-sub">posledních 30 dní</div></div>
-    <div class="stat-card"><div class="stat-val">${avgKcal}</div><div class="stat-lbl">Průměr kcal/den</div><div class="stat-sub">cíl: ${target} kcal</div></div>
-    <div class="stat-card"><div class="stat-val">${daysInGoal}/${daysTracked}</div><div class="stat-lbl">Dní v cíli</div><div class="stat-sub">${pctGoal}%</div><div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:${pctGoal}%;background:var(--sage)"></div></div></div>
-    <div class="stat-card"><div class="stat-val">${Math.round(todayKcal)}</div><div class="stat-lbl">Dnes kcal</div><div class="stat-sub">${todayKcal>=target?'Cíl splněn ✓':'zbývá '+(target-Math.round(todayKcal))}</div></div>`;
+    <div class="stat-card"><div class="stat-val">${daysTracked}</div><div class="stat-label">Dní trackováno</div><div class="stat-sub">posledních 30 dní</div></div>
+    <div class="stat-card"><div class="stat-val">${avgKcal}</div><div class="stat-label">Průměr kcal/den</div><div class="stat-sub">cíl: ${target} kcal</div></div>
+    <div class="stat-card"><div class="stat-val">${daysInGoal}/${daysTracked}</div><div class="stat-label">Dní v cíli</div><div class="stat-sub">${pctGoal}%</div></div>
+    <div class="stat-card"><div class="stat-val">${Math.round(todayKcal)}</div><div class="stat-label">Dnes kcal</div><div class="stat-sub">${todayKcal>=target?'Cíl splněn ✓':'zbývá '+(target-Math.round(todayKcal))}</div></div>`;
 
   const days7=[];
   for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days7.push(d.toISOString().split('T')[0]);}
@@ -1397,27 +1773,23 @@ function renderStats(){
   });
   const maxKcal=Math.max(...barData.map(b=>b.kcal),target,1);
   document.getElementById('week-bars').innerHTML=barData.map(b=>{
-    const h=Math.max(Math.round((b.kcal/maxKcal)*70),b.kcal>0?4:0);
-    const col=b.kcal>target?'var(--red)':b.isToday?'var(--sage)':'var(--sage-soft)';
-    return `<div class="week-bar-wrap"><div class="week-bar-bg" style="height:70px"><div class="week-bar-fill" style="height:${h}px;background:${col}"></div></div><div class="week-day">${b.label}</div></div>`;
+    const h=Math.max(Math.round((b.kcal/maxKcal)*120),b.kcal>0?6:0);
+    const col=b.kcal>target?'var(--red)':'var(--accent)';
+    return `<div class="wc-bar-col"><div class="wc-bar" style="height:120px"><div class="wc-bar-fill" style="height:${h}px;background:${col}"></div></div><div class="wc-day">${b.label}</div></div>`;
   }).join('');
 }
 
 function loadH(){
   const hist=JSON.parse(localStorage.getItem('nai_hist')||'[]');
   const el=document.getElementById('a-hist');
-  if(!hist.length){el.innerHTML='<div class="empty-h">Zatím žádná historie.</div>';return;}
+  if(!hist.length){el.innerHTML='<div class="no-mp">Zatím žádná historie.</div>';return;}
   el.innerHTML=hist.slice(0,30).map(day=>{
     const tot=day.meals.reduce((a,m)=>({kcal:a.kcal+m.kcal}),{kcal:0});
     const d=new Date(day.date);
     const lbl=d.toLocaleDateString('cs-CZ',{weekday:'short',day:'numeric',month:'short'});
-    return `<div class="hday"><div class="hday-header"><span class="hday-date">${lbl}</span><span class="hday-kcal">${Math.round(tot.kcal)} kcal</span></div>${day.meals.map(m=>`<div class="hmeal"><span class="hmeal-name">${m.name}</span><span class="hmeal-kcal">${Math.round(m.kcal)}</span></div>`).join('')}</div>`;
+    return `<div class="hday"><div class="hday-top"><span class="hday-date">${lbl}</span><span class="hday-kcal">${Math.round(tot.kcal)} kcal</span></div><div class="hday-meals">${day.meals.map(m=>`<div class="hmeal"><span class="hmeal-time">${m.time||''}</span><span class="hmeal-name">${escapeHtml(m.name)}</span><span class="hmeal-kcal">${Math.round(m.kcal)}</span></div>`).join('')}</div></div>`;
   }).join('');
 }
-
-const histTabLabels={hist:'Záznamy',stats:'Statistiky',weight:'Váha'};
-function setHistTab(t){ /* legacy no-op */ }
-function setSubtab(t){ /* legacy no-op */ }
 
 function loadHistoryAll(){
   loadH();
@@ -1436,6 +1808,7 @@ function go(name){
   document.getElementById('s-'+name).classList.add('on');
   const navBtn=document.getElementById('n-'+name);
   if(navBtn)navBtn.classList.add('on');
+  if(name==='today')renderCaffeine();
   if(name==='history')loadHistoryAll();
   if(name==='add')loadAddAll();
   if(name==='settings')loadS();
