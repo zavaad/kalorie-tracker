@@ -951,15 +951,16 @@ let caffeine=[]; // dnešní záznamy: {id, mg, time(ISO), name, kcal, linkId}
 let caffSelectedSrc=null;
 let caffAiName=''; // název z AI odhadu (nebo z chipu)
 let caffAiKcal=0; // kcal z AI odhadu (nebo z chipu)
+let caffAiMl=0; // objem tekutiny z AI odhadu (pro propojení s vodou)
 let caffTimer=null;
 // Předvyplněné zdroje (mg kofeinu) — typické hodnoty
 const CAFF_SOURCES=[
-  {name:'Espresso', mg:63, kcal:3},
-  {name:'Yerba maté', mg:85, kcal:0},
-  {name:'Red Bull', mg:80, kcal:110},
-  {name:'Zelený čaj', mg:28, kcal:0},
-  {name:'Matcha', mg:70, kcal:5},
-  {name:'Coca Cola', mg:32, kcal:139}
+  {name:'Espresso', mg:63, kcal:3, ml:30},
+  {name:'Yerba maté', mg:85, kcal:0, ml:500},
+  {name:'Red Bull', mg:80, kcal:110, ml:250},
+  {name:'Zelený čaj', mg:28, kcal:0, ml:250},
+  {name:'Matcha', mg:70, kcal:5, ml:250},
+  {name:'Coca Cola', mg:32, kcal:139, ml:330}
 ];
 
 // ── WATER ──
@@ -1325,7 +1326,7 @@ function renderCaffSources(){
   el.innerHTML=CAFF_SOURCES.map((s,i)=>{
     return `<button class="caff-src" data-i="${i}" onclick="selectCaffSrc(${i})">
       <div class="caff-src-name">${escapeHtml(s.name)}</div>
-      <div class="caff-src-mg">${s.mg} mg · ${s.kcal} kcal</div>
+      <div class="caff-src-mg">${s.mg} mg · ${s.kcal} kcal${s.ml?' · '+s.ml+' ml':''}</div>
     </button>`;
   }).join('');
 }
@@ -1333,6 +1334,7 @@ function selectCaffSrc(i){
   caffSelectedSrc=i;
   caffAiName=CAFF_SOURCES[i].name;
   caffAiKcal=CAFF_SOURCES[i].kcal||0;
+  caffAiMl=CAFF_SOURCES[i].ml||0;
   document.querySelectorAll('#caff-sources .caff-src').forEach(b=>{
     b.classList.toggle('on', parseInt(b.dataset.i)===i);
   });
@@ -1342,6 +1344,7 @@ function openCaffModal(){
   caffSelectedSrc=null;
   caffAiName='';
   caffAiKcal=0;
+  caffAiMl=0;
   $('caff-mg').value='';
   $('caff-ai-input').value='';
   $('caff-ai-result').innerHTML='';
@@ -1357,15 +1360,16 @@ function closeCaffModal(){$('caff-modal').classList.remove('on');document.body.c
 function closeCaffOutside(e){if(e.target===$('caff-modal'))closeCaffModal();}
 
 function getCaffSystemPrompt(){
-  return `Jsi odborník na obsah kofeinu a kalorií v nápojích a potravinách. Uživatel napíše název nápoje/jídla (klidně neurčitě, např. "velké latte z automatu" nebo "monster 0,5l") a ty odhadneš obsah kofeinu v miligramech a kalorie.
+  return `Jsi odborník na obsah kofeinu, kalorií a objemu tekutiny v nápojích. Uživatel napíše název nápoje (klidně neurčitě, např. "velké latte z automatu" nebo "monster 0,5l") a ty odhadneš obsah kofeinu v mg, kalorie a objem tekutiny v ml.
 
 DŮLEŽITÉ: Odpovídej VŽDY a POUZE platným JSON objektem, nikdy ne čistým textem.
-- Pokud jde o nápoj/jídlo s kofeinem, odhadni mg i kcal co nejlépe podle typické porce a v krátkém feedback česky řekni z čeho vycházíš.
+- Odhadni mg, kcal i ml co nejlépe podle typické porce a v krátkém feedback česky řekni z čeho vycházíš.
+- "ml" = objem tekutiny nápoje. Káva, čaj, maté, energetické nápoje i kola se počítají jako tekutina — vrať jejich plný objem. U pevné potraviny s kofeinem (např. čokoláda) vrať ml:0.
 - Pokud porce není jasná, předpokládej běžnou velikost a zmiň to ve feedback.
 - Pokud položka kofein neobsahuje nebo nesouvisí s nápoji/jídlem, vrať mg:0 a do feedback napiš česky vysvětlení.
 
 Formát (POUZE tento JSON, bez markdown, bez textu okolo):
-{"name":"krátký název nápoje","mg":0,"kcal":0,"feedback":"krátké vysvětlení česky"}`;
+{"name":"krátký název nápoje","mg":0,"kcal":0,"ml":0,"feedback":"krátké vysvětlení česky"}`;
 }
 function getCaffSystemBlocks(){
   return [{type:'text',text:getCaffSystemPrompt(),cache_control:{type:'ephemeral'}}];
@@ -1396,8 +1400,12 @@ async function askCaffAI(){
         $('caff-mg').value=mg;
         caffAiName=parsed.name||'Kofein';
         caffAiKcal=Math.round(parsed.kcal||0);
-        const kcalStr=caffAiKcal>0?` · ${caffAiKcal} kcal`:'';
-        res.innerHTML=`<div class="caff-ai-headline">${escapeHtml(parsed.name||'')} · ~${mg} mg${kcalStr}</div>${escapeHtml(parsed.feedback||'')}`;
+        caffAiMl=Math.round(parsed.ml||0);
+        const extra=[];
+        if(caffAiKcal>0)extra.push(`${caffAiKcal} kcal`);
+        if(caffAiMl>0)extra.push(`${caffAiMl} ml`);
+        const extraStr=extra.length?' · '+extra.join(' · '):'';
+        res.innerHTML=`<div class="caff-ai-headline">${escapeHtml(parsed.name||'')} · ~${mg} mg${extraStr}</div>${escapeHtml(parsed.feedback||'')}`;
       }else{
         res.innerHTML=escapeHtml(parsed.feedback||'Tahle položka kofein neobsahuje.');
       }
@@ -1422,6 +1430,7 @@ function saveCaffLog(){
   }
   const name=caffAiName||'Kofein';
   const kcal=Math.max(0,Math.round(caffAiKcal||0));
+  const ml=Math.max(0,Math.round(caffAiMl||0));
   const linkId=Date.now();
   // Zápis kofeinu
   caffeine.push({id:linkId,mg,time:when.toISOString(),name,kcal,linkId});
@@ -1431,8 +1440,14 @@ function saveCaffLog(){
     meals.push({name,kcal,protein:0,carbs:0,fat:0,caffeine_mg:mg,linkId,time:fmtHM(when)});
     saveMeals();
   }
+  // Provázaný zápis do vody (objem tekutiny — káva, čaj, maté se počítají)
+  if(ml>0){
+    water.push({id:linkId,ml,time:when.toISOString(),name,kcal,caffeine_mg:mg,linkId});
+    saveWater();
+  }
   closeCaffModal();
   renderCaffeine();
+  renderWater();
   render();
   toast('Zapsáno ✓');
 }
